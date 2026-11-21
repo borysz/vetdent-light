@@ -69,3 +69,9 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 | Ütközésnél (409) két választás: „Az én változatom mentése” (a legfrissebb verzióra rámentve) vagy „A másik változat betöltése” | Csendben semmi nem veszhet el | `sheet-editor.tsx` |
 | A listák (kezdőképernyő, ablakok) lapozhatók, nem görgethetők, 3–4 sorral | A felugró ablakok nem görgethetők, a kezdőképernyő egy képernyőn elfér | `patient-picker.tsx`, `home-screen.tsx`, `sheets-dialog.tsx` |
 | `check:layout` (valódi Chrome, 7 méret, 12 oldal- és ablakállapot méretenként) és `check:flow` (létrehozás, piszkozat, elhagyás, ütközés) éles buildre fut, saját jelölt adattal, és utána töröl | A leírás szerint; a fejlesztői szerver saját gombokat tesz az oldalra, ezért éles buildet használunk | `scripts/check-layout.ts`, `scripts/check-flow.ts` |
+
+## Fogszám a felületen
+
+| Döntés | Indok | Módosítás helye |
+|---|---|---|
+| A felületen nem jelenik meg a fogak darabszáma (nincs „42 fog” / „30 fog” a kártyákon, az ablakokban és a faj gombjain) | A megrendelő kérése (2026-11-21). A fogtábla címe a mintaképeken „Kutya · 42 fog”: a 4. fázisban megkérdezendő, hogy ott is elhagyjuk-e | `messages/hu.json` |
