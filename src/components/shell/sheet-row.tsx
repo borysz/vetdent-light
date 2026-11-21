@@ -19,10 +19,10 @@ export function SheetRow({
   return (
     <li className="flex min-h-14 items-center gap-3 rounded-md border border-border bg-surface px-3 py-1">
       <div className="min-w-0 flex-1">
-        <p className="flex items-center gap-2">
+        <p className="flex min-w-0 flex-wrap items-center gap-x-2">
           {showAnimal ? (
             <>
-              <span className="truncate font-semibold">{sheet.patientName}</span>
+              <span className="min-w-0 truncate font-semibold">{sheet.patientName}</span>
               <SpeciesBadge species={sheet.species} />
             </>
           ) : null}

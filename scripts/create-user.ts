@@ -3,50 +3,14 @@
  *
  *   npm run user:create -- --email vet@example.com --name "Jane Doe" --title "Dr." [--clinic "Clinic name"]
  *
- * The password is asked for hidden (or read from stdin when piped); it is never a command-line argument.
+ * The password is asked for hidden, twice (or read once from stdin when piped); it is never a command-line argument.
  */
-import { createInterface } from "node:readline";
 import { createAdminClient } from "../src/server/admin";
+import { promptNewPassword } from "./lib/password-prompt";
 
 function arg(name: string): string | undefined {
   const index = process.argv.indexOf(`--${name}`);
   return index >= 0 ? process.argv[index + 1] : undefined;
-}
-
-function promptHidden(question: string): Promise<string> {
-  if (!process.stdin.isTTY) {
-    return new Promise((resolve) => {
-      const rl = createInterface({ input: process.stdin });
-      rl.once("line", (line) => {
-        rl.close();
-        resolve(line);
-      });
-    });
-  }
-  return new Promise((resolve) => {
-    process.stdout.write(question);
-    const stdin = process.stdin;
-    stdin.setRawMode(true);
-    stdin.resume();
-    stdin.setEncoding("utf8");
-    let buffer = "";
-    const onData = (chunk: string) => {
-      for (const char of chunk) {
-        if (char === "\r" || char === "\n") {
-          stdin.setRawMode(false);
-          stdin.pause();
-          stdin.off("data", onData);
-          process.stdout.write("\n");
-          resolve(buffer);
-          return;
-        }
-        if (char === "\u0003") process.exit(130);
-        if (char === "\u007f" || char === "\b") buffer = buffer.slice(0, -1);
-        else buffer += char;
-      }
-    };
-    stdin.on("data", onData);
-  });
 }
 
 async function main() {
@@ -59,11 +23,7 @@ async function main() {
     process.exit(2);
   }
 
-  const password = await promptHidden("Password (at least 12 characters): ");
-  if (password.length < 12) {
-    console.error("The password must be at least 12 characters.");
-    process.exit(2);
-  }
+  const password = await promptNewPassword();
 
   const admin = createAdminClient();
 

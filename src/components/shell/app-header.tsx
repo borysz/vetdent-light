@@ -40,7 +40,7 @@ export function AppHeader() {
           <span className="flex size-10 items-center justify-center rounded-xl bg-primary text-white" aria-hidden>
             <Stethoscope className="size-6" />
           </span>
-          <span className="text-xl font-bold">{app("name")}</span>
+          <span className="hidden text-xl font-bold min-[480px]:inline">{app("name")}</span>
           <span className="hidden rounded-md border border-primary/30 bg-primary-soft px-2 py-1 font-mono text-xs font-medium text-primary 2xl:inline">
             {app("badge")}
           </span>
@@ -49,7 +49,7 @@ export function AppHeader() {
         {bridge ? (
           <nav
             aria-label={t("tabsLabel")}
-            className="order-last grid basis-full grid-cols-4 gap-1 rounded-lg bg-surface-muted p-1 xl:order-none xl:flex xl:min-w-0 xl:flex-1 xl:basis-auto xl:grid-cols-none"
+            className="order-last grid basis-full grid-cols-2 gap-1 sm:grid-cols-4 rounded-lg bg-surface-muted p-1 xl:order-none xl:flex xl:min-w-0 xl:flex-1 xl:basis-auto xl:grid-cols-none"
           >
             {TAB_KEYS.map((key, index) => {
               const active = bridge.tab === index + 1;
@@ -76,7 +76,7 @@ export function AppHeader() {
           <div className="flex-1" />
         )}
 
-        <div className="ml-auto flex shrink-0 items-center gap-1 xl:ml-0">
+        <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-1 xl:ml-0 xl:shrink-0 xl:flex-nowrap">
           <Button
             variant="secondary"
             aria-label={t("newSheet")}
@@ -106,7 +106,7 @@ export function AppHeader() {
                 disabled={bridge.saving}
                 className={cn(
                   buttonStyles({ variant: "primary" }),
-                  "h-12 min-w-28 flex-col gap-0 px-3 py-0.5 leading-tight",
+                  "h-12 min-w-24 flex-col gap-0 px-2 py-0.5 leading-tight sm:min-w-28 sm:px-3",
                 )}
               >
                 <span className="font-semibold">{bridge.saving ? t("saving") : t("save")}</span>
@@ -131,7 +131,7 @@ export function AppHeader() {
                 disabled
                 aria-label={`${t("emailOwner")} (${t("soonShort")})`}
                 title={`${t("emailOwner")}: ${t("soonShort")}`}
-                className="px-0 w-11"
+                className="hidden px-0 w-11 sm:inline-flex"
               >
                 <Mail className="size-5" aria-hidden />
               </Button>
