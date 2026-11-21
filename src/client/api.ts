@@ -89,6 +89,12 @@ export const api = {
   logout: async (): Promise<void> => {
     await request("POST", "/auth/logout", null, {});
   },
+  requestPasswordReset: async (email: string): Promise<void> => {
+    await request("POST", "/auth/password-reset", null, { email });
+  },
+  changePassword: async (password: string): Promise<void> => {
+    await request("PUT", "/auth/password", null, { password });
+  },
   me: (): Promise<Me> => request("GET", "/auth/me", meResponseSchema),
   patients: (params: PageParams & { q?: string; species?: Species }) =>
     request("GET", `/patients${query(params)}`, patientPageSchema),

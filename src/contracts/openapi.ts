@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { loginRequestSchema, loginResponseSchema, meResponseSchema } from "./auth";
+import {
+  loginRequestSchema,
+  loginResponseSchema,
+  meResponseSchema,
+  passwordChangeSchema,
+  passwordResetRequestSchema,
+} from "./auth";
 import { clinicSchema, clinicUpdateSchema } from "./clinic";
 import { errorResponseSchema } from "./errors";
 import {
@@ -36,6 +42,8 @@ const operations: Operation[] = [
   { method: "get", path: "/health", summary: "Health check", auth: false, response: z.object({ status: z.literal("ok") }) },
   { method: "post", path: "/auth/login", summary: "Sign in with e-mail and password (sets an httpOnly session cookie)", auth: false, request: loginRequestSchema, response: loginResponseSchema },
   { method: "post", path: "/auth/logout", summary: "Sign out", auth: false, status: 204 },
+  { method: "post", path: "/auth/password-reset", summary: "E-mail a password reset link (202 whether or not the address has an account; the link opens /auth/confirm)", auth: false, request: passwordResetRequestSchema, status: 202 },
+  { method: "put", path: "/auth/password", summary: "Set a new password for the signed-in user", auth: true, request: passwordChangeSchema, status: 204 },
   { method: "get", path: "/auth/me", summary: "The signed-in user and clinic", auth: true, response: meResponseSchema },
   { method: "get", path: "/reference-data", summary: "Reference data (codes)", auth: true, response: referenceDataSchema },
   { method: "get", path: "/clinic", summary: "The clinic (letterhead data)", auth: true, response: clinicSchema },

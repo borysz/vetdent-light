@@ -70,6 +70,15 @@ export async function loadMembership(db: Db, userId: string) {
   };
 }
 
+/** The caller's access token: the Bearer token, or the one in the (already verified) session cookie. */
+export async function accessTokenOf(req: Request, ctx: AuthContext): Promise<string> {
+  const token = bearerToken(req);
+  if (token) return token;
+  const { data } = await ctx.db.auth.getSession();
+  if (!data.session) throw new ApiError("unauthenticated", "Not signed in");
+  return data.session.access_token;
+}
+
 /**
  * Authenticate a request: `Authorization: Bearer <access token>` or the httpOnly session cookie.
  * The token is verified (JWKS) by Supabase Auth; the user must belong to a clinic.

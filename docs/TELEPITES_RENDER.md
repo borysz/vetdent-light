@@ -45,6 +45,7 @@ A `SUPABASE_SECRET_KEY`-t **ne** add meg a Renderen: a futó alkalmazás nem has
 2. Belépés a meglévő felhasználóval, egy lap megnyitása, mentés.
 3. A 4. fülön **PDF letöltése**: ez próbálja ki, hogy a Chrome a Render környezetében is elindul.
 4. A Render HTTPS-t ad, így a belépési süti `Secure` jelzője magától bekapcsol.
+5. Az elfelejtett jelszóhoz a Supabase felületén meg kell adni az oldal címét: `docs/JELSZO_VISSZAALLITAS.md`.
 
 ## 5. Ha valami nem megy
 

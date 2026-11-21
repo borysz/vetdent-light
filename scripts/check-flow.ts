@@ -1,10 +1,12 @@
 /**
  * Browser flow check with a real Chrome against a running server (production build recommended):
- * create a sheet, status and required fields, local draft restore, leave guard, save conflict (409), sign-in.
+ * create a sheet, status and required fields, local draft restore, leave guard, save conflict (409), sign-in,
+ * forgotten password (reset link generated with the admin API, so no e-mail is sent).
  * Uses a marked test user (e2e-…@vetdent-light.test) and deletes everything it created.
  *
  *   npm run check:flow
  */
+import { randomBytes } from "node:crypto";
 import { mkdtempSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -235,6 +237,41 @@ async function main() {
     ok("clean sheet leaves without a question", true);
     await page.waitForFunction(() => document.body.innerText.includes("FlowDog"), { timeout: 10000 }).catch(() => undefined);
     ok("home lists the saved animal and its sheet", (await bodyText(page)).includes("FlowDog"));
+
+    // 6. forgotten password: link on the sign-in page, reset link, new password, sign in with it
+    const guest = await (await browser.createBrowserContext()).newPage();
+    await guest.evaluateOnNewDocument("window.__name = (t) => t;");
+    await guest.setViewport({ width: 1280, height: 800 });
+    await guest.goto(`${BASE}/login`, { waitUntil: "networkidle2" });
+    await Promise.all([
+      guest.waitForFunction(() => location.pathname === "/forgot-password"),
+      guest.evaluate((t) => [...document.querySelectorAll("a")].find((a) => a.textContent?.includes(t))?.click(), messages.login.forgotPassword),
+    ]);
+    ok("the sign-in page links to the forgotten password form", (await bodyText(guest)).includes(messages.forgotPassword.title));
+    const link = await admin.auth.admin.generateLink({ type: "recovery", email });
+    const tokenHash = link.data.properties?.hashed_token ?? "";
+    ok("a recovery link can be generated", Boolean(tokenHash), link.error?.message ?? "");
+    const confirmUrl = `${BASE}/auth/confirm?token_hash=${tokenHash}&type=recovery`;
+    await guest.goto(confirmUrl, { waitUntil: "networkidle2" });
+    ok("the reset link signs in and opens the new password form", new URL(guest.url()).pathname === "/reset-password", new URL(guest.url()).pathname);
+    const newPassword = randomBytes(18).toString("base64url");
+    await guest.type("#new-password", newPassword);
+    await guest.type("#new-password-again", newPassword + "x");
+    await guest.click("button[type=submit]");
+    await pause(300);
+    ok("different passwords are refused", (await bodyText(guest)).includes(messages.resetPassword.mismatch));
+    await guest.click("#new-password-again", { count: 3 });
+    await guest.type("#new-password-again", newPassword);
+    await Promise.all([guest.waitForFunction(() => location.pathname === "/", { timeout: 15000 }), guest.click("button[type=submit]")]);
+    ok("saving the new password opens the app", true);
+    const fresh = await (await browser.createBrowserContext()).newPage();
+    await fresh.evaluateOnNewDocument("window.__name = (t) => t;");
+    await login(fresh, email, newPassword);
+    ok("the new password signs in", new URL(fresh.url()).pathname === "/");
+    const signedOut = await (await browser.createBrowserContext()).newPage();
+    await signedOut.evaluateOnNewDocument("window.__name = (t) => t;");
+    await signedOut.goto(confirmUrl, { waitUntil: "networkidle2" });
+    ok("a used reset link is refused", (await bodyText(signedOut)).includes(messages.forgotPassword.linkInvalid), signedOut.url().replace(BASE, ""));
   } finally {
     await browser.close();
     await e2e.remove();

@@ -8,6 +8,13 @@ export const loginRequestSchema = z.object({
   returnTokens: z.boolean().optional(),
 });
 
+/** Minimum length of a new password (also asked by npm run user:create / user:password). */
+export const MIN_PASSWORD_LENGTH = 12;
+
+export const passwordResetRequestSchema = z.object({ email: z.email().max(254) });
+
+export const passwordChangeSchema = z.object({ password: z.string().min(MIN_PASSWORD_LENGTH).max(256) });
+
 export const meResponseSchema = z.object({
   user: z.object({ id: uuid, email: z.string().nullable() }),
   member: z.object({ displayName: z.string(), title: z.string().nullable() }),

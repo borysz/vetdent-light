@@ -301,6 +301,24 @@ async function main() {
       // tsx wraps named functions in a __name() helper; define it in the page so audit code can run there.
       await page.evaluateOnNewDocument("window.__name = (target) => target;");
 
+      const emulate = (size: (typeof SIZES)[number]) =>
+        // Tablets are emulated as real devices (mobile viewport, touch, 2x pixels, tablet browser), like the
+        // device mode of Chrome DevTools; laptops and desktops as plain windows.
+        page.emulate({
+          userAgent: size.phone ? PHONE_USER_AGENT : size.tablet ? TABLET_USER_AGENT : desktopUserAgent,
+          viewport: { width: size.width, height: size.height, deviceScaleFactor: size.tablet ? 2 : 1, isMobile: size.tablet, hasTouch: size.tablet },
+        });
+
+      // Signed-out pages first.
+      for (const size of SIZES) {
+        await emulate(size);
+        for (const [path, state] of [["/login", "login"], ["/forgot-password", "forgot-password"]] as const) {
+          await page.goto(`${BASE_URL}${path}`, { waitUntil: "networkidle2" });
+          await page.waitForSelector("form button[type=submit]");
+          await inspect(page, size, state, { fitsScreen: true });
+        }
+      }
+
       await page.setViewport({ width: SIZES[0].width, height: SIZES[0].height });
       await page.goto(`${BASE_URL}/login`, { waitUntil: "networkidle2" });
       await page.type("#email", email);
@@ -310,12 +328,7 @@ async function main() {
 
       const h = messages.header;
       for (const size of SIZES) {
-        // Tablets are emulated as real devices (mobile viewport, touch, 2x pixels, tablet browser), like the
-        // device mode of Chrome DevTools; laptops and desktops as plain windows.
-        await page.emulate({
-          userAgent: size.phone ? PHONE_USER_AGENT : size.tablet ? TABLET_USER_AGENT : desktopUserAgent,
-          viewport: { width: size.width, height: size.height, deviceScaleFactor: size.tablet ? 2 : 1, isMobile: size.tablet, hasTouch: size.tablet },
-        });
+        await emulate(size);
 
         await page.goto(`${BASE_URL}/`, { waitUntil: "networkidle2" });
         await page.waitForSelector("main ul li");
@@ -405,6 +418,10 @@ async function main() {
         await page.goto(`${BASE_URL}/sheets/new?patient=${firstPatientId}`, { waitUntil: "networkidle2" });
         await page.waitForSelector("input[type=date]");
         await inspect(page, size, "sheet-new-for-patient");
+
+        await page.goto(`${BASE_URL}/reset-password`, { waitUntil: "networkidle2" });
+        await page.waitForSelector("#new-password");
+        await inspect(page, size, "reset-password", { fitsScreen: true });
 
         await page.goto(`${BASE_URL}/login`, { waitUntil: "networkidle2" });
         // Signed in users are redirected from /login; that redirect target is the home screen.

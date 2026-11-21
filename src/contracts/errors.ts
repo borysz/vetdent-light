@@ -12,6 +12,9 @@ export const errorCodes = [
   "not_found",
   "version_conflict",
   "species_locked",
+  "rate_limited",
+  "weak_password",
+  "same_password",
   "internal_error",
 ] as const;
 export type ErrorCode = (typeof errorCodes)[number];
@@ -27,6 +30,9 @@ export const httpStatusByCode: Record<ErrorCode, number> = {
   not_found: 404,
   version_conflict: 409,
   species_locked: 409,
+  rate_limited: 429,
+  weak_password: 422,
+  same_password: 422,
   internal_error: 500,
 };
 
