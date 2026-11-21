@@ -8,7 +8,7 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 |---|---|---|
 | A fejlesztői és az éles szerver portja **6438** (`npm run dev`, `npm run start`) | A megrendelő kérése | `package.json`, `.claude/launch.json` |
 | `cacheComponents` kikapcsolva (a `create-next-app` alapból bekapcsolta, a `partialPrefetching`-gel együtt, ezeket töröltük) | Minden bejelentkezett oldal dinamikus; a vetdent projektben a kérésidejű adat csak `<Suspense>` mögött volt olvasható | `next.config.ts` |
-| A nyelv a **cookie-ból** jön (`locale`), az URL-ben nincs nyelvi előtag; alapnyelv `hu` | A felület útvonalai magyarok (`/belepes`, `/lapok/…`), nyelvi előtag felesleges; új nyelv = új katalógus | `src/i18n/config.ts`, `src/i18n/request.ts` |
+| A nyelv a **cookie-ból** jön (`locale`), az URL-ben nincs nyelvi előtag; alapnyelv `hu` | Az URI-k és a forráskód mindig angolok (`/login`, `/sheets/…`), a nyelv nem része az útvonalnak; új nyelv = új katalógus | `src/i18n/config.ts`, `src/i18n/request.ts` |
 | Az i18n teljes, nem csak magyar: `messages/<nyelv>.json` + ellenőrzési jegyzék `messages/review/<nyelv>.json` | Lásd `docs/I18N.md`; ez felülírja a `MASTER_PROMPT.md` egynyelvűségi sorát | `docs/I18N.md`, `scripts/i18n.ts` |
 | Az ellenőrzési jegyzékben a szöveg `textHash`-e rögzíti, melyik szöveget nézte át az állatorvos; módosított szöveg automatikusan `pending` lesz (`npm run i18n:sync`) | A jóváhagyás ne vonatkozhasson csendben megváltozott szövegre | `scripts/i18n.ts` |
 | `@types/node` 24-es | A Vitest 5 a 20-as típusokkal nem telepíthető; a gép Node 24-et használ | `package.json` |
@@ -43,3 +43,10 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 - A gazdi e-mail-címe nem kötelező (csak formátumellenőrzés), amíg nincs e-mail-küldés.
 - Külön gazdi-nyilvántartás nincs: a gazdi adatai az állatnál vannak; később bővíthető.
 - A kezelési lap egy dokumentumként (`content jsonb`) mentődik; ha később elemzés kell, a fogadatok normalizálhatók.
+
+## URI-k és forráskód nyelve
+
+| Döntés | Indok | Módosítás helye |
+|---|---|---|
+| Az oldalak és az API URI-jei, valamint a teljes forráskód mindig angol. A bejelentkezési oldal `/login` (nem `/belepes`); a tervezett útvonalak: `/sheets/[id]`, `/sheets/new?species=dog|cat` vagy `?patient=<id>`, fül: `?tab=1..4` (nem `/lapok`, `?faj=`, `?paciens=`, `?ful=`) | A megrendelő kérése; a `MASTER_PROMPT.md` magyar útvonalai ezzel felülíródnak | `src/app/`, `src/proxy.ts`, `tests/language.test.ts` |
+| A `tests/language.test.ts` hibát jelez, ha a `src`, `scripts`, `tests` vagy `supabase` mappában ékezetes magyar szöveg vagy magyar útvonalnév van | Hogy a szabály ne sérülhessen észrevétlenül | `tests/language.test.ts` |

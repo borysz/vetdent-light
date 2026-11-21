@@ -19,7 +19,7 @@
   --primary-strong: #00786f; /* selected ASA, active tooth badge */
   --primary-soft: #f0fdfa; /* selected chip background */
   --primary-soft-strong: #cbfbf1; /* mint badges, active-tooth bar */
-  --dark: #0f172b; /* PDF Mentés button */
+  --dark: #0f172b; /* PDF save button */
 
   /* species */
   --dog: #fe9a00;
@@ -36,7 +36,7 @@
   --mark-calculus: #fe9a00; /* orange fill */
   --mark-fracture: #9810fa; /* purple */
   --midline: #50a2ff; /* dashed blue midline */
-  --chart-title: #155dfc; /* "KUTYA · 42 MARADANDÓ FOG" */
+  --chart-title: #155dfc; /* "DOG · 42 PERMANENT TEETH" (Hungarian label in the UI) */
 
   /* chart cell tints */
   --cell-treat-bg: #f0fdfa;

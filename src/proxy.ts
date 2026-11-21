@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { serverEnv } from "@/server/env";
 
-const PUBLIC_PAGES = new Set(["/belepes"]);
+const PUBLIC_PAGES = new Set(["/login"]);
 const PUBLIC_API = new Set([
   "/api/v1/health",
   "/api/v1/openapi.json",
@@ -16,7 +16,7 @@ function isHttps(request: NextRequest): boolean {
 
 /**
  * Keeps the Supabase session fresh and gates everything behind sign-in:
- * pages redirect to /belepes, API calls get a 401 JSON error. Bearer requests pass through
+ * pages redirect to /login, API calls get a 401 JSON error. Bearer requests pass through
  * (the route verifies the token itself).
  */
 export async function proxy(request: NextRequest) {
@@ -63,7 +63,7 @@ export async function proxy(request: NextRequest) {
 
   if (!signedIn && !PUBLIC_PAGES.has(pathname)) {
     const url = request.nextUrl.clone();
-    url.pathname = "/belepes";
+    url.pathname = "/login";
     url.search = "";
     return withSessionCookies(NextResponse.redirect(url));
   }

@@ -21,7 +21,7 @@ const patientCard = (name: string, over: Record<string, unknown> = {}) => ({
   name,
   breed: "Golden Retriever",
   sex: "male",
-  ownerName: `Gazdi ${name}`,
+  ownerName: `Owner ${name}`,
   ownerEmail: "gazdi@example.com",
   ownerPhone: "+36 30 000 0000",
   ...over,
@@ -29,7 +29,7 @@ const patientCard = (name: string, over: Record<string, unknown> = {}) => ({
 
 const newSheet = (name: string, over: Record<string, unknown> = {}) => ({
   treatmentDate: "2026-03-05",
-  treatingVet: "Dr. Teszt",
+  treatingVet: "Dr. Test",
   ageYears: 6,
   ageMonths: 4,
   weightKg: 32.5,
@@ -177,7 +177,7 @@ describe.skipIf(!hasEnv)("API v1 (real Supabase)", () => {
       const name = `Atomic-${runId}`;
       const { error } = await clientFor(alice).rpc("create_patient_with_sheet", {
         p_clinic_id: alice.clinicId!,
-        p_patient: { species: "dog", name, ownerName: "Gazdi" },
+        p_patient: { species: "dog", name, ownerName: "Owner" },
         p_sheet: { treatmentDate: null },
       });
       expect(error).not.toBeNull();
@@ -299,7 +299,7 @@ describe.skipIf(!hasEnv)("API v1 (real Supabase)", () => {
       const own = await call(clinicPUT, "/api/v1/clinic", {
         token: alice.token,
         method: "PUT",
-        body: { name: `itest ${runId} alice`, city: "Budapest", postalCode: "1118", street: "Teszt utca 1.", phone: "", email: "rendelo@example.com" },
+        body: { name: `itest ${runId} alice`, city: "Budapest", postalCode: "1118", street: "Test street 1.", phone: "", email: "rendelo@example.com" },
       });
       expect(own.status).toBe(200);
       expect(own.body.city).toBe("Budapest");
@@ -353,11 +353,11 @@ describe.skipIf(!hasEnv)("API v1 (real Supabase)", () => {
       await call(patientsPOST, "/api/v1/patients", {
         token: alice.token,
         method: "POST",
-        body: patientCard(`Bodri-${runId}`, { ownerName: `Szabó Zsolt ${runId}`, ownerPhone: "+36 20 555 1234" }),
+        body: patientCard(`Bodri-${runId}`, { ownerName: `Smith John ${runId}`, ownerPhone: "+36 20 555 1234" }),
       });
       const byName = await call(patientsGET, `/api/v1/patients?q=bodri-${runId}`, { token: alice.token });
       expect(byName.body.items.length).toBe(1);
-      const byOwner = await call(patientsGET, `/api/v1/patients?q=${encodeURIComponent(`szabó zsolt ${runId}`)}`, { token: alice.token });
+      const byOwner = await call(patientsGET, `/api/v1/patients?q=${encodeURIComponent(`smith john ${runId}`)}`, { token: alice.token });
       expect(byOwner.body.items.length).toBe(1);
       const byPhone = await call(patientsGET, `/api/v1/patients?q=${encodeURIComponent("555 1234")}`, { token: alice.token });
       expect(byPhone.body.items.length).toBeGreaterThanOrEqual(1);

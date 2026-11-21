@@ -29,7 +29,7 @@ Confirmed primary value: a fast, precise interactive dental chart (42 teeth for 
 - Target devices: laptop (1920x1080 at 150% zoom, about 1280x580 usable), iPad portrait (820x1100, 810x1000), Android tablet portrait (800x1150). Secondary: 768x1024, landscape tablet 1180x820, wide desktop.
 - The full dental chart must always be visible at once, without horizontal scroll or shrinking. Pop-ups must never scroll.
 - Touch targets at least 44x44 px, inputs at 16 px, no hover-only functions.
-- Interface language: Hungarian for now, formal address, but the app is i18n-ready: no user-visible string in code, every locale is a message catalogue (`messages/<locale>.json`, next-intl, typed keys), `hu` is the default locale and further languages are added by adding a catalogue, not by touching components. Locale-dependent formats (dates, numbers, decimal comma) come from the locale, never hard-coded. Code and commits in English.
+- Interface language: Hungarian for now, formal address, but the app is i18n-ready: no user-visible string in code, every locale is a message catalogue (`messages/<locale>.json`, next-intl, typed keys), `hu` is the default locale and further languages are added by adding a catalogue, not by touching components. Locale-dependent formats (dates, numbers, decimal comma) come from the locale, never hard-coded. Code, identifiers, comments, scripts, tests, commit messages and all URIs (pages and API) are always English (e.g. `/login`, `/sheets/[id]`); Hungarian lives only in `messages/`, `docs/` and the root documents.
 - Time zone Europe/Budapest, hu-HU number formats (decimal comma), dates as YYYY-MM-DD on the sheet.
 - Login by e-mail and password; no self-registration. All members of a clinic see and edit all of its animals and sheets.
 

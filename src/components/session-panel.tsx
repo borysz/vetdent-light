@@ -13,7 +13,7 @@ export function SessionPanel() {
 
   async function onLogout() {
     await logout.mutateAsync();
-    router.replace("/belepes");
+    router.replace("/login");
     router.refresh();
   }
 

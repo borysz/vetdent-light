@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -H 0.0.0.0 -p 6438",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "check:i18n": "tsx scripts/i18n.ts check",
     "i18n:sync": "tsx scripts/i18n.ts sync",

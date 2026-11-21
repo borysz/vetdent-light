@@ -1,7 +1,7 @@
 /**
  * Create a confirmed Auth user and a clinic membership. Run it in your own terminal:
  *
- *   npm run user:create -- --email vet@example.com --name "Kovács Eszter" --title "Dr." [--clinic "Rendelő neve"]
+ *   npm run user:create -- --email vet@example.com --name "Jane Doe" --title "Dr." [--clinic "Clinic name"]
  *
  * The password is asked for hidden (or read from stdin when piped); it is never a command-line argument.
  */
@@ -53,15 +53,15 @@ async function main() {
   const email = arg("email");
   const displayName = arg("name");
   const title = arg("title") ?? null;
-  const clinicName = arg("clinic") ?? "Demó rendelő";
+  const clinicName = arg("clinic") ?? "Demo clinic";
   if (!email || !displayName) {
     console.error('Usage: npm run user:create -- --email <email> --name "<display name>" [--title "Dr."] [--clinic "<clinic>"]');
     process.exit(2);
   }
 
-  const password = await promptHidden("Jelszó (legalább 12 karakter): ");
+  const password = await promptHidden("Password (at least 12 characters): ");
   if (password.length < 12) {
-    console.error("A jelszó legalább 12 karakter legyen.");
+    console.error("The password must be at least 12 characters.");
     process.exit(2);
   }
 
@@ -76,7 +76,7 @@ async function main() {
     const created = await admin.from("clinics").insert({ name: clinicName }).select("id").single();
     if (created.error) throw created.error;
     clinicId = created.data.id;
-    console.log(`Rendelő létrehozva: ${clinicName}`);
+    console.log(`Clinic created: ${clinicName}`);
   }
 
   const user = await admin.auth.admin.createUser({ email, password, email_confirm: true });
@@ -89,10 +89,10 @@ async function main() {
     await admin.auth.admin.deleteUser(user.data.user.id);
     throw member.error;
   }
-  console.log(`Felhasználó létrehozva: ${email} (${clinicName})`);
+  console.log(`User created: ${email} (${clinicName})`);
 }
 
 main().catch((error) => {
-  console.error("Hiba:", error instanceof Error ? error.message : error);
+  console.error("Error:", error instanceof Error ? error.message : error);
   process.exit(1);
 });
