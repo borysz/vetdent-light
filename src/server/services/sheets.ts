@@ -8,6 +8,8 @@ import {
   type SheetSummary,
   type UpdateSheetRequest,
 } from "@/contracts/sheets";
+import { validateTeeth, type TeethRecord } from "@/domain/teeth/entry";
+import type { Species } from "@/contracts/patients";
 import type { Json } from "../db/database.types";
 import type { AuthContext } from "../auth";
 import { ApiError, fromDb } from "../errors";
@@ -52,6 +54,12 @@ function patientJson(patient: PatientInput, fields: SheetFields): Json {
   };
 }
 
+/** The teeth record must fit the species (existing teeth, allowed codes); otherwise 422. */
+function assertTeeth(species: Species, fields: SheetFields) {
+  const problems = validateTeeth(species, fields.content.teeth as TeethRecord);
+  if (problems.length > 0) throw new ApiError("validation_failed", "Invalid teeth record", { "content.teeth": problems[0] });
+}
+
 export async function getSheet(ctx: AuthContext, id: string): Promise<SheetDetail> {
   const { data, error } = await ctx.db
     .from("treatment_sheets")
@@ -67,6 +75,7 @@ export async function getSheet(ctx: AuthContext, id: string): Promise<SheetDetai
 
 export async function createSheet(ctx: AuthContext, input: CreateSheetRequest): Promise<SheetDetail> {
   if (input.patient) {
+    assertTeeth(input.patient.species, input);
     // New patient and first sheet in one database transaction.
     const { data, error } = await ctx.db.rpc("create_patient_with_sheet", {
       p_clinic_id: ctx.clinicId,
@@ -80,12 +89,13 @@ export async function createSheet(ctx: AuthContext, input: CreateSheetRequest): 
   const patientId = input.patientId as string;
   const { data: patient, error: patientError } = await ctx.db
     .from("patients")
-    .select("id")
+    .select("id, species")
     .eq("id", patientId)
     .eq("clinic_id", ctx.clinicId)
     .maybeSingle();
   if (patientError) throw fromDb(patientError);
   if (!patient) throw new ApiError("not_found", "Patient not found");
+  assertTeeth(patient.species as Species, input);
 
   const { data: sheet, error } = await ctx.db
     .from("treatment_sheets")
@@ -120,7 +130,8 @@ export async function createSheet(ctx: AuthContext, input: CreateSheetRequest): 
 /** Save with optimistic locking; a stale `version` raises version_conflict (409). */
 export async function updateSheet(ctx: AuthContext, id: string, input: UpdateSheetRequest): Promise<SheetDetail> {
   // Make sure the sheet belongs to the caller's clinic (404 otherwise) before writing.
-  await getSheet(ctx, id);
+  const current = await getSheet(ctx, id);
+  assertTeeth(input.patient?.species ?? current.patient.species, input);
   const { error } = await ctx.db.rpc("save_sheet", {
     p_sheet_id: id,
     p_expected_version: input.version,

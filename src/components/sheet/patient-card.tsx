@@ -1,9 +1,11 @@
 "use client";
 
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { DraftErrors, SheetDraft } from "@/client/sheet-draft";
 import { sexValues, type Sex, type Species } from "@/contracts/patients";
+import type { SheetContent } from "@/contracts/sheets";
+import { COMPLAINTS } from "@/domain/teeth/codes";
 import { SpeciesBadge } from "@/components/species-badge";
 import { cn } from "@/lib/utils";
 import { Field, selectStyles, TextInput } from "./fields";
@@ -18,11 +20,12 @@ const SEX_KEYS: Record<Sex, "sexMale" | "sexFemale" | "sexNeuteredMale" | "sexSp
 
 /**
  * Patient card shown above every tab. Collapsed it is one summary line; expanded it holds the
- * animal, owner, ASA, vet and date fields. Anamnesis fields join in the next phase.
+ * animal, owner, ASA, vet, date and anamnesis fields.
  */
 export function PatientCard({
   draft,
   onChange,
+  onAnamnesis,
   errors,
   speciesLocked,
   expanded,
@@ -30,12 +33,15 @@ export function PatientCard({
 }: {
   draft: SheetDraft;
   onChange: (patch: Partial<SheetDraft>) => void;
+  onAnamnesis: (patch: Partial<SheetContent["anamnesis"]>) => void;
   errors: DraftErrors;
   speciesLocked: boolean;
   expanded: boolean;
   onToggle: () => void;
 }) {
   const t = useTranslations("card");
+  const complaintText = useTranslations("complaints");
+  const anamnesis = draft.content.anamnesis;
   const err = (key: keyof DraftErrors) => (errors[key] ? t(errors[key]) : undefined);
 
   const summary: [string, string][] = [
@@ -267,6 +273,69 @@ export function PatientCard({
                 onChange={(e) => onChange({ treatmentDate: e.target.value })}
               />
             )}
+          </Field>
+
+          <Field label={t("lastFeeding")}>
+            {(p) => <TextInput id={p.id} value={anamnesis.lastFeeding} onChange={(e) => onAnamnesis({ lastFeeding: e.target.value })} autoComplete="off" />}
+          </Field>
+          <Field label={t("preoperativeBlood")}>
+            {(p) => (
+              <>
+                <TextInput
+                  id={p.id}
+                  list={p.id + "-options"}
+                  value={anamnesis.preoperativeBlood}
+                  onChange={(e) => onAnamnesis({ preoperativeBlood: e.target.value })}
+                  autoComplete="off"
+                />
+                <datalist id={p.id + "-options"}>
+                  <option value={t("preoperativeBloodNormal")} />
+                </datalist>
+              </>
+            )}
+          </Field>
+          <Field label={t("assistant")} className="md:col-span-2">
+            {(p) => <TextInput id={p.id} value={anamnesis.assistant} onChange={(e) => onAnamnesis({ assistant: e.target.value })} autoComplete="off" />}
+          </Field>
+
+          <fieldset className="md:col-span-4">
+            <legend className="mb-1 block text-sm font-medium">{t("complaints")}</legend>
+            <div className="flex flex-wrap gap-1">
+              {COMPLAINTS.map((complaint) => {
+                const active = anamnesis.complaints.includes(complaint);
+                return (
+                  <button
+                    key={complaint}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() =>
+                      onAnamnesis({
+                        complaints: active
+                          ? anamnesis.complaints.filter((item) => item !== complaint)
+                          : [...anamnesis.complaints, complaint],
+                      })
+                    }
+                    className={cn(
+                      "inline-flex min-h-11 items-center gap-1 rounded-md border px-3 text-sm font-medium outline-offset-2 focus-visible:outline-2 focus-visible:outline-primary-strong",
+                      active ? "border-primary bg-primary-soft text-primary-strong" : "border-border bg-surface text-foreground-muted hover:bg-surface-muted",
+                    )}
+                  >
+                    {active ? <Check className="size-4" aria-hidden /> : <Plus className="size-4" aria-hidden />}
+                    {complaintText(complaint)}
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
+
+          <Field label={t("otherAnamnesis")} className="md:col-span-2">
+            {(p) => <TextInput id={p.id} value={anamnesis.otherAnamnesis} onChange={(e) => onAnamnesis({ otherAnamnesis: e.target.value })} autoComplete="off" />}
+          </Field>
+          <Field label={t("homeHygiene")}>
+            {(p) => <TextInput id={p.id} value={anamnesis.homeHygiene} onChange={(e) => onAnamnesis({ homeHygiene: e.target.value })} autoComplete="off" />}
+          </Field>
+          <Field label={t("diet")}>
+            {(p) => <TextInput id={p.id} value={anamnesis.diet} onChange={(e) => onAnamnesis({ diet: e.target.value })} autoComplete="off" />}
           </Field>
         </div>
       ) : null}

@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { teethOf } from "@/domain/teeth/catalog";
+import { COMPLAINTS, FINDINGS, TREATMENTS } from "@/domain/teeth/codes";
 import { sexValues, speciesValues } from "./patients";
 
 /**
@@ -11,6 +13,24 @@ export const referenceDataSchema = z.object({
   sexes: z.array(z.string()),
   asaClasses: z.array(z.string()),
   stages: z.array(z.string()),
+  complaints: z.array(z.string()),
+  findings: z.array(z.object({ code: z.string(), group: z.string(), grade: z.number().int().optional() })),
+  treatments: z.array(z.string()),
+  /** Tooth catalogue per species (modified Triadan). */
+  teeth: z.record(
+    z.string(),
+    z.array(
+      z.object({
+        code: z.string(),
+        quadrant: z.number().int(),
+        arch: z.string(),
+        side: z.string(),
+        kind: z.string(),
+        index: z.number().int(),
+        roots: z.number().int(),
+      }),
+    ),
+  ),
 });
 export type ReferenceData = z.infer<typeof referenceDataSchema>;
 
@@ -19,4 +39,13 @@ export const referenceData: ReferenceData = {
   sexes: [...sexValues],
   asaClasses: ["I", "II", "III", "IV", "V"],
   stages: ["normal", "1", "2", "3", "4"],
+  complaints: [...COMPLAINTS],
+  findings: FINDINGS,
+  treatments: [...TREATMENTS],
+  teeth: Object.fromEntries(
+    speciesValues.map((species) => [
+      species,
+      teethOf(species).map(({ code, quadrant, arch, side, kind, index, roots }) => ({ code, quadrant, arch, side, kind, index, roots })),
+    ]),
+  ),
 };

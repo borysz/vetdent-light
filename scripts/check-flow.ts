@@ -81,6 +81,35 @@ async function main() {
     const row = await admin.from("patients").select("name,owner_name,last_weight_kg,species").eq("name", "FlowDog").maybeSingle();
     ok("patient is in the database", row.data?.owner_name === "Flow Owner" && row.data?.last_weight_kg === 12.5 && row.data?.species === "dog");
 
+    // 1b. chart: select all teeth, quick entry, scale and polish everything
+    const polished = () =>
+      page.evaluate(() => [...document.querySelectorAll("[data-other-cell]")].filter((cell) => (cell.textContent ?? "").includes("POL")).length);
+    ok("the dog chart shows 42 teeth", (await page.$$("[data-chart] [data-tooth]")).length === 42);
+    await clickText(page, messages.chart.selectAll);
+    await clickText(page, messages.chart.quickFor.split(" ")[0]);
+    await page.waitForSelector("[role=dialog]");
+    const quickText = await page.$eval("[role=dialog]", (dialog) => dialog.textContent ?? "");
+    ok("tooth resorption (TR) is not offered for a dog", !quickText.includes("TR1"));
+    await clickText(page, messages.quick.scaleAndPolish);
+    await page.keyboard.press("Escape");
+    await pause(300);
+    ok("one click puts U+POL on every tooth", (await polished()) === 42, String(await polished()));
+    await page.click('[data-tooth="308"]');
+    await page.waitForSelector("[role=dialog] [role=tab]");
+    await page.evaluate(() => {
+      const missing = [...document.querySelectorAll("[role=dialog] button")].find((b) => b.textContent?.trim() === "M");
+      (missing as HTMLButtonElement).click();
+    });
+    await clickText(page, messages.toothEditor.done);
+    await pause(300);
+    ok("marking a tooth missing removes its treatments", (await polished()) === 41, String(await polished()));
+    await clickText(page, messages.header.save);
+    await page.waitForFunction(() => /Mentve \d\d:\d\d/.test(document.body.innerText) && !document.body.innerText.includes("Nem mentett"), { timeout: 15000 });
+    await page.reload({ waitUntil: "networkidle2" });
+    await page.waitForSelector("[data-chart] [data-tooth]");
+    ok("the chart is stored and comes back after a reload", (await polished()) === 41, String(await polished()));
+    await page.click(`[aria-label="${messages.card.expand}"]`);
+
     // 2. dirty state, then draft restore after a reload
     await fillByLabel(page, messages.card.breed, "Beagle");
     ok("an edit makes the status unsaved", (await bodyText(page)).includes(messages.editor.unsaved));

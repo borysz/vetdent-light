@@ -38,6 +38,27 @@
   --midline: #50a2ff; /* dashed blue midline */
   --chart-title: #155dfc; /* "DOG · 42 PERMANENT TEETH" (Hungarian label in the UI) */
 
+  /* tooth drawings */
+  --tooth-stroke: #314158;
+  --mark-calculus-stroke: #ca3500;
+  --mark-calculus-fill: #ffedd5;
+  --mark-fracture-fill: #f3e8ff;
+  --mark-extraction-stroke: #ff637e;
+  --mark-extraction-fill: #ffe4e6;
+  --mark-missing-fill: #f1f5f9;
+
+  /* chart cells and code chips */
+  --cell-bg: #f8fafc;
+  --cell-border: #e2e8f0;
+  --cell-value-bg: #f1f5f9;
+  --cell-value-border: #cad5e2;
+  --chip-treatment-bg: #cbfbf1;
+  --chip-treatment-ink: #0b4f4a;
+  --chip-pathology-bg: #f3e8ff;
+  --chip-pathology-ink: #6e11b0;
+  --chip-extraction-bg: #ffe2e2;
+  --chip-extraction-ink: #c10007;
+
   /* chart cell tints */
   --cell-treat-bg: #f0fdfa;
   --cell-pathology-bg: #ffe2e2;

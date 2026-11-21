@@ -75,3 +75,22 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 | Döntés | Indok | Módosítás helye |
 |---|---|---|
 | A felületen nem jelenik meg a fogak darabszáma (nincs „42 fog” / „30 fog” a kártyákon, az ablakokban és a faj gombjain) | A megrendelő kérése (2026-11-21). A fogtábla címe a mintaképeken „Kutya · 42 fog”: a 4. fázisban megkérdezendő, hogy ott is elhagyjuk-e | `messages/hu.json` |
+
+## 4. fázis
+
+| Döntés | Indok | Módosítás helye |
+|---|---|---|
+| A fogtábla címében és fejlécében nincs fogszám („… (Kutya)”, „KUTYA · MARADANDÓ FOGAK”) | A megrendelő a felületről kérte a fogszám elhagyását; a kártyáknál már így van | `messages/hu.json` (`chart.*`) |
+| A tábla két külön rács (maxilla, mandibula); minden ívfélben a fogak egyenletesen töltik ki a fél szélességet, ezért a felső és az alsó oszlopok nem esnek egy vonalba | Pontosan a mintaképek szerint | `src/components/chart/dental-chart.tsx` |
+| Egy fog teljes oszlopa egyetlen érintési cél (átlátszó gomb az oszlop fölött) | Álló tableten egy oszlop kb. 30 px széles; a 44 px a magasságban teljesül | `dental-chart.tsx`, `check-layout.ts` (`data-touch="column"`) |
+| Az „Egyéb” cella a kódokat a tényleges oszlopszélességhez tördeli; alacsony képernyőn (≤ 700 px magas) legfeljebb 3 sort mutat, a többit „+n” jelzi (a fogszerkesztőben és az aktív fog sávban minden kód látszik) | A teljes táblának a laptop fejléce alatti kb. 510 px-be kell férnie a legrosszabb esetben is | `src/domain/teeth/derive.ts` (`packChips`), `odontogram-tab.tsx` |
+| Alacsony képernyőn a tábla sorai tömörebbek (index 18 px, fograjz 40 px), magasabb képernyőn nagyobbak (24 / 56 px) | Ugyanaz az ok | `dental-chart.tsx` (CSS-változók) |
+| Több fog kijelölésekor a kijelölő gombok helyére a kijelölési sáv kerül („N fog kijelölve”, „Gyorsbevitel – N fog”, „Kijelölés törlése”) | Ne nőjön a tábla magassága új sorral | `odontogram-tab.tsx` |
+| A fogszerkesztő ablak két fülre bomlik (Állapot, Kezelés); a gyorsbevitel a lábléc gombjáról külön ablakban nyílik | A felugró ablak nem görgethető, a három rész együtt nem fér el 1280×580-on | `tooth-editor-dialog.tsx` |
+| A gyorsbevitel gombjai kapcsolók: ha minden érintett fogon megvan a kód, a kattintás leveszi; a nem alkalmazható fogakat kihagyja és megszámolja | Gyors javítás lehetősége; a szabályok ugyanazok, mint a fogszerkesztőben | `quick-panel.tsx` |
+| A gyorsbevitelben a TR-nek (csak macskánál) és a mobilitásnak fokozatonként külön gombja van (TR1–TR5, Mob1–Mob3), nem egy „TR” és egy „Mob” gomb | A mintaképen a fokozat nem derül ki; fokozatot nem találunk ki | `quick-panel.tsx` |
+| A fograjzok saját SVG-k a minták stílusában (vékony körvonal, koronavonal); a felső fogak az alsók tükörképei, így mindkét ív koronái a vízszintes elválasztó felé néznek | A `referencia/*.jpg` ábrái nem másolhatók; a minták stílusát követjük | `tooth-drawing.tsx` |
+| Fajváltáskor (csak az első mentés előtt lehetséges) a fogadatokból az marad meg, ami az új fajnál is érvényes | A kutya és a macska fogai és kódjai eltérnek | `adaptTeethToSpecies` |
+| Az API a fogadatokat a fajhoz ellenőrzi (létező fog, megengedett kód), hibánál 422 | A szabályok a szerveren is érvényesüljenek | `src/server/services/sheets.ts` |
+| A preoperatív vérvizsgálat szabad szöveges mező egy javaslattal („Normál referenciaértékek”) | A mintaképen csak ez az egy elem látszik; további elemet nem találunk ki | `patient-card.tsx` |
+| A hosszú fülnevek csak 1800 px-től látszanak (alatta a rövidek) | 1536–1800 px között a teljes nevek két sorba törtek | `app-header.tsx` |

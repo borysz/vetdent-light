@@ -14,6 +14,7 @@ const widths = {
   sm: "max-w-md",
   md: "max-w-2xl",
   lg: "max-w-4xl",
+  xl: "max-w-5xl",
 } as const;
 
 /**
@@ -23,12 +24,15 @@ const widths = {
 export function DialogContent({
   title,
   description,
+  header,
   size = "md",
   children,
   className,
 }: {
   title: string;
   description?: string;
+  /** Custom header content; the title is then only announced to screen readers. */
+  header?: ReactNode;
   size?: keyof typeof widths;
   children: ReactNode;
   className?: string;
@@ -45,8 +49,9 @@ export function DialogContent({
         )}
       >
         <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-3">
-          <div className="min-w-0">
-            <DialogPrimitive.Title className="text-lg font-semibold">{title}</DialogPrimitive.Title>
+          <div className="min-w-0 flex-1">
+            {header}
+            <DialogPrimitive.Title className={header ? "sr-only" : "text-lg font-semibold"}>{title}</DialogPrimitive.Title>
             {description ? (
               <DialogPrimitive.Description className="text-sm text-foreground-muted">{description}</DialogPrimitive.Description>
             ) : (

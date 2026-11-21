@@ -6,7 +6,8 @@
  *
  * It creates a marked test user (e2e-…@vetdent-light.test) with a few animals and sheets, signs in through the
  * login page, visits every main page and opens every dialog at every target size, and fails on:
- * horizontal page scroll, elements outside the screen, scrollable or clipped dialogs, touch targets under 44 px.
+ * horizontal page scroll, elements outside the screen, scrollable or clipped dialogs, touch targets under 44 px,
+ * and for the dental chart: it must fit whole under the header, show every tooth, and keep its text at 11 px or more.
  * Screenshots go to SCREENSHOT_DIR (default "template pics/screenshots", local, not in git). Everything it
  * created is deleted at the end.
  */
@@ -15,6 +16,7 @@ import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import puppeteer, { type Page } from "puppeteer-core";
 import messages from "../messages/hu.json";
+import { teethOf } from "../src/domain/teeth/catalog";
 import { createAdminClient } from "../src/server/admin";
 
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:6438";
@@ -81,9 +83,40 @@ function auditPage(): string[] {
   for (const el of document.querySelectorAll(targets)) {
     if (!visible(el)) continue;
     const rect = el.getBoundingClientRect();
-    if (rect.width < 43.5 || rect.height < 43.5) small.push(`${describe(el)} is ${Math.round(rect.width)}x${Math.round(rect.height)}`);
+    const columnTarget = (el as HTMLElement).dataset.touch === "column";
+    if ((!columnTarget && rect.width < 43.5) || rect.height < 43.5) small.push(`${describe(el)} is ${Math.round(rect.width)}x${Math.round(rect.height)}`);
   }
   issues.push(...small.slice(0, 8).map((text) => `touch target under 44 px: ${text}`));
+
+  const chartSection = document.querySelector("[data-chart-section]");
+  const chart = document.querySelector("[data-chart]");
+  if (chartSection && chart) {
+    const headerHeight = document.querySelector("header")?.getBoundingClientRect().height ?? 0;
+    const sectionHeight = chartSection.getBoundingClientRect().height;
+    if (sectionHeight > vh - headerHeight + 0.5) {
+      issues.push(`the whole chart does not fit under the header (${Math.round(sectionHeight)} px > ${Math.round(vh - headerHeight)} px available)`);
+    }
+    if (chart.scrollWidth > chart.clientWidth + 1) issues.push("the chart overflows horizontally");
+    const tiny = new Set<string>();
+    for (const el of chart.querySelectorAll("*")) {
+      const ownText = [...el.childNodes].some((node) => node.nodeType === 3 && (node.textContent ?? "").trim() !== "");
+      if (ownText && visible(el) && parseFloat(getComputedStyle(el).fontSize) < 11) tiny.add(describe(el));
+    }
+    issues.push(...[...tiny].slice(0, 5).map((text) => `chart text under 11 px: ${text}`));
+    const teethShown = chart.querySelectorAll("[data-tooth]").length;
+    const expected = Number((chartSection as HTMLElement).dataset.teeth ?? teethShown);
+    if (teethShown !== expected) issues.push(`chart shows ${teethShown} teeth, expected ${expected}`);
+    for (const cell of chart.querySelectorAll("[data-other-cell]")) {
+      const cellRect = cell.getBoundingClientRect();
+      for (const chip of cell.querySelectorAll("span > span")) {
+        const chipRect = chip.getBoundingClientRect();
+        if (chipRect.left < cellRect.left - 4 || chipRect.right > cellRect.right + 4) {
+          issues.push(`code chip sticks out of its cell: "${chip.textContent}"`);
+          break;
+        }
+      }
+    }
+  }
 
   const header = document.querySelector("header");
   if (header) {
@@ -120,6 +153,19 @@ async function clickByLabel(page: Page, label: string) {
   await handle?.click();
 }
 
+/** Click the first enabled button whose text contains the given text. */
+async function clickButtonText(page: Page, text: string) {
+  await page.waitForFunction(
+    (t) => [...document.querySelectorAll("button")].some((b) => (b.textContent ?? "").includes(t) && !b.disabled),
+    {},
+    text,
+  );
+  await page.evaluate((t) => {
+    const button = [...document.querySelectorAll("button")].find((b) => (b.textContent ?? "").includes(t) && !b.disabled);
+    (button as HTMLButtonElement).click();
+  }, text);
+}
+
 async function main() {
   const admin = createAdminClient();
   const runId = randomBytes(3).toString("hex");
@@ -140,8 +186,33 @@ async function main() {
       ["dog", "Max", "Owner One"], ["cat", "Mia", "Owner Two"], ["dog", "Rex", "Owner Three"],
       ["cat", "Luna", "Owner Four"], ["dog", "Buddy", "Owner Five"], ["cat", "Kitty", "Owner Six"],
     ] as const;
+    const scaled = (species: "dog" | "cat") => Object.fromEntries(teethOf(species).map((tooth) => [tooth.code, { treatments: ["U", "POL"] }]));
+    // Worst case for the "other" cells: many codes on teeth of both blocks.
+    const dogContent = {
+      teeth: {
+        ...scaled("dog"),
+        "108": { codes: ["FX-C", "PE", "PD2"], treatments: ["RX", "EXT-SURG"], pocketMm: { mesial: 2, buccal: 4, distal: 2, palatolingual: 2 } },
+        "104": { codes: ["T2", "G2", "PD1"], treatments: ["U", "POL"] },
+        "204": { codes: ["T2", "G1"], treatments: ["U", "POL"] },
+        "208": { codes: ["T3", "G3", "PD4", "Mob3", "Fur3", "FX-CR", "UCF"], treatments: ["U", "POL", "CURE", "RX", "ENDO", "FLAP", "BIO"] },
+        "409": { codes: ["T2", "Fur1"], treatments: ["U", "POL", "CURE"] },
+        "309": { codes: ["PD3", "Mob2", "Fur2", "FX-CR", "PE"], treatments: ["U", "POL", "CURE", "RX", "ENDO", "FLAP"] },
+        "308": { codes: ["M"] },
+      },
+      periodontal: { stage: "2", calculusIndex: "T2", gingivitisIndex: "G1-G2", occlusion: "Normal" },
+    };
+    const catContent = {
+      teeth: {
+        ...scaled("cat"),
+        "108": { codes: ["T2", "G1"], treatments: ["U", "POL"] },
+        "407": { codes: ["TR2", "G2"], treatments: ["RX", "EXT-SURG"] },
+        "307": { codes: ["TR3", "G3", "Mob2"], treatments: ["RX", "EXT-SURG"] },
+      },
+      periodontal: { stage: "2", stomatitis: "Mild" },
+    };
     let firstSheetId = "";
     let firstPatientId = "";
+    let catSheetId = "";
     for (const [index, [species, name, owner]] of animals.entries()) {
       const patient = await admin
         .from("patients")
@@ -161,7 +232,7 @@ async function main() {
             age_months: 4,
             weight_kg: 12.5,
             asa: "II",
-            content: { teeth: { "108": { treatments: ["U", "POL"] } } },
+            content: index === 0 && n === 0 ? dogContent : index === 1 ? catContent : { teeth: { "108": { treatments: ["U", "POL"] } } },
           })
           .select("id")
           .single();
@@ -170,6 +241,7 @@ async function main() {
           firstSheetId = sheet.data.id;
           firstPatientId = patient.data.id;
         }
+        if (index === 1) catSheetId = sheet.data.id;
       }
     }
 
@@ -230,6 +302,32 @@ async function main() {
           await inspect(page, size, `sheet-tab-${tab}`);
         }
 
+        for (const [species, sheetId] of [["dog", firstSheetId], ["cat", catSheetId]] as const) {
+          await page.goto(`${BASE_URL}/sheets/${sheetId}?tab=1`, { waitUntil: "networkidle2" });
+          await page.waitForSelector("[data-chart] [data-tooth]");
+          await page.evaluate(() => document.querySelector("[data-chart-section]")?.scrollIntoView({ block: "end" }));
+          await inspect(page, size, `chart-${species}`);
+
+          await page.click(`[data-tooth="${species === "dog" ? "108" : "307"}"]`);
+          await page.waitForSelector("[role=dialog] [role=tab]");
+          await inspect(page, size, `dialog-tooth-findings-${species}`);
+          const tabs = await page.$$("[role=dialog] [role=tab]");
+          await tabs[1].click();
+          await inspect(page, size, `dialog-tooth-treatment-${species}`);
+          await clickButtonText(page, messages.toothEditor.tabQuick);
+          await page.waitForFunction((t) => (document.querySelector("[role=dialog]")?.textContent ?? "").includes(t), {}, messages.quick.diagnostic);
+          await inspect(page, size, `dialog-tooth-quick-${species}`);
+          await closeDialog(page);
+
+          await clickButtonText(page, messages.chart.selectAll);
+          await clickButtonText(page, messages.chart.quickFor.split(" ")[0]);
+          await page.waitForSelector("[role=dialog]");
+          await inspect(page, size, `dialog-quick-entry-${species}`);
+          await closeDialog(page);
+        }
+
+        await page.goto(`${BASE_URL}/sheets/${firstSheetId}?tab=1`, { waitUntil: "networkidle2" });
+        await page.waitForSelector("main h2");
         await clickByLabel(page, h.reset);
         await page.waitForSelector("[role=dialog]");
         await inspect(page, size, "dialog-reset-confirm");

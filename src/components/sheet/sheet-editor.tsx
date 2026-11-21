@@ -18,6 +18,8 @@ import type { SheetDetail } from "@/contracts/sheets";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useShell } from "@/components/shell/shell-context";
+import { OdontogramTab } from "@/components/chart/odontogram-tab";
+import { adaptTeethToSpecies, type TeethRecord } from "@/domain/teeth/entry";
 import { PatientCard } from "./patient-card";
 
 const TAB_KEYS = ["odontogram", "anesthesia", "homecare", "report"] as const;
@@ -236,7 +238,14 @@ export function SheetEditor(props: SheetEditorProps) {
 
   const change = (patch: Partial<SheetDraft>) => {
     setSaveError(null);
-    setDraft((current) => ({ ...current, ...patch }));
+    setDraft((current) => {
+      const next = { ...current, ...patch };
+      // A dog chart and a cat chart have different teeth and codes: keep only what still applies.
+      if (patch.species && patch.species !== current.species) {
+        next.content = { ...next.content, teeth: adaptTeethToSpecies(next.content.teeth as TeethRecord, patch.species) };
+      }
+      return next;
+    });
   };
 
   return (
@@ -275,19 +284,24 @@ export function SheetEditor(props: SheetEditorProps) {
       <PatientCard
         draft={draft}
         onChange={change}
+        onAnamnesis={(patch) => change({ content: { ...draft.content, anamnesis: { ...draft.content.anamnesis, ...patch } } })}
         errors={errors}
         speciesLocked={sheetId !== null || patientId !== null}
         expanded={cardOpen}
         onToggle={() => setCardOpen((open) => !open)}
       />
 
-      <section
-        aria-label={tabsText(TAB_KEYS[tab - 1])}
-        className="rounded-xl border border-border bg-surface p-6 text-foreground-muted"
-      >
-        <h2 className="mb-1 text-lg font-semibold text-foreground">{tabsText(TAB_KEYS[tab - 1])}</h2>
-        <p>{tabsText("placeholder")}</p>
-      </section>
+      {tab === 1 ? (
+        <OdontogramTab key={draft.species} species={draft.species} content={draft.content} onContent={(content) => change({ content })} />
+      ) : (
+        <section
+          aria-label={tabsText(TAB_KEYS[tab - 1])}
+          className="rounded-xl border border-border bg-surface p-6 text-foreground-muted"
+        >
+          <h2 className="mb-1 text-lg font-semibold text-foreground">{tabsText(TAB_KEYS[tab - 1])}</h2>
+          <p>{tabsText("placeholder")}</p>
+        </section>
+      )}
 
       <ConfirmDialog
         open={leave !== null}
