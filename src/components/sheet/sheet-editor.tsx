@@ -20,6 +20,8 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useShell } from "@/components/shell/shell-context";
 import { OdontogramTab } from "@/components/chart/odontogram-tab";
 import { adaptTeethToSpecies, type TeethRecord } from "@/domain/teeth/entry";
+import { AnesthesiaTab } from "./anesthesia-tab";
+import { HomecareTab } from "./homecare-tab";
 import { PatientCard } from "./patient-card";
 
 const TAB_KEYS = ["odontogram", "anesthesia", "homecare", "report"] as const;
@@ -293,6 +295,10 @@ export function SheetEditor(props: SheetEditorProps) {
 
       {tab === 1 ? (
         <OdontogramTab key={draft.species} species={draft.species} content={draft.content} onContent={(content) => change({ content })} />
+      ) : tab === 2 ? (
+        <AnesthesiaTab content={draft.content} onContent={(content) => change({ content })} />
+      ) : tab === 3 ? (
+        <HomecareTab content={draft.content} onContent={(content) => change({ content })} />
       ) : (
         <section
           aria-label={tabsText(TAB_KEYS[tab - 1])}

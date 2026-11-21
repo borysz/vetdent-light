@@ -200,6 +200,20 @@ async function main() {
         "308": { codes: ["M"] },
       },
       periodontal: { stage: "2", calculusIndex: "T2", gingivitisIndex: "G1-G2", occlusion: "Normal" },
+      nerveBlocks: [
+        { nerve: "infraorbital", side: "right", anesthetic: "bupivacaine_lidocaine", amountMl: 1.2 },
+        { nerve: "mentalis", side: "left", anesthetic: "lidocaine_2", amountMl: 0.5 },
+        { nerve: "mentalis", side: "right", anesthetic: "lidocaine_2", amountMl: 0.5 },
+      ],
+      surgery: { suture: "Monocryl 4-0", stitchType: "Simple interrupted", description: "Sectioned and extracted. ".repeat(12) },
+      radiology: { imageCount: 4, findings: "Pre- and post-extraction views. ".repeat(10), intraoperative: "None. ".repeat(8) },
+      medications: [
+        { name: "Meloxidyl 1.5 mg/ml oral suspension", dose: "Draw up to the 32 kg mark with the syringe", frequency: "Once daily in the morning with food", durationDays: 5, instructions: "Anti-inflammatory and painkiller. ".repeat(6) },
+        { name: "Kesium 500 mg tablet", dose: "1 tablet", frequency: "Twice daily (every 12 hours)", durationDays: 7, instructions: "Antibiotic." },
+        { name: "Stomodine oral gel", dose: "Pea-sized", frequency: "Twice daily in the evening", durationDays: 10, instructions: "Apply gently." },
+      ],
+      homecare: { feeding: "Soft food for 10 days. ".repeat(10), chewingRestrictions: "No chew toys for 14 days. ".repeat(8), oralHygiene: "Do not brush the wound.", closingNote: "Extraction of 108 went well." },
+      followUp: { date: "2026-12-01", purpose: "Suture check" },
     };
     const catContent = {
       teeth: {

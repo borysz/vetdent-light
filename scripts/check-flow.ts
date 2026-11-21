@@ -110,6 +110,45 @@ async function main() {
     ok("the chart is stored and comes back after a reload", (await polished()) === 41, String(await polished()));
     await page.click(`[aria-label="${messages.card.expand}"]`);
 
+    // 1c. tab 2 (nerve block) and tab 3 (medication template) are stored too
+    const sectionSelector = (title: string) => `section[aria-label="${title}"]`;
+    await page.click(`[aria-label="${messages.tabs.anesthesia}"]`);
+    await clickText(page, messages.anesthesia.addBlock);
+    const blockSelects = await page.$$(`${sectionSelector(messages.anesthesia.nerveBlocksTitle)} li select`);
+    await blockSelects[0].select("infraorbital");
+    await blockSelects[1].select("right");
+    await blockSelects[2].select("lidocaine_2");
+    await fillByLabel(page, messages.anesthesia.amount, "1,2");
+    await page.click(`[aria-label="${messages.tabs.homecare}"]`);
+    await clickText(page, messages.homecare.templatePainkiller);
+    const medicationValues = () =>
+      page.evaluate(
+        (labels) =>
+          labels.map((label) => {
+            const id = [...document.querySelectorAll("label")].find((el) => el.textContent?.trim().startsWith(label))?.htmlFor ?? "";
+            return (document.getElementById(id) as HTMLInputElement | null)?.value ?? "<missing>";
+          }),
+        [messages.homecare.name, messages.homecare.dose, messages.homecare.days],
+      );
+    const [medName, medDose, medDays] = await medicationValues();
+    ok("the painkiller template fills name and duration but leaves the dose empty", medName.includes("Meloxidyl") && medDose === "" && medDays === "5", `${medName} | dose '${medDose}' | ${medDays}`);
+    await clickText(page, messages.header.save);
+    await page.waitForFunction(() => /Mentve \d\d:\d\d/.test(document.body.innerText) && !document.body.innerText.includes("Nem mentett"), { timeout: 15000 });
+    await page.reload({ waitUntil: "networkidle2" });
+    await page.waitForSelector(sectionSelector(messages.homecare.medsTitle));
+    ok("the medication is stored and the dose is still empty", (await medicationValues())[0].includes("Meloxidyl") && (await medicationValues())[1] === "");
+    await page.click(`[aria-label="${messages.tabs.anesthesia}"]`);
+    const stored = await page.evaluate((selector) => {
+      const row = document.querySelector(selector + " li");
+      const selects = [...(row?.querySelectorAll("select") ?? [])].map((el) => (el as HTMLSelectElement).value);
+      const amount = (row?.querySelector("input") as HTMLInputElement | null)?.value;
+      return { selects, amount };
+    }, sectionSelector(messages.anesthesia.nerveBlocksTitle));
+    ok("the nerve block is stored with the decimal comma", stored.selects.join(",") === "infraorbital,right,lidocaine_2" && stored.amount === "1,2", JSON.stringify(stored));
+    await page.click(`[aria-label="${messages.tabs.odontogram}"]`);
+    await page.waitForSelector("[data-chart] [data-tooth]");
+    await page.click(`[aria-label="${messages.card.expand}"]`);
+
     // 2. dirty state, then draft restore after a reload
     await fillByLabel(page, messages.card.breed, "Beagle");
     ok("an edit makes the status unsaved", (await bodyText(page)).includes(messages.editor.unsaved));

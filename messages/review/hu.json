@@ -1,4 +1,151 @@
 {
+  "anesthesia.addBlock": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "fcb83c2449058775"
+  },
+  "anesthesia.amount": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "93fd6d97dd334298"
+  },
+  "anesthesia.anesthetic": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "bf21454e00553dbe"
+  },
+  "anesthesia.choose": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "2511f3eafbf400c6"
+  },
+  "anesthesia.findings": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "374823955d2e4494"
+  },
+  "anesthesia.imageCount": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "150425fbf2d58444"
+  },
+  "anesthesia.intraoperative": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "46930ff7d0c23586"
+  },
+  "anesthesia.nerve": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "c6d00c49858025ec"
+  },
+  "anesthesia.nerveBlocksHint": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "632b6d61debc768b"
+  },
+  "anesthesia.nerveBlocksTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "079e35bcccfed295"
+  },
+  "anesthesia.radiologyHint": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "0ca47a0cd196ea97"
+  },
+  "anesthesia.radiologyTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "3e3a06ab8fa797e4"
+  },
+  "anesthesia.removeBlock": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "350309c827bac640"
+  },
+  "anesthesia.side": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "694b30d2239ff499"
+  },
+  "anesthesia.stitchType": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "5754a4abd8e23267"
+  },
+  "anesthesia.surgeryNotes": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "8e802f55a03cc6f8"
+  },
+  "anesthesia.suture": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "2cd453927f297f0b"
+  },
+  "anesthesia.sutureHint": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "7d2125866f2a823e"
+  },
+  "anesthesia.sutureTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b3cad5ca5b868f8d"
+  },
+  "anesthetics.bupivacaine_lidocaine": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "cbc54b9159ab4d68"
+  },
+  "anesthetics.lidocaine_2": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "082d635afb457288"
+  },
   "app.badge": {
     "status": "pending",
     "reviewer": null,
@@ -1420,6 +1567,160 @@
     "note": "",
     "textHash": "8ba6ac6c3ed9e7e9"
   },
+  "homecare.addMedication": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "2ef2df3047f1189d"
+  },
+  "homecare.adviceTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "de3c56d32331f568"
+  },
+  "homecare.chewing": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "92d947e38806927b"
+  },
+  "homecare.closingNote": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "205d9ff0de071306"
+  },
+  "homecare.days": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "c73afcd535d4e6c1"
+  },
+  "homecare.daysUnit": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "82ebadafdeec2df7"
+  },
+  "homecare.dose": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "f7c0b99ad0f1f4a6"
+  },
+  "homecare.feeding": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "c1268f7cca3708a1"
+  },
+  "homecare.followUpDate": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "0aaa5dc9a54a42f7"
+  },
+  "homecare.followUpPurpose": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "18e63015f09a93f5"
+  },
+  "homecare.followUpTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "35c8e0436779c5d2"
+  },
+  "homecare.frequency": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "7ba9408e9580b22d"
+  },
+  "homecare.instructions": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "de8a8f33288da6b5"
+  },
+  "homecare.medsHint": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "42e3f5a688a4f801"
+  },
+  "homecare.medsTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a83a86da02fd8f47"
+  },
+  "homecare.name": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "d7123f11bf0963db"
+  },
+  "homecare.oralHygiene": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "179737e72c306d56"
+  },
+  "homecare.removeMedication": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1b1d0b5da3a44033"
+  },
+  "homecare.templateAntibiotic": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "02754037abe197c9"
+  },
+  "homecare.templateOralGel": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "16df060d92dfa490"
+  },
+  "homecare.templatePainkiller": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "99f6255e44a44ada"
+  },
+  "homecare.templates": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e95da2279643e61f"
+  },
   "login.email": {
     "status": "pending",
     "reviewer": null,
@@ -1461,6 +1762,83 @@
     "reviewedAt": null,
     "note": "",
     "textHash": "721a5477d7c5299e"
+  },
+  "medicationTemplates.antibiotic.frequency": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "f04cce94c179e436"
+  },
+  "medicationTemplates.antibiotic.instructions": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "9ee70bcf978aa434"
+  },
+  "medicationTemplates.antibiotic.name": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b8608690196b172b"
+  },
+  "medicationTemplates.oralGel.frequency": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "8155e2cb2d0d3cef"
+  },
+  "medicationTemplates.oralGel.instructions": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "3727f59c4296a06d"
+  },
+  "medicationTemplates.oralGel.name": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "fdedba29e35d6f42"
+  },
+  "medicationTemplates.painkiller.frequency": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "c07b21177c4b0807"
+  },
+  "medicationTemplates.painkiller.instructions": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "173455b34633f531"
+  },
+  "medicationTemplates.painkiller.name": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a19edc3eed093a58"
+  },
+  "nerves.infraorbital": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "c0ff2c32e2e06b0a"
+  },
+  "nerves.mentalis": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "d1a2f31affe3c110"
   },
   "newSheetDialog.cat": {
     "status": "pending",
@@ -1860,6 +2238,20 @@
     "reviewedAt": null,
     "note": "",
     "textHash": "b2df1095aaa45396"
+  },
+  "sides.left": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "c7e9047dcad220c4"
+  },
+  "sides.right": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "7bbf628e879cd35b"
   },
   "tabs.anesthesia": {
     "status": "pending",

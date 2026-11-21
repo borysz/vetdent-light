@@ -351,5 +351,79 @@
     "species_locked": "A faj nem módosítható, mert az állatnak már van kezelési lapja.",
     "internal_error": "Váratlan hiba történt. Kérjük, próbálja újra.",
     "network": "Nem sikerült kapcsolódni a szerverhez. Ellenőrizze az internetkapcsolatot."
+  },
+  "anesthesia": {
+    "nerveBlocksTitle": "Lokális érzéstelenítés & idegblokkok",
+    "nerveBlocksHint": "Regionális blokkok alkalmazása a műtét alatti fájdalomcsillapításra és az altatási mélység csökkentésére.",
+    "nerve": "Ideg (anatómiai elhelyezkedés)",
+    "side": "Oldal",
+    "anesthetic": "Helyi érzéstelenítő",
+    "amount": "Mennyiség (ml)",
+    "choose": "Válasszon…",
+    "addBlock": "+ Idegblokk hozzáadása",
+    "removeBlock": "Idegblokk törlése",
+    "sutureTitle": "Varratok & sebészi részletek",
+    "suture": "Alkalmazott varróanyag",
+    "sutureHint": "Gyakori: Monocryl 4-0 / 5-0 (gyorsan felszívódó), Vicryl 4-0",
+    "stitchType": "Öltéstípus / öltésminta",
+    "surgeryNotes": "Részletes sebészi leírás / megjegyzések",
+    "radiologyTitle": "Digitális fogászati röntgen (dentális RTG)",
+    "radiologyHint": "Intraorális röntgenfelvételek értékelése, periapikális lízis, rezorpció és gyökérstátusz.",
+    "imageCount": "Felvételek száma",
+    "findings": "Röntgenvizsgálat lelete és megállapításai",
+    "intraoperative": "Műtét alatti észrevételek / szövődmények"
+  },
+  "nerves": {
+    "infraorbital": "N. infraorbitalis (felső elülső)",
+    "mentalis": "N. mentalis (alsó elülső)"
+  },
+  "sides": {
+    "right": "Jobb",
+    "left": "Bal"
+  },
+  "anesthetics": {
+    "bupivacaine_lidocaine": "Bupivacain + Lidocain (1:1)",
+    "lidocaine_2": "Lidocain 2%"
+  },
+  "homecare": {
+    "medsTitle": "Otthoni gyógyszeres kezelési terv",
+    "medsHint": "Ezek az adagolási utasítások fognak pontosan és áttekinthetően szerepelni a gazdinak átadott tájékoztatón és e-mailben.",
+    "templates": "Gyors sablonok:",
+    "templatePainkiller": "+ Fájdalomcsillapító",
+    "templateAntibiotic": "+ Antibiotikum",
+    "templateOralGel": "+ Szájápoló gél",
+    "addMedication": "+ Új gyógyszer",
+    "name": "Készítmény neve & hatáserősség",
+    "dose": "Egyszeri adag",
+    "frequency": "Gyakoriság",
+    "days": "Időtartam (nap)",
+    "daysUnit": "nap",
+    "instructions": "Gazdinak szóló részletes alkalmazási útmutató",
+    "removeMedication": "Gyógyszer törlése",
+    "adviceTitle": "Műtét utáni ápolás & gazdi tanácsok",
+    "feeding": "Táplálási javaslat a műtét utáni napokra",
+    "chewing": "Rágási korlátozások & fizikai kímélet",
+    "oralHygiene": "Otthoni szájhigiénia a gyógyulás alatt",
+    "closingNote": "Kezelőorvos záró megjegyzése a gazdinak",
+    "followUpTitle": "Kontroll időpont & varratszedés",
+    "followUpDate": "Javasolt kontroll dátuma",
+    "followUpPurpose": "Kontroll célja / teendő"
+  },
+  "medicationTemplates": {
+    "painkiller": {
+      "name": "Meloxidyl 1,5 mg/ml orális szuszpenzió",
+      "frequency": "Naponta 1x délelőtt eleséggel",
+      "instructions": "Gyulladáscsökkentő és fájdalomcsillapító. Mindig teli gyomorra adandó!"
+    },
+    "antibiotic": {
+      "name": "Kesium 500 mg tabletta (Amoxicillin/Klavulánsav)",
+      "frequency": "Naponta 2x (12 óránként)",
+      "instructions": "Széles spektrumú antibiotikum a szájüregi sebfertőzés megelőzésére."
+    },
+    "oralGel": {
+      "name": "Stomodine szájápoló gél",
+      "frequency": "Naponta 2x este",
+      "instructions": "Kívülről a pofa felől óvatosan az ínyre juttatni a seb közvetlen piszkálása nélkül."
+    }
   }
 }

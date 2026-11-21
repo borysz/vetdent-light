@@ -39,3 +39,21 @@ Forrás: `src/domain/teeth/` (katalógus, kódok, szabályok, jelölések leveze
 | Gyorsbevitel feliratai | T1 (Enyhe), T2 (Közepes), T3 (Súlyos), G2 (Vérzés), G3 (Spontán), „Egyszerű húzás”, „Sebészi húzás”, „Kürettálás” a minta szerint | – |
 | Fő panaszok listája | A mintán látható nyolc elem | Kell-e további elem? |
 | Preoperatív vérvizsgálat | Szabad szöveg, egy javaslattal | Kell-e választéklista, és milyen elemekkel? |
+
+## 5. fázis: anesztézia, műtét, hazaadó lap (mind jóváhagyandó)
+
+Forrás: `src/domain/anesthesia.ts`, `src/domain/medications.ts` és a `messages/hu.json` `anesthesia.*`, `nerves.*`, `sides.*`, `anesthetics.*`, `homecare.*`, `medicationTemplates.*` szövegei.
+
+| Téma | Jelenlegi megvalósítás | Kérdés az állatorvosnak |
+|---|---|---|
+| Idegblokk: ideg | Csak a mintán látható kettő: N. infraorbitalis (felső elülső), N. mentalis (alsó elülső) | Mely további idegek kellenek (pl. a hátsó blokkokhoz)? |
+| Idegblokk: oldal | Jobb, Bal (a minta csak a „Jobb”-ot mutatta) | Kell-e „Mindkét oldal”? |
+| Helyi érzéstelenítő | Bupivacain + Lidocain (1:1), Lidocain 2% | Mely további készítmények és hígítások kellenek? |
+| Mennyiség (ml) | Szabad szám, legfeljebb 50 ml | Van-e ésszerű felső korlát (pl. testtömegtől függően)? Az alkalmazás nem számol adagot. |
+| Varróanyag-javaslat | „Gyakori: Monocryl 4-0 / 5-0 (gyorsan felszívódó), Vicryl 4-0” a minta szerint | – |
+| Dentális RTG szövegei | „periapikális lízis, rezorpció és gyökérstátusz” a minta szerint | – |
+| Fájdalomcsillapító sablon | Meloxidyl 1,5 mg/ml orális szuszpenzió; naponta 1x délelőtt eleséggel; 5 nap; „Gyulladáscsökkentő és fájdalomcsillapító. Mindig teli gyomorra adandó!” | A készítmény, a gyakoriság és az időtartam helyes-e? Macskánál is használható-e így? (A mintán „kutyáknak” szerepelt; ezt kivettük.) |
+| Antibiotikum sablon | Kesium 500 mg tabletta (Amoxicillin/Klavulánsav); naponta 2x (12 óránként); 7 nap; „Széles spektrumú antibiotikum a szájüregi sebfertőzés megelőzésére.” | Ugyanezek a kérdések; a 500 mg-os tabletta kis testtömegnél is alkalmas-e? |
+| Szájápoló gél sablon | Stomodine szájápoló gél; naponta 2x este; 10 nap; „Kívülről a pofa felől óvatosan az ínyre juttatni a seb közvetlen piszkálása nélkül.” | Ugyanezek a kérdések |
+| Az adag | Egyik sablon sem tölti ki; a minta példái (pl. „32 kg-os jelzésig szívva fecskendővel”) egy konkrét állatra szóltak | – |
+| Hazaadó lap felirata | „Hazaadó lap & Gyógyszerek” (a mintán elírt „Hazadobó”) | Helyes-e? |

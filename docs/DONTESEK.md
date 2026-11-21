@@ -94,3 +94,15 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 | Az API a fogadatokat a fajhoz ellenőrzi (létező fog, megengedett kód), hibánál 422 | A szabályok a szerveren is érvényesüljenek | `src/server/services/sheets.ts` |
 | A preoperatív vérvizsgálat szabad szöveges mező egy javaslattal („Normál referenciaértékek”) | A mintaképen csak ez az egy elem látszik; további elemet nem találunk ki | `patient-card.tsx` |
 | A hosszú fülnevek csak 1800 px-től látszanak (alatta a rövidek) | 1536–1800 px között a teljes nevek két sorba törtek | `app-header.tsx` |
+
+## 5. fázis
+
+| Döntés | Indok | Módosítás helye |
+|---|---|---|
+| Az idegblokk ideg-, oldal- és érzéstelenítő-listája csak a mintaképen látható elemeket tartalmazza (két ideg, két érzéstelenítő); az oldalaknál a „Jobb” mellé a „Bal” is bekerült | Új szakmai elemet nem találunk ki; a „Bal” a „Jobb” nyilvánvaló párja, és a minta mentális idegblokkja is bal oldalra kellhet. Mindhárom szöveg `pending` | `src/domain/anesthesia.ts`, `messages/hu.json` |
+| A listák értékei kódok (`infraorbital`, `right`, `lidocaine_2`), a nevek felületi szövegek; ha a lapon olyan érték van, ami nincs a listában, a mező mégis megmutatja | A zárójelentés és más nyelvek a kódból fordítanak; adat nem rejtőzhet el | `anesthesia-tab.tsx` |
+| A gyógyszersablonok kitöltik a nevet, a gyakoriságot, az időtartamot és az útmutatót, **az adagot soha** | Az alkalmazás nem számol adagot, az adag mezőt az orvos tölti ki | `src/domain/medications.ts`, `messages/hu.json` (`medicationTemplates`) |
+| A fájdalomcsillapító sablon útmutatója faj nélküli („Gyulladáscsökkentő és fájdalomcsillapító. Mindig teli gyomorra adandó!”); a mintán „kutyáknak” szerepel | Macskánál a sablon ne állítson fajra nem igaz dolgot; a készítmény macskára való alkalmasságát az állatorvosnak kell eldöntenie | `messages/hu.json` |
+| A számmezők (mennyiség, felvételek száma, időtartam) tizedesvesszőt fogadnak, és csak érvényes értéket tárolnak (gépelés közben a szöveg megmarad, pl. „1,”) | A tizedesjel egységesen vessző | `src/components/ui/number-input.tsx` |
+| A táplálási javaslat és a rágási korlátozás mezője csillagos (kötelező jelzéssel), de a mentést nem tiltja; a PDF készítésekor (6. fázis) figyelmeztet, ha üres | A leírás szerint | `homecare-tab.tsx` |
+| Keskenyebb képernyőn az idegblokk sora két sorba tördelődik (ideg és oldal fent, érzéstelenítő és mennyiség lent, törlés jobbra), a hosszú nevek így nem vágódnak le | Álló tableten a nevek egy sorban nem fértek el | `anesthesia-tab.tsx` |
