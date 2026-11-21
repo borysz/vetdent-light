@@ -7,7 +7,7 @@ import { useClinic, useUpdateClinic } from "@/client/hooks";
 import type { Clinic } from "@/contracts/clinic";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { inputStyles } from "./search-field";
+import { inputStyles } from "@/components/ui/input-styles";
 import { useShell } from "./shell-context";
 
 /** Letterhead data for the PDF (name, address, phone, e-mail). */

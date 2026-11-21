@@ -1,6 +1,6 @@
 # Felület leírása (a mintaképekből)
 
-A mintaképek (`template pics/`, helyi, Gitben nincs) a kinézet és a működés forrásai. Ez a leírás rögzíti őket szövegben, hogy a tudás a repóban is meglegyen. A képeken szereplő nevek, e-mail-címek és rendelő csak példák.
+A mintaképek (`template pics/`, helyi, Gitben nincs) a kinézet és a működés forrásai. Ez a leírás rögzíti őket szövegben, hogy a tudás a repóban is meglegyen. A képeken szereplő nevek, e-mail-címek és rendelő csak példák. Ahol a kész felület szándékosan eltér a mintáktól (nincs fogszám, rövid fülnevek laptopon, összecsukható páciens-kártya, mondatkezdő címek), azt a `docs/DONTESEK.md` rögzíti; az elfogadás állapota a `docs/ELFOGADAS.md`-ben van.
 
 ## Színek (pixelolvasással mérve, tokenek: `src/app/globals.css`)
 

@@ -26,6 +26,7 @@ import { adaptTeethToSpecies, type TeethRecord } from "@/domain/teeth/entry";
 import { AnesthesiaTab } from "./anesthesia-tab";
 import { HomecareTab } from "./homecare-tab";
 import { PatientCard } from "./patient-card";
+import { usePdfDownload } from "./use-pdf-download";
 
 function clampTab(value: string | null): number {
   const number = Number(value);
@@ -73,8 +74,7 @@ export function SheetEditor(props: SheetEditorProps) {
   const [leave, setLeave] = useState<{ proceed: () => void } | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
   const [conflict, setConflict] = useState(false);
-  const [pdfBusy, setPdfBusy] = useState(false);
-  const [pdfError, setPdfError] = useState<string | null>(null);
+  const { pdfBusy, pdfError, runPdf } = usePdfDownload();
   const [preflight, setPreflight] = useState<{ unsaved: boolean; missing: boolean } | null>(null);
   const clinic = useClinic(true);
 
@@ -195,30 +195,6 @@ export function SheetEditor(props: SheetEditorProps) {
       setSaveError(error instanceof ApiClientError ? errorText(error.code) : t("loadFailed"));
     }
   }, [sheetId, key, t, errorText]);
-
-  /** Download the saved sheet as a PDF (made on the server from the same report component). */
-  const runPdf = useCallback(
-    async (id: string) => {
-      setPdfBusy(true);
-      setPdfError(null);
-      try {
-        const { blob, fileName } = await api.sheetPdf(id);
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 10_000);
-      } catch (error) {
-        setPdfError(error instanceof ApiClientError ? errorText(error.code) : reportText("pdfFailed"));
-      } finally {
-        setPdfBusy(false);
-      }
-    },
-    [errorText, reportText],
-  );
 
   /** The PDF is made from the saved state: unsaved changes must be saved first; empty required advice only warns. */
   const startPdf = useCallback(() => {

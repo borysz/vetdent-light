@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "vetdent-light",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -42,11 +42,15 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
     "pdfjs-dist": "^6.5.438",
-    "prettier": "^3.10.1",
     "supabase": "^3.2.0",
     "tailwindcss": "4.3.3",
     "tsx": "^4.23.15",
     "typescript": "^5",
+    "vite": "^8.3.8",
     "vitest": "^5.1.1"
+  },
+  "description": "Veterinary dental treatment sheet for dogs and cats",
+  "engines": {
+    "node": ">=24"
   }
 }

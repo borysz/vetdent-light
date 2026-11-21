@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-Fixed by the owner's brief (`template pics/MASTER_PROMPT.md`, local file, not in git): Next.js 16 (App Router), React 19, TypeScript strict, Tailwind CSS 4 + shadcn/ui, lucide-react, TanStack Query, zod, next-intl (Hungarian only), Supabase (Postgres + Auth), server-side PDF from the same React component as the preview. API-first: all data goes through a versioned REST API under `/api/v1`.
+Fixed by the owner's brief (`template pics/MASTER_PROMPT.md`, local file, not in git): Next.js 16 (App Router), React 19, TypeScript strict, Tailwind CSS 4, Radix UI primitives (own components in `src/components/ui/`), lucide-react, TanStack Query, zod, next-intl (Hungarian for now, i18n-ready, see `docs/I18N.md`), Supabase (Postgres + Auth), server-side PDF (headless Chrome via puppeteer-core) from the same React component as the preview. API-first: all data goes through a versioned REST API under `/api/v1`.
 
 ## Users
 

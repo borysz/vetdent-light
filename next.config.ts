@@ -5,8 +5,12 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["puppeteer-core"],
-  // Public DNS name forwarded to this dev machine (hostnames only, no port).
-  allowedDevOrigins: ["borysz.tplinkdns.com"],
+  // Hostnames (no port) other than localhost that may reach the dev server, e.g. a forwarded public DNS name.
+  // Comma separated in ALLOWED_DEV_ORIGINS (see .env.example).
+  allowedDevOrigins: (process.env.ALLOWED_DEV_ORIGINS ?? "")
+    .split(",")
+    .map((host) => host.trim())
+    .filter(Boolean),
   // cacheComponents stays off: every signed-in page is dynamic (see docs/DONTESEK.md).
   turbopack: {
     rules: {

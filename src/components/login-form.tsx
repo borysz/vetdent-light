@@ -6,9 +6,8 @@ import { useTranslations } from "next-intl";
 import { useState, type FormEvent } from "react";
 import { ApiClientError } from "@/client/api";
 import { useLogin } from "@/client/hooks";
+import { inputStyles } from "@/components/ui/input-styles";
 
-const field =
-  "h-11 w-full rounded-md border border-border bg-surface px-3 text-base text-foreground outline-offset-2 focus-visible:outline-2 focus-visible:outline-primary-strong";
 
 export function LoginForm() {
   const t = useTranslations("login");
@@ -54,7 +53,7 @@ export function LoginForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className={`${field} mt-1`}
+          className={`${inputStyles} mt-1`}
         />
 
         <label className="mt-4 block text-sm font-medium" htmlFor="password">
@@ -67,7 +66,7 @@ export function LoginForm() {
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className={`${field} mt-1`}
+          className={`${inputStyles} mt-1`}
         />
 
         {errorCode ? (

@@ -5,13 +5,13 @@
  *
  *   npm run check:flow
  */
-import { randomBytes } from "node:crypto";
 import { mkdtempSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import puppeteer, { type Page } from "puppeteer-core";
 import messages from "../messages/hu.json";
 import { createAdminClient } from "../src/server/admin";
+import { createE2eUser } from "./lib/e2e";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:6438";
 const CHROME_PATH = process.env.CHROME_PATH ?? "C:/Program Files/Google/Chrome/Application/chrome.exe";
@@ -49,11 +49,8 @@ async function clickText(page: Page, text: string) {
 
 async function main() {
   const admin = createAdminClient();
-  const email = `e2e-${randomBytes(3).toString("hex")}@vetdent-light.test`;
-  const password = randomBytes(24).toString("base64url");
-  const user = await admin.auth.admin.createUser({ email, password, email_confirm: true });
-  const clinic = await admin.from("clinics").insert({ name: "e2e flow" }).select("id").single();
-  await admin.from("clinic_members").insert({ clinic_id: clinic.data!.id, user_id: user.data.user!.id, display_name: "E2E Flow", title: "Dr." });
+  const e2e = await createE2eUser(admin, { clinicName: "e2e flow", displayName: "E2E Flow" });
+  const { email, password } = e2e;
   const browser = await puppeteer.launch({ executablePath: CHROME_PATH, headless: true });
   try {
     const page = await browser.newPage();
@@ -240,8 +237,7 @@ async function main() {
     ok("home lists the saved animal and its sheet", (await bodyText(page)).includes("FlowDog"));
   } finally {
     await browser.close();
-    await admin.from("clinics").delete().eq("id", clinic.data!.id);
-    await admin.auth.admin.deleteUser(user.data.user!.id);
+    await e2e.remove();
   }
   console.log(results.join("\n"));
   process.exit(results.some((r) => r.startsWith("FAIL")) ? 1 : 0);

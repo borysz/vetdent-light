@@ -11,6 +11,7 @@ import {
 import { validateTeeth, type TeethRecord } from "@/domain/teeth/entry";
 import type { Species } from "@/contracts/patients";
 import type { Json } from "../db/database.types";
+import { asJson } from "../db/json";
 import type { AuthContext } from "../auth";
 import { ApiError, fromDb } from "../errors";
 import { toSheetDetail, toSheetSummary, type PatientRow, type SheetRow } from "../mappers";
@@ -28,7 +29,7 @@ function sheetJson(fields: SheetFields): Json {
     ageMonths: fields.ageMonths,
     weightKg: fields.weightKg,
     asa: fields.asa,
-    content: fields.content as unknown as Json,
+    content: asJson(fields.content),
     schemaVersion: SHEET_SCHEMA_VERSION,
   };
 }
@@ -108,7 +109,7 @@ export async function createSheet(ctx: AuthContext, input: CreateSheetRequest): 
       age_months: input.ageMonths,
       weight_kg: input.weightKg,
       asa: input.asa,
-      content: input.content as unknown as Json,
+      content: asJson(input.content),
       schema_version: SHEET_SCHEMA_VERSION,
     })
     .select("id")
@@ -137,7 +138,7 @@ export async function updateSheet(ctx: AuthContext, id: string, input: UpdateShe
     p_expected_version: input.version,
     p_sheet: sheetJson(input),
     p_patient: input.patient ? patientJson(input.patient, input) : null,
-  } as never);
+  });
   if (error) throw fromDb(error);
   return getSheet(ctx, id);
 }

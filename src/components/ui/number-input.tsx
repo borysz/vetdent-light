@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { formatDecimal, parseDecimal } from "@/client/sheet-draft";
+import { inputStyles } from "./input-styles";
 import { cn } from "@/lib/utils";
 
 /**
@@ -43,10 +44,7 @@ export function NumberInput({
         if (parsed === null) onChange(null);
         else if (!Number.isNaN(parsed) && parsed <= max && (!integer || Number.isInteger(parsed))) onChange(parsed);
       }}
-      className={cn(
-        "h-11 w-full rounded-md border border-border bg-surface px-3 font-mono text-base text-foreground outline-offset-2 focus-visible:outline-2 focus-visible:outline-primary-strong",
-        className,
-      )}
+      className={cn(inputStyles, "font-mono", className)}
     />
   );
 }

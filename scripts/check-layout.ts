@@ -11,7 +11,6 @@
  * Screenshots go to SCREENSHOT_DIR (default "template pics/screenshots", local, not in git). Everything it
  * created is deleted at the end.
  */
-import { randomBytes } from "node:crypto";
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import puppeteer, { type Page } from "puppeteer-core";
@@ -19,6 +18,7 @@ import messages from "../messages/hu.json";
 import { teethOf } from "../src/domain/teeth/catalog";
 import { createAdminClient } from "../src/server/admin";
 import { insertDemoAnimals } from "./lib/demo";
+import { createE2eUser } from "./lib/e2e";
 
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:6438";
 const SCREENSHOT_DIR = process.env.SCREENSHOT_DIR ?? join("template pics", "screenshots");
@@ -181,18 +181,10 @@ async function clickButtonText(page: Page, text: string) {
 
 async function main() {
   const admin = createAdminClient();
-  const runId = randomBytes(3).toString("hex");
-  const email = `e2e-${runId}@vetdent-light.test`;
-  const password = randomBytes(24).toString("base64url");
-
-  const user = await admin.auth.admin.createUser({ email, password, email_confirm: true });
-  if (user.error || !user.data.user) throw user.error ?? new Error("createUser failed");
-  const clinic = await admin.from("clinics").insert({ name: `e2e ${runId}` }).select("id").single();
-  if (clinic.error) throw clinic.error;
-  const clinicId = clinic.data.id;
+  const e2e = await createE2eUser(admin, { clinicName: "e2e layout", displayName: "E2E Test" });
+  const { email, password, clinicId } = e2e;
 
   try {
-    await admin.from("clinic_members").insert({ clinic_id: clinicId, user_id: user.data.user.id, display_name: "E2E Test", title: "Dr." });
 
     // A handful of animals with sheets, so lists and paging have something to show.
     const animals = [
@@ -392,8 +384,7 @@ async function main() {
       await browser.close();
     }
   } finally {
-    await admin.from("clinics").delete().eq("id", clinicId);
-    await admin.auth.admin.deleteUser(user.data.user.id);
+    await e2e.remove();
   }
 
   if (failures.length > 0) {

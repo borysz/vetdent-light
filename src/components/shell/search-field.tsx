@@ -2,9 +2,8 @@
 
 import { Search } from "lucide-react";
 import { useId } from "react";
+import { inputStyles } from "@/components/ui/input-styles";
 
-export const inputStyles =
-  "h-11 w-full rounded-md border border-border bg-surface px-3 text-base text-foreground outline-offset-2 focus-visible:outline-2 focus-visible:outline-primary-strong";
 
 /** Search input with a visible label (screen readers) and a leading icon. */
 export function SearchField({

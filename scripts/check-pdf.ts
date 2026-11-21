@@ -10,13 +10,13 @@
  * strangers get 404/401. The PDF is saved to SCREENSHOT_DIR for a look. Everything created is deleted.
  * Hungarian letters are written as escapes here: source code stays free of them.
  */
-import { randomBytes } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import puppeteer from "puppeteer-core";
 import messages from "../messages/hu.json";
 import { createAdminClient } from "../src/server/admin";
+import { createE2eUser, type E2eUser } from "./lib/e2e";
 import type { Database } from "../src/server/db/database.types";
 import { teethOf } from "../src/domain/teeth/catalog";
 
@@ -62,39 +62,31 @@ async function pdfText(bytes: Uint8Array): Promise<{ pages: number; text: string
 
 async function main() {
   const admin = createAdminClient();
-  const runId = randomBytes(3).toString("hex");
-  const password = randomBytes(24).toString("base64url");
-  const emails = [`e2e-${runId}-a@vetdent-light.test`, `e2e-${runId}-b@vetdent-light.test`];
-  const userIds: string[] = [];
-  const clinicIds: string[] = [];
+  const created: E2eUser[] = [];
 
   try {
-    const make = async (email: string, clinicName: string) => {
-      const user = await admin.auth.admin.createUser({ email, password, email_confirm: true });
-      if (user.error || !user.data.user) throw user.error ?? new Error("createUser failed");
-      userIds.push(user.data.user.id);
-      const clinic = await admin
-        .from("clinics")
-        .insert({ name: clinicName, postal_code: "1118", city: "Budapest", street: "Test street 12.", phone: "+36 1 450 8820", email: "clinic@example.com" })
-        .select("id")
-        .single();
-      if (clinic.error) throw clinic.error;
-      clinicIds.push(clinic.data.id);
-      await admin.from("clinic_members").insert({ clinic_id: clinic.data.id, user_id: user.data.user.id, display_name: `Jane ${email.includes("-a@") ? "A" : "B"}`, title: "Dr." });
-      return clinic.data.id;
+    const make = async (clinicName: string, displayName: string) => {
+      const user = await createE2eUser(admin, {
+        clinicName,
+        displayName,
+        clinicFields: { postal_code: "1118", city: "Budapest", street: "Test street 12.", phone: "+36 1 450 8820", email: "clinic@example.com" },
+      });
+      created.push(user);
+      return user;
     };
-    const clinicA = await make(emails[0], "PDF check clinic");
-    await make(emails[1], "Other clinic");
+    const userA = await make("PDF check clinic", "Jane A");
+    const userB = await make("Other clinic", "Jane B");
+    const clinicA = userA.clinicId;
 
     const publishable = () =>
       createClient<Database>(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, { auth: { persistSession: false, autoRefreshToken: false } });
-    const tokenOf = async (email: string) => {
-      const signedIn = await publishable().auth.signInWithPassword({ email, password });
+    const tokenOf = async (user: E2eUser) => {
+      const signedIn = await publishable().auth.signInWithPassword({ email: user.email, password: user.password });
       if (signedIn.error || !signedIn.data.session) throw signedIn.error ?? new Error("sign-in failed");
       return signedIn.data.session.access_token;
     };
-    const tokenA = await tokenOf(emails[0]);
-    const tokenB = await tokenOf(emails[1]);
+    const tokenA = await tokenOf(userA);
+    const tokenB = await tokenOf(userB);
 
     // A dog with a full chart, plus content on every tab.
     const teeth = Object.fromEntries(teethOf("dog").map((tooth) => [tooth.code, { treatments: ["U", "POL"] }]));
@@ -194,7 +186,7 @@ async function main() {
     const login = await fetch(`${BASE_URL}/api/v1/auth/login`, {
       method: "POST",
       headers: { "content-type": "application/json", origin: BASE_URL },
-      body: JSON.stringify({ email: emails[0], password }),
+      body: JSON.stringify({ email: userA.email, password: userA.password }),
     });
     const cookie = login.headers.getSetCookie().map((line) => line.split(";")[0]).join("; ");
     const viaCookie = await fetch(url, { headers: { cookie } });
@@ -211,8 +203,7 @@ async function main() {
     const printPage = await fetch(`${BASE_URL}/print/sheets/${sheet.data.id}`, { redirect: "manual" });
     ok("the print page is not public (redirects to sign-in)", printPage.status === 307, String(printPage.status));
   } finally {
-    for (const id of clinicIds) await admin.from("clinics").delete().eq("id", id);
-    for (const id of userIds) await admin.auth.admin.deleteUser(id);
+    for (const user of created) await user.remove();
   }
 
   console.log(results.join("\n"));

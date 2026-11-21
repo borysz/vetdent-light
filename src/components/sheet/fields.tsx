@@ -1,10 +1,9 @@
 "use client";
 
 import { useId, type InputHTMLAttributes, type ReactNode } from "react";
+import { controlBase } from "@/components/ui/input-styles";
 import { cn } from "@/lib/utils";
 
-const control =
-  "h-11 w-full rounded-md border bg-surface px-3 text-base text-foreground outline-offset-2 focus-visible:outline-2 focus-visible:outline-primary-strong";
 
 /** Label, control and error message wired together for assistive technology. */
 export function Field({
@@ -46,10 +45,10 @@ export function TextInput({
   return (
     <input
       aria-invalid={invalid || undefined}
-      className={cn(control, invalid ? "border-red-700" : "border-border", className)}
+      className={cn(controlBase, invalid ? "border-red-700" : "border-border", className)}
       {...props}
     />
   );
 }
 
-export const selectStyles = cn(control, "border-border");
+export const selectStyles = cn(controlBase, "border-border");

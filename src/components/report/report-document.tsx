@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import { formatDecimal } from "@/client/sheet-draft";
 import { DentalChart } from "@/components/chart/dental-chart";
 import { useToothNames } from "@/components/chart/use-tooth-name";
-import type { Sex } from "@/contracts/patients";
+import { SEX_MESSAGE_KEYS } from "@/components/sex-labels";
 import { affectedTeeth, pocketText } from "@/domain/report";
 import { COMPLAINTS } from "@/domain/teeth/codes";
 import type { TeethRecord } from "@/domain/teeth/entry";
@@ -20,12 +20,6 @@ type NerveKey = keyof (typeof messages)["nerves"];
 type SideKey = keyof (typeof messages)["sides"];
 type AnestheticKey = keyof (typeof messages)["anesthetics"];
 
-const SEX_KEYS: Record<Sex, "sexMale" | "sexFemale" | "sexNeuteredMale" | "sexSpayedFemale"> = {
-  male: "sexMale",
-  female: "sexFemale",
-  neutered_male: "sexNeuteredMale",
-  spayed_female: "sexSpayedFemale",
-};
 const STAGES = ["normal", "1", "2", "3", "4"] as const;
 const NO_SELECTION: ReadonlySet<string> = new Set();
 
@@ -148,7 +142,7 @@ export function ReportDocument({ data }: { data: ReportData }) {
               .filter(Boolean)
               .join(" · ") || "–"}
           </Row>
-          <Row label={t("sex")}>{data.sex ? card(SEX_KEYS[data.sex]) : "–"}</Row>
+          <Row label={t("sex")}>{data.sex ? card(SEX_MESSAGE_KEYS[data.sex]) : "–"}</Row>
         </dl>
         <dl>
           <Row label={t("ownerName")}>{data.ownerName}</Row>

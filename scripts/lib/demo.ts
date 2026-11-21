@@ -10,6 +10,7 @@ import { estimateBirthMonth } from "../../src/domain/age";
 import { teethOf, type Species } from "../../src/domain/teeth/catalog";
 import { validateTeeth, type TeethRecord } from "../../src/domain/teeth/entry";
 import type { createAdminClient } from "../../src/server/admin";
+import { asJson } from "../../src/server/db/json";
 
 type Admin = ReturnType<typeof createAdminClient>;
 
@@ -101,7 +102,7 @@ export async function insertDemoAnimals(admin: Admin, clinicId: string): Promise
         age_months: sheet.ageMonths,
         weight_kg: sheet.weightKg,
         asa: sheet.asa,
-        content: demoContent(animal) as never,
+        content: asJson(demoContent(animal)),
         schema_version: SHEET_SCHEMA_VERSION,
       })
       .select("id")

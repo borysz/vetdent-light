@@ -74,7 +74,7 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 
 | Döntés | Indok | Módosítás helye |
 |---|---|---|
-| A felületen nem jelenik meg a fogak darabszáma (nincs „42 fog” / „30 fog” a kártyákon, az ablakokban és a faj gombjain) | A megrendelő kérése (2026-11-21). A fogtábla címe a mintaképeken „Kutya · 42 fog”: a 4. fázisban megkérdezendő, hogy ott is elhagyjuk-e | `messages/hu.json` |
+| A felületen nem jelenik meg a fogak darabszáma (nincs „42 fog” / „30 fog” a kártyákon, az ablakokban és a faj gombjain) | A megrendelő kérése (2026-11-21). A fogtábla címéből és fejlécéből is kikerült (4. fázis), a mintaképeken még „Kutya · 42 fog” áll | `messages/hu.json` |
 
 ## 4. fázis
 
@@ -139,3 +139,16 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 | A demóadat a megrendelő rendelőjébe (`Demo clinic`) is bekerült | A leírás szerint a Supabase-projekt egyben a demóprojekt is | – |
 | Az összevetés a mintaképekkel három eltérést talált és javított: 1920 px-en a negyedik fül neve levágódott (a teljes fülnevek most 2200 px-től látszanak, a `check:layout` ezt már jelzi); az A4 előnézet középre került; az előzmények sorainál a „Részletek:” felirat csak a szabad szöveg előtt áll | Pontos egyezés a mintával, hiba nélkül | `app-header.tsx`, `scaled-page.tsx`, `report-document.tsx` |
 | A címek mondatkezdő nagybetűsek, nem minden szó nagybetűs, mint a mintán | A helyes magyar helyesírás szerint | `messages/hu.json` |
+
+## Karbantartás (kódátnézés)
+
+| Döntés | Indok | Módosítás helye |
+|---|---|---|
+| Az `.env.example` bekerült a Gitbe: a `.gitignore` második `.env*` sora (a későbbi szabály nyer) kizárta, így friss klónban nem lett volna miből másolni | Hiba volt | `.gitignore` |
+| Az eszközmappák (`.claude/`, `.agents/`, `.codex/`) gépenként eltérők, ezért nincsenek a Gitben | Tiszta `git status` | `.gitignore` |
+| A használaton kívüli Next-sablonképek törölve (`public/*.svg`) | Nem hivatkozott rájuk semmi | `public/` |
+| A fejlesztői szerver további hostnevei a `ALLOWED_DEV_ORIGINS` környezeti változóból jönnek (vesszővel elválasztva), a publikus DNS-név nincs a tárolóban | A tároló ne kötődjön egy géphez | `next.config.ts`, `.env.example` |
+| A nem használt `prettier` eltávolítva; a `vite` közvetlen fejlesztői függőség (a Vitest-beállítás importálja); a csomag neve `vetdent-light`, `engines`: Node ≥ 24 | Rend a függőségekben | `package.json` |
+| Közös segédek az ismétlések helyett: `src/domain/date.ts` (egy „ma” a rendelő időzónájában), `src/components/sex-labels.ts`, `src/components/ui/input-styles.ts` (egy űrlapmező-stílus), `src/server/db/json.ts` (a JSON-átalakítás egy nevesített helyen), `scripts/lib/e2e.ts` (a böngészős ellenőrzések közös ideiglenes felhasználója, hiba esetén is takarít), `src/components/sheet/use-pdf-download.ts` (a PDF-letöltés külön hookban) | Kevesebb ismétlés, egy helyen javítható | lásd az oszlopban |
+| A `CLAUDE.md` egyszer megduplázódott egy javítószkript miatt (`String.replace` és a `$` jelek): újraírva; a `tests/docs.test.ts` őrzi az ismétlődő bekezdéseket és a nem létező fájlokra mutató hivatkozásokat | A hiba így nem ismétlődhet észrevétlenül | `CLAUDE.md`, `tests/docs.test.ts` |
+| Új dokumentum: `docs/ARCHITEKTURA.md` (felépítés, adatfolyam, bővítés lépései); a `README.md` a teljes indulási útmutatót tartalmazza | Új fejlesztő gyorsan eligazodjon | `docs/`, `README.md` |

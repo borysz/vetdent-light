@@ -5,9 +5,10 @@ template pics/
 .env*
 !.env.example
 
-# Claude Code: per-user settings and worktrees
-.claude/settings.local.json
-.claude/worktrees/
+# Tool folders (Claude Code, Codex, Impeccable skills): per-machine, not part of the project
+.claude/
+.agents/
+.codex/
 
 # --- Next.js defaults ---
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
@@ -41,9 +42,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
 
 # vercel
 .vercel

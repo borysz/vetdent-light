@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { todayInBudapest } from "@/domain/date";
 import type { Patient, Sex, Species } from "@/contracts/patients";
 import { sheetContentSchema, type SheetContent, type SheetDetail } from "@/contracts/sheets";
 import type { CreateSheetBody, UpdateSheetBody } from "./api";
@@ -23,11 +24,6 @@ export type SheetDraft = {
   content: SheetContent;
 };
 
-/** Today's date in the clinic's time zone, YYYY-MM-DD. */
-export function todayInBudapest(now = new Date()): string {
-  return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Budapest" }).format(now);
-}
-
 /** Decimal with a comma or a dot; null for empty, NaN for garbage. */
 export function parseDecimal(text: string): number | null {
   const trimmed = text.trim().replace(",", ".");
@@ -45,7 +41,7 @@ export function memberName(member: { displayName: string; title: string | null }
   return [member.title, member.displayName].filter(Boolean).join(" ");
 }
 
-export function emptyContent(): SheetContent {
+function emptyContent(): SheetContent {
   return sheetContentSchema.parse({});
 }
 
@@ -96,7 +92,7 @@ export function draftFromSheet(sheet: SheetDetail): SheetDraft {
   };
 }
 
-export type DraftErrorKey = "required" | "invalidDate" | "invalidEmail" | "invalidNumber";
+type DraftErrorKey = "required" | "invalidDate" | "invalidEmail" | "invalidNumber";
 export type DraftErrors = Partial<
   Record<"patientName" | "ownerName" | "ownerEmail" | "treatmentDate" | "ageYears" | "ageMonths" | "weightKg", DraftErrorKey>
 >;

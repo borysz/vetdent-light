@@ -13,7 +13,7 @@ import {
 /** Request bodies as the client sends them (before the server applies defaults/transforms). */
 export type CreateSheetBody = z.input<typeof createSheetRequestSchema>;
 export type UpdateSheetBody = z.input<typeof updateSheetRequestSchema>;
-export type ClinicBody = z.input<typeof clinicUpdateSchema>;
+type ClinicBody = z.input<typeof clinicUpdateSchema>;
 
 /** Typed API error: `code` is the stable key the UI translates (messages: errors.<code>). */
 export class ApiClientError extends Error {

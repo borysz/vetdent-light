@@ -4,7 +4,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tansta
 import type { Species } from "@/contracts/patients";
 import { api } from "./api";
 
-export const meKey = ["me"] as const;
+const meKey = ["me"] as const;
 
 export function useMe() {
   return useQuery({ queryKey: meKey, queryFn: api.me, retry: false, staleTime: 60_000 });

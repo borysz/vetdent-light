@@ -3,20 +3,15 @@
 import { Check, ChevronDown, ChevronUp, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { DraftErrors, SheetDraft } from "@/client/sheet-draft";
-import { sexValues, type Sex, type Species } from "@/contracts/patients";
+import { sexValues, type Species } from "@/contracts/patients";
 import type { SheetContent } from "@/contracts/sheets";
 import { COMPLAINTS } from "@/domain/teeth/codes";
 import { SpeciesBadge } from "@/components/species-badge";
 import { cn } from "@/lib/utils";
+import { SEX_MESSAGE_KEYS } from "@/components/sex-labels";
 import { Field, selectStyles, TextInput } from "./fields";
 
 const ASA_VALUES = ["I", "II", "III", "IV", "V"] as const;
-const SEX_KEYS: Record<Sex, "sexMale" | "sexFemale" | "sexNeuteredMale" | "sexSpayedFemale"> = {
-  male: "sexMale",
-  female: "sexFemale",
-  neutered_male: "sexNeuteredMale",
-  spayed_female: "sexSpayedFemale",
-};
 
 /**
  * Patient card shown above every tab. Collapsed it is one summary line; expanded it holds the
@@ -52,7 +47,7 @@ export function PatientCard({
         ? t("yearsMonths", { years: draft.ageYears || "0", months: draft.ageMonths || "0" })
         : "",
     ],
-    [t("summarySex"), draft.sex ? t(SEX_KEYS[draft.sex]) : ""],
+    [t("summarySex"), draft.sex ? t(SEX_MESSAGE_KEYS[draft.sex]) : ""],
     [t("summaryWeight"), draft.weightKg ? `${draft.weightKg} kg` : ""],
     [t("summaryOwner"), draft.ownerName],
     [t("summaryAsa"), draft.asa],
@@ -226,7 +221,7 @@ export function PatientCard({
                 <option value="">{t("sexUnknown")}</option>
                 {sexValues.map((sex) => (
                   <option key={sex} value={sex}>
-                    {t(SEX_KEYS[sex])}
+                    {t(SEX_MESSAGE_KEYS[sex])}
                   </option>
                 ))}
               </select>

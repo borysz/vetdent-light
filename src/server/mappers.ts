@@ -1,4 +1,5 @@
 import { ageOn } from "@/domain/age";
+import { todayInBudapest } from "@/domain/date";
 import type { Clinic } from "@/contracts/clinic";
 import type { Patient } from "@/contracts/patients";
 import { sheetContentSchema, type SheetDetail, type SheetSummary } from "@/contracts/sheets";
@@ -7,12 +8,7 @@ import type { Database } from "./db/database.types";
 type Tables = Database["public"]["Tables"];
 export type PatientRow = Tables["patients"]["Row"];
 export type SheetRow = Tables["treatment_sheets"]["Row"];
-export type ClinicRow = Tables["clinics"]["Row"];
-
-/** Today's date in the clinic's time zone, YYYY-MM-DD. */
-export function todayInBudapest(now = new Date()): string {
-  return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Budapest" }).format(now);
-}
+type ClinicRow = Tables["clinics"]["Row"];
 
 export function toPatient(row: PatientRow, today = todayInBudapest()): Patient {
   return {
@@ -32,7 +28,7 @@ export function toPatient(row: PatientRow, today = todayInBudapest()): Patient {
   };
 }
 
-export function parseContent(raw: unknown) {
+function parseContent(raw: unknown) {
   const parsed = sheetContentSchema.safeParse(raw ?? {});
   if (!parsed.success) {
     // Stored documents are written through the same schema; a mismatch means a schema_version migration is missing.
