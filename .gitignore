@@ -1,2 +1,10 @@
 # Local-only files and data, not for git
 template pics/
+
+# Secrets: Supabase keys and any other environment file (only the example is shared)
+.env*
+!.env.example
+
+# Claude Code: per-user settings and worktrees
+.claude/settings.local.json
+.claude/worktrees/
