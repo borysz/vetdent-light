@@ -54,6 +54,9 @@ Minden felületi változtatás után futtasd a három böngészős ellenőrzést
 - Egyetlen komponens: `src/components/report/report-document.tsx` (előnézet, böngészős nyomtatás, szerveroldali PDF). Az előnézet az aktuális szerkesztésből, a PDF a mentett lapból készül.
 - PDF: `GET /api/v1/sheets/{id}/pdf` → `src/server/pdf.ts` a `/print/sheets/<id>` oldalt nyomtatja a szerveren futó Chrome-mal (`CHROME_PATH`, `INTERNAL_BASE_URL`).
 
+## Telepítés
+Render.com, natív Node-szolgáltatás: `render.yaml` és `docs/TELEPITES_RENDER.md`. A build letölti a Chrome headless shellt (`npm run chrome:install`, `.chrome/`), a szerver `CHROME_PATH` nélkül is megtalálja (`src/server/chrome.ts`); konténerben `CHROME_ARGS=--no-sandbox --disable-dev-shm-usage`. A titkos kulcs (`SUPABASE_SECRET_KEY`) nem kerül a szerverre.
+
 ## Demóadat
 `npm run seed:demo` felveszi Max kutyát és Mici macskát (a mintaképek példái, `supabase/seed/demo-data.json`) az első rendelőbe; `-- --reset` törli őket. A `check:layout` ugyanezt a demóadatot használja, így a képernyőképei a mintaképekkel vethetők össze. A böngészős ellenőrzések közös ideiglenes felhasználója: `scripts/lib/e2e.ts`.
 

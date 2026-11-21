@@ -1,0 +1,29 @@
+# Render Blueprint: native Node web service (see docs/TELEPITES_RENDER.md).
+# Secret values are not stored here: Render asks for the "sync: false" variables when the Blueprint is created.
+services:
+  - type: web
+    name: vetdent-light
+    runtime: node
+    region: frankfurt
+    # The server-side PDF starts a headless Chrome: 512 MB plans are likely too small, 2 GB is comfortable.
+    plan: standard
+    buildCommand: npm ci && npm run chrome:install && npm run build
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: PORT
+        value: "10000"
+      # How the server's own Chrome reaches this server to open the print page: must match PORT.
+      - key: INTERNAL_BASE_URL
+        value: http://127.0.0.1:10000
+      # Chrome inside Render's container: no sandbox, no /dev/shm.
+      - key: CHROME_ARGS
+        value: --no-sandbox --disable-dev-shm-usage
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_PUBLISHABLE_KEY
+        sync: false
+      - key: SUPABASE_JWKS_URL
+        sync: false

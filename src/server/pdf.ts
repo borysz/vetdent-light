@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { chromeArgs, resolveChromePath } from "./chrome";
 import { serverEnv } from "./env";
 import { ApiError } from "./errors";
 
@@ -39,14 +40,15 @@ function parseCookies(header: string, url: string) {
  */
 export async function renderSheetPdf(opts: { sheetId: string; authorization: string | null; cookie: string | null }): Promise<Uint8Array> {
   const env = serverEnv();
-  if (!env.CHROME_PATH) {
-    console.error("PDF: CHROME_PATH is not set");
+  const executablePath = await resolveChromePath();
+  if (!executablePath) {
+    console.error("PDF: no Chrome (set CHROME_PATH or run npm run chrome:install)");
     throw new ApiError("internal_error", "PDF generation is not configured");
   }
   const base = env.INTERNAL_BASE_URL;
 
   return inTurn(async () => {
-    const browser = await puppeteer.launch({ executablePath: env.CHROME_PATH, headless: true, args: ["--disable-gpu"] });
+    const browser = await puppeteer.launch({ executablePath, headless: true, args: chromeArgs() });
     try {
       const page = await browser.newPage();
       page.setDefaultTimeout(30_000);

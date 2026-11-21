@@ -152,3 +152,14 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 | Közös segédek az ismétlések helyett: `src/domain/date.ts` (egy „ma” a rendelő időzónájában), `src/components/sex-labels.ts`, `src/components/ui/input-styles.ts` (egy űrlapmező-stílus), `src/server/db/json.ts` (a JSON-átalakítás egy nevesített helyen), `scripts/lib/e2e.ts` (a böngészős ellenőrzések közös ideiglenes felhasználója, hiba esetén is takarít), `src/components/sheet/use-pdf-download.ts` (a PDF-letöltés külön hookban) | Kevesebb ismétlés, egy helyen javítható | lásd az oszlopban |
 | A `CLAUDE.md` egyszer megduplázódott egy javítószkript miatt (`String.replace` és a `$` jelek): újraírva; a `tests/docs.test.ts` őrzi az ismétlődő bekezdéseket és a nem létező fájlokra mutató hivatkozásokat | A hiba így nem ismétlődhet észrevétlenül | `CLAUDE.md`, `tests/docs.test.ts` |
 | Új dokumentum: `docs/ARCHITEKTURA.md` (felépítés, adatfolyam, bővítés lépései); a `README.md` a teljes indulási útmutatót tartalmazza | Új fejlesztő gyorsan eligazodjon | `docs/`, `README.md` |
+
+## Telepítés: Render.com
+
+| Döntés | Indok | Módosítás helye |
+|---|---|---|
+| Render.com, **natív Node-szolgáltatás** (nem Docker) | Megrendelői döntés | `render.yaml`, `docs/TELEPITES_RENDER.md` |
+| A Chrome-ot a build tölti le a projekt `.chrome/` mappájába (`npm run chrome:install`, Chrome headless shell); ha a `CHROME_PATH` üres, a szerver ezt találja meg | A Render natív környezetében nincs Chrome, és a letöltött Chrome útvonala verziófüggő | `src/server/chrome.ts`, `package.json` |
+| Chrome-kapcsolók környezeti változóból (`CHROME_ARGS`), a Renderen `--no-sandbox --disable-dev-shm-usage` | Konténerben a Chrome sandboxa és a `/dev/shm` nem használható; helyben nem kell | `src/server/chrome.ts`, `.env.example` |
+| A Renderen a start parancs a `PORT` változót használja (`npx next start -H 0.0.0.0 -p $PORT`), az `INTERNAL_BASE_URL` ugyanerre a portra mutat | A Render a saját portján várja az alkalmazást; a `npm run start` a fejlesztéshez rögzített 6438-at használja | `render.yaml` |
+| A `SUPABASE_SECRET_KEY` nem kerül a Renderre | A futó alkalmazás nem használja, csak a szkriptek és a tesztek | `docs/TELEPITES_RENDER.md` |
+| Legalább 1–2 GB memóriás csomag, Frankfurt régió | A PDF-hez headless Chrome indul; a Supabase-projekt `eu-central-1`-ben van | `render.yaml` |

@@ -5,6 +5,9 @@ template pics/
 .env*
 !.env.example
 
+# Chrome downloaded by npm run chrome:install (server-side PDF on hosts without Chrome)
+.chrome/
+
 # Tool folders (Claude Code, Codex, Impeccable skills): per-machine, not part of the project
 .claude/
 .agents/

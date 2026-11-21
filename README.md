@@ -41,6 +41,7 @@ npm run dev            # http://localhost:6438
 | `npm run user:create -- --email … --name … --title "Dr."` | Felhasználó és rendelőtagság létrehozása |
 | `npm run seed:demo` | Demóadat az első rendelőbe; `-- --reset` törli |
 | `npm run i18n:sync` | Új vagy módosított szövegek felvétele az ellenőrzési jegyzékbe (`pending`) |
+| `npm run chrome:install` | Chrome headless shell letöltése a `.chrome/` mappába (szerveren, ahol nincs Chrome; a szerver magától megtalálja) |
 
 A három böngészős ellenőrzés a futó **éles** szervert használja: `npm run build && npm run start`.
 
@@ -51,6 +52,7 @@ A három böngészős ellenőrzés a futó **éles** szervert használja: `npm r
 | `PRODUCT.md` | Kinek készül, mire való, milyen korlátok és elvek érvényesek |
 | `CLAUDE.md` | Átadási jegyzék a fejlesztőnek (és a következő munkamenetnek): szabályok, parancsok, gépfüggő tudnivalók |
 | `docs/ARCHITEKTURA.md` | Felépítés, rétegek, adatfolyam, bővítés lépései |
+| `docs/TELEPITES_RENDER.md` | Telepítés a Render.com-ra (natív Node-szolgáltatás, a `render.yaml` Blueprint) |
 | `docs/DONTESEK.md` | Minden döntés indoklással és a módosítás helyével |
 | `docs/ELFOGADAS.md` | Az elfogadási feltételek állapota, összevetés a mintaképekkel, mi nincs kipróbálva |
 | `docs/SZAKMAI_ELLENORZES.md` | Állatorvosnak jóváhagyandó szakmai adatok és kérdések |
