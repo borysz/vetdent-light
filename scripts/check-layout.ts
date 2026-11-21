@@ -25,27 +25,37 @@ const BASE_URL = process.env.BASE_URL ?? "http://localhost:6438";
 const SCREENSHOT_DIR = process.env.SCREENSHOT_DIR ?? join("template pics", "screenshots");
 const CHROME_PATH = process.env.CHROME_PATH ?? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 
-/** Target sizes (usable browser area in CSS px) and secondary sizes where nothing may break either. */
+/**
+ * Target sizes (usable browser area in CSS px) and secondary sizes where nothing may break either.
+ * Phones are not a target: there nothing may stick out or scroll the page sideways, but the dental chart may
+ * scroll sideways inside its own box, dialogs may scroll vertically and the home screen may be taller than one screen.
+ */
 const SIZES = [
-  { name: "laptop-1280x580", width: 1280, height: 580, tablet: false },
-  { name: "ipad-820x1100", width: 820, height: 1100, tablet: true },
-  { name: "ipad9-810x1000", width: 810, height: 1000, tablet: true },
-  { name: "android-800x1150", width: 800, height: 1150, tablet: true },
-  { name: "secondary-768x1024", width: 768, height: 1024, tablet: true },
-  { name: "tablet-landscape-1180x820", width: 1180, height: 820, tablet: true },
-  { name: "desktop-1920x1080", width: 1920, height: 1080, tablet: false },
+  { name: "laptop-1280x580", width: 1280, height: 580, tablet: false, phone: false },
+  { name: "ipad-820x1100", width: 820, height: 1100, tablet: true, phone: false },
+  { name: "ipad9-810x1000", width: 810, height: 1000, tablet: true, phone: false },
+  { name: "android-800x1150", width: 800, height: 1150, tablet: true, phone: false },
+  { name: "secondary-768x1024", width: 768, height: 1024, tablet: true, phone: false },
+  { name: "tablet-landscape-1180x820", width: 1180, height: 820, tablet: true, phone: false },
+  { name: "desktop-1920x1080", width: 1920, height: 1080, tablet: false, phone: false },
+  { name: "phone-402x874", width: 402, height: 874, tablet: true, phone: true },
+  { name: "phone-360x780", width: 360, height: 780, tablet: true, phone: true },
 ];
 
 /** An iPad's Safari identifies itself like this (iPadOS asks for the desktop site by default). */
 const TABLET_USER_AGENT =
   "Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1";
 
+/** An iPhone's Safari. */
+const PHONE_USER_AGENT =
+  "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1";
+
 type Failure = { size: string; state: string; issue: string };
 const failures: Failure[] = [];
 let checks = 0;
 
 /** Runs in the page: collects layout problems of the current state. */
-function auditPage(): string[] {
+function auditPage(phone: boolean): string[] {
   const issues: string[] = [];
   const vw = window.innerWidth;
   const vh = window.innerHeight;
@@ -63,8 +73,15 @@ function auditPage(): string[] {
   };
 
   const outside: string[] = [];
+  // Content inside a box that scrolls sideways on its own (the chart on a phone) does not stick out of the page.
+  const insideScroller = (el: Element) => {
+    for (let parent = el.parentElement; parent; parent = parent.parentElement) {
+      if (["auto", "scroll"].includes(getComputedStyle(parent).overflowX)) return true;
+    }
+    return false;
+  };
   for (const el of document.querySelectorAll("header *, main *, [role=dialog] *, [role=menu] *")) {
-    if (!visible(el)) continue;
+    if (!visible(el) || insideScroller(el)) continue;
     const rect = el.getBoundingClientRect();
     if (rect.right > vw + 0.5 || rect.left < -0.5) outside.push(`${describe(el)} spans ${Math.round(rect.left)}..${Math.round(rect.right)} of ${vw}`);
   }
@@ -77,6 +94,7 @@ function auditPage(): string[] {
       if (el.closest(".sr-only")) continue; // visually hidden text for screen readers is clipped on purpose
       const style = getComputedStyle(el);
       if (!["auto", "scroll", "hidden"].includes(style.overflowY)) continue;
+      if (phone && style.overflowY === "auto") continue; // on a phone a dialog may scroll vertically
       if (el.scrollHeight > el.clientHeight + 1) {
         issues.push(`dialog content is scrollable or clipped: ${describe(el)} (scrollHeight ${el.scrollHeight} > clientHeight ${el.clientHeight})`);
         break;
@@ -99,10 +117,10 @@ function auditPage(): string[] {
   if (chartSection && chart) {
     const headerHeight = document.querySelector("header")?.getBoundingClientRect().height ?? 0;
     const sectionHeight = chartSection.getBoundingClientRect().height;
-    if (sectionHeight > vh - headerHeight + 0.5) {
+    if (!phone && sectionHeight > vh - headerHeight + 0.5) {
       issues.push(`the whole chart does not fit under the header (${Math.round(sectionHeight)} px > ${Math.round(vh - headerHeight)} px available)`);
     }
-    if (chart.scrollWidth > chart.clientWidth + 1) issues.push("the chart overflows horizontally");
+    if (!phone && chart.scrollWidth > chart.clientWidth + 1) issues.push("the chart overflows horizontally");
     const tiny = new Set<string>();
     for (const el of chart.querySelectorAll("*")) {
       const ownText = [...el.childNodes].some((node) => node.nodeType === 3 && (node.textContent ?? "").trim() !== "");
@@ -139,15 +157,15 @@ function auditPage(): string[] {
   const header = document.querySelector("header");
   if (header) {
     const rect = header.getBoundingClientRect();
-    if (rect.height > 140) issues.push(`header is unusually tall (${Math.round(rect.height)} px)`);
+    if (!phone && rect.height > 140) issues.push(`header is unusually tall (${Math.round(rect.height)} px)`);
   }
   return issues;
 }
 
 async function inspect(page: Page, size: (typeof SIZES)[number], state: string, opts: { fitsScreen?: boolean } = {}) {
   checks += 1;
-  for (const issue of await page.evaluate(auditPage)) failures.push({ size: size.name, state, issue });
-  if (opts.fitsScreen) {
+  for (const issue of await page.evaluate(auditPage, size.phone)) failures.push({ size: size.name, state, issue });
+  if (opts.fitsScreen && !size.phone) {
     // Pages that must fit one screen (the home screen) may not need vertical scrolling.
     const overflow = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight);
     if (overflow > 1) failures.push({ size: size.name, state, issue: `page needs vertical scrolling (${overflow} px too tall)` });
@@ -295,7 +313,7 @@ async function main() {
         // Tablets are emulated as real devices (mobile viewport, touch, 2x pixels, tablet browser), like the
         // device mode of Chrome DevTools; laptops and desktops as plain windows.
         await page.emulate({
-          userAgent: size.tablet ? TABLET_USER_AGENT : desktopUserAgent,
+          userAgent: size.phone ? PHONE_USER_AGENT : size.tablet ? TABLET_USER_AGENT : desktopUserAgent,
           viewport: { width: size.width, height: size.height, deviceScaleFactor: size.tablet ? 2 : 1, isMobile: size.tablet, hasTouch: size.tablet },
         });
 

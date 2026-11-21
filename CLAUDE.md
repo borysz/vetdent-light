@@ -29,6 +29,7 @@ Next.js 16 (App Router, Turbopack), React 19, TypeScript strict, Tailwind CSS 4,
 | `npm run check:pdf` | PDF-végpont: ő és ű a PDF-ből kiolvasva, A4, oldalszám, jogosultság |
 | `npm run i18n:sync` | Új vagy módosított szövegek felvétele az ellenőrzési jegyzékbe |
 | `npm run user:create` / `npm run seed:demo` | Felhasználó létrehozása (a saját termináljában) / demóadat |
+| `npm run user:password -- --email <cím>` | Meglévő felhasználó új jelszava (a saját termináljában, kétszer kéri) |
 
 Minden felületi változtatás után futtasd a három böngészős ellenőrzést; ami ott nem zöld, az nincs kész.
 

@@ -27,7 +27,7 @@ export function HomeScreen() {
         <SpeciesCard species="cat" onClick={() => navigate("/sheets/new?species=cat")} />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <section aria-label={t("searchResults")} className="rounded-xl border border-border bg-surface p-3">
           <PatientPicker
             pageSize={PER_PAGE}
@@ -67,22 +67,22 @@ function SpeciesCard({ species, onClick }: { species: "dog" | "cat"; onClick: ()
       onClick={onClick}
       aria-label={dog ? t("newDog") : t("newCat")}
       className={cn(
-        "flex min-h-20 items-center gap-3 rounded-xl border border-border bg-surface p-3 text-left outline-offset-2 transition-colors focus-visible:outline-2 focus-visible:outline-primary-strong",
+        "flex min-h-20 min-w-0 items-center gap-2 rounded-xl border border-border bg-surface p-2 text-left outline-offset-2 sm:gap-3 sm:p-3 transition-colors focus-visible:outline-2 focus-visible:outline-primary-strong",
         dog ? "hover:border-dog" : "hover:border-cat",
       )}
     >
       <span
-        className={cn("flex size-14 shrink-0 items-center justify-center rounded-xl", dog ? "bg-dog-soft" : "bg-cat-soft")}
+        className={cn("flex size-12 shrink-0 items-center justify-center rounded-xl sm:size-14", dog ? "bg-dog-soft" : "bg-cat-soft")}
       >
-        {dog ? <DogArt className="size-11" /> : <CatArt className="size-11" />}
+        {dog ? <DogArt className="size-10 sm:size-11" /> : <CatArt className="size-10 sm:size-11" />}
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-xl font-bold">{dog ? t("dogTitle") : t("catTitle")}</span>
-        <span className="block truncate text-foreground-muted">{dog ? t("dogSubtitle") : t("catSubtitle")}</span>
+        <span className="block text-lg font-bold sm:text-xl">{dog ? t("dogTitle") : t("catTitle")}</span>
+        <span className="block text-sm text-foreground-muted sm:truncate sm:text-base">{dog ? t("dogSubtitle") : t("catSubtitle")}</span>
       </span>
       <span
         aria-hidden
-        className={cn("flex size-10 shrink-0 items-center justify-center rounded-full", dog ? "bg-dog-soft text-dog-ink" : "bg-cat-soft text-cat-ink")}
+        className={cn("hidden size-10 shrink-0 items-center justify-center rounded-full sm:flex", dog ? "bg-dog-soft text-dog-ink" : "bg-cat-soft text-cat-ink")}
       >
         <Plus className="size-5" />
       </span>

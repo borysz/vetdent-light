@@ -17,7 +17,8 @@ const widths = {
 
 /**
  * Modal that never scrolls: it is as tall as its content up to the viewport, and the content must fit
- * (split it into tabs or pages otherwise; checked by npm run check:layout).
+ * (split it into tabs or pages otherwise; checked by npm run check:layout). Phones are the one exception:
+ * there the content may scroll vertically, since phones are not a target size.
  */
 export function DialogContent({
   title,
@@ -63,7 +64,7 @@ export function DialogContent({
             <X className="size-5" aria-hidden />
           </DialogPrimitive.Close>
         </div>
-        <div className="min-h-0 flex-1 overflow-hidden px-5 py-4">{children}</div>
+        <div className="min-h-0 flex-1 overflow-hidden px-5 py-4 max-sm:overflow-y-auto max-sm:px-3">{children}</div>
       </DialogPrimitive.Content>
     </DialogPrimitive.Portal>
   );

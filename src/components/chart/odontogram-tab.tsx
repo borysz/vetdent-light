@@ -127,7 +127,11 @@ export function OdontogramTab({
           {showSelectionBar ? null : <span className="text-sm text-foreground-muted [@media(max-height:700px)]:hidden">{t("hint")}</span>}
         </div>
 
-        <DentalChart species={species} teeth={teeth} selected={selected} onToothClick={onToothClick} maxChipLines={lowScreen ? 3 : 6} />
+        <div className="max-sm:-mx-2 max-sm:overflow-x-auto max-sm:px-2">
+          <div className="max-sm:min-w-[640px]">
+            <DentalChart species={species} teeth={teeth} selected={selected} onToothClick={onToothClick} maxChipLines={lowScreen ? 3 : 6} />
+          </div>
+        </div>
       </section>
 
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 rounded-xl border border-border bg-surface-muted px-3 py-2 text-sm">
