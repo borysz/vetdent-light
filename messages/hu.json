@@ -1,0 +1,17 @@
+{
+  "app": {
+    "name": "VetDent Pro",
+    "badge": "FOGÁSZATI LAP",
+    "description": "Állatorvosi fogászati kezelési lap kutyák és macskák számára"
+  },
+  "tabs": {
+    "odontogram": "1. Odontogram & Fogvizsgálat",
+    "anesthesia": "2. Anesztézia & Műtét",
+    "homecare": "3. Hazaadó lap & Gyógyszerek",
+    "report": "4. Zárójelentés előnézet"
+  },
+  "home": {
+    "placeholderTitle": "Az alkalmazás váza elkészült",
+    "placeholderBody": "A belépés, a kezdőképernyő és a kezelési lap a következő fázisokban készül el."
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "app.badge": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "46b33cb17e18cb51"
+  },
+  "app.description": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "47abff64b22ff52e"
+  },
+  "app.name": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "4f3f48f1b01d2f34"
+  },
+  "home.placeholderBody": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a75b2eaa4cd88e4a"
+  },
+  "home.placeholderTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "41b82bd9fdd4787e"
+  },
+  "tabs.anesthesia": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "eb407cd5deff1c08"
+  },
+  "tabs.homecare": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "ebec8d44e27d4d2e"
+  },
+  "tabs.odontogram": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1f2d664a85079774"
+  },
+  "tabs.report": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "7605cdf1a4f5a9c0"
+  }
+}

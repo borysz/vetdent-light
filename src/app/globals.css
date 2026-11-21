@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens, measured from the sample images in `template pics/`
+ * (pixel reads; see docs/FELULET.md). Colour and size come only from here.
+ */
+:root {
+  /* surfaces */
+  --background: #f5f7fa; /* page */
+  --surface: #ffffff; /* cards, inputs */
+  --surface-muted: #f8fafc; /* inset rows, active-tooth bar */
+  --surface-preview: #eaeef4; /* grey area around the A4 preview */
+  --border: #e2e8f0;
+  --foreground: #0f172b; /* text, dark buttons */
+  --foreground-muted: #62748e;
+
+  /* brand / actions */
+  --primary: #009689; /* teal: add, e-mail, selected chip text */
+  --primary-strong: #00786f; /* selected ASA, active tooth badge */
+  --primary-soft: #f0fdfa; /* selected chip background */
+  --primary-soft-strong: #cbfbf1; /* mint badges, active-tooth bar */
+  --dark: #0f172b; /* PDF Mentés button */
+
+  /* species */
+  --dog: #fe9a00;
+  --dog-soft: #fffbeb;
+  --dog-ink: #973c00;
+  --cat: #9810fa;
+  --cat-soft: #f3e8ff;
+  --cat-ink: #6e11c2;
+
+  /* chart marks */
+  --mark-extraction: #e11d48; /* red X */
+  --mark-missing: #8290a4; /* grey X */
+  --mark-radiograph: #155dfc; /* blue ring */
+  --mark-calculus: #fe9a00; /* orange fill */
+  --mark-fracture: #9810fa; /* purple */
+  --midline: #50a2ff; /* dashed blue midline */
+  --chart-title: #155dfc; /* "KUTYA · 42 MARADANDÓ FOG" */
+
+  /* chart cell tints */
+  --cell-treat-bg: #f0fdfa;
+  --cell-pathology-bg: #ffe2e2;
+  --cell-missing-bg: #f3e8ff;
+  --cell-selected: #00786f;
+
+  /* sizes */
+  --touch-min: 44px;
+  --text-base: 16px;
+  --text-chart-min: 11px;
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-preview: var(--surface-preview);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-soft-strong: var(--primary-soft-strong);
+  --color-dark: var(--dark);
+  --color-dog: var(--dog);
+  --color-dog-soft: var(--dog-soft);
+  --color-dog-ink: var(--dog-ink);
+  --color-cat: var(--cat);
+  --color-cat-soft: var(--cat-soft);
+  --color-cat-ink: var(--cat-ink);
+  --color-midline: var(--midline);
+  --color-chart-title: var(--chart-title);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+  --radius-md: var(--radius);
+}
+
+html {
+  font-size: var(--text-base);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+input,
+select,
+textarea {
+  font-size: 16px; /* iOS does not zoom into 16 px fields */
+}
