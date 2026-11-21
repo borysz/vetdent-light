@@ -127,3 +127,15 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 | Böngészős nyomtatásnál a fejléc, a páciens-kártya és az eszköztár rejtett, csak a zárójelentés nyomtatódik; az `@page` A4, 12 mm margó | Közvetlen nyomtatás | `globals.css`, `app-header.tsx`, `sheet-editor.tsx` |
 | A `puppeteer-core` éles függőség (nem csak fejlesztői); az `@next` külső csomagként kezeli | A szerver futás közben használja | `package.json`, `next.config.ts` |
 | A `.env.local`-ban (és éles környezetben) szükséges: `CHROME_PATH`, opcionálisan `INTERNAL_BASE_URL` | A PDF-hez Chrome kell a szerver gépén | `.env.example` |
+
+## 7. fázis
+
+| Döntés | Indok | Módosítás helye |
+|---|---|---|
+| A demóadat a mintaképek két példája (Max kutya, Mici macska), semleges nevekkel (Minta Péter, Dr. Minta Eszter) és `example.com` címekkel; a magyar szövegek az adatfájlban vannak (`supabase/seed/demo-data.json`), nem a kódban | A képeken szereplő nevek csak példák; a kód nyelve angol | `supabase/seed/demo-data.json`, `scripts/lib/demo.ts` |
+| A demófogak alapállapota „0” (ép) és U+POL, rajta a mintán látható eltérések (108 extrakció, 104, 204, 409, 308 a kutyánál; 108, 208, 407, 307 a macskánál) | Ugyanazt mutatja, mint a mintakép; a betöltés a fogszabályokat ellenőrzi | `scripts/lib/demo.ts`, `tests/demo-data.test.ts` |
+| `npm run seed:demo` az első rendelőbe tölt (vagy `--clinic "Név"`); újrafuttatva nem duplikál (azonos gazdi e-mail alapján); `--reset` törli a két demóállatot és a lapjaikat | Visszafordítható, ismételhető | `scripts/seed-demo.ts` |
+| A rendelő üres fejlécadatait a demóadat tölti ki, a már megadottakat nem írja felül; a rendelő nevét nem módosítja | A felhasználó saját adatát nem írjuk felül | `fillDemoClinic` |
+| A demóadat a megrendelő rendelőjébe (`Demo clinic`) is bekerült | A leírás szerint a Supabase-projekt egyben a demóprojekt is | – |
+| Az összevetés a mintaképekkel három eltérést talált és javított: 1920 px-en a negyedik fül neve levágódott (a teljes fülnevek most 2200 px-től látszanak, a `check:layout` ezt már jelzi); az A4 előnézet középre került; az előzmények sorainál a „Részletek:” felirat csak a szabad szöveg előtt áll | Pontos egyezés a mintával, hiba nélkül | `app-header.tsx`, `scaled-page.tsx`, `report-document.tsx` |
+| A címek mondatkezdő nagybetűsek, nem minden szó nagybetűs, mint a mintán | A helyes magyar helyesírás szerint | `messages/hu.json` |

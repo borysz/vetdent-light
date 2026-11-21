@@ -66,8 +66,8 @@ export function AppHeader() {
                     active ? "bg-surface text-foreground shadow-sm" : "text-foreground-muted hover:text-foreground",
                   )}
                 >
-                  <span className="min-[1800px]:hidden">{tabs(SHORT_KEYS[index])}</span>
-                  <span className="hidden whitespace-nowrap min-[1800px]:inline">{tabs(key)}</span>
+                  <span className="min-[2200px]:hidden">{tabs(SHORT_KEYS[index])}</span>
+                  <span className="hidden whitespace-nowrap min-[2200px]:inline">{tabs(key)}</span>
                 </button>
               );
             })}

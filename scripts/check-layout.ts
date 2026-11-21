@@ -18,6 +18,7 @@ import puppeteer, { type Page } from "puppeteer-core";
 import messages from "../messages/hu.json";
 import { teethOf } from "../src/domain/teeth/catalog";
 import { createAdminClient } from "../src/server/admin";
+import { insertDemoAnimals } from "./lib/demo";
 
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:6438";
 const SCREENSHOT_DIR = process.env.SCREENSHOT_DIR ?? join("template pics", "screenshots");
@@ -114,6 +115,18 @@ function auditPage(): string[] {
           issues.push(`code chip sticks out of its cell: "${chip.textContent}"`);
           break;
         }
+      }
+    }
+  }
+
+  const tabNav = document.querySelector("header nav");
+  if (tabNav) {
+    if (tabNav.scrollWidth > tabNav.clientWidth + 1) issues.push("tab names are clipped in the header (they do not fit next to the buttons)");
+    const navRight = tabNav.getBoundingClientRect().right;
+    for (const tab of tabNav.querySelectorAll("button")) {
+      if (tab.getBoundingClientRect().right > navRight + 0.5) {
+        issues.push(`a tab sticks out of the tab bar: "${tab.getAttribute("aria-label")}"`);
+        break;
       }
     }
   }
@@ -259,6 +272,12 @@ async function main() {
       }
     }
 
+    // The two demo animals (Max, Mici): the screenshots of these are compared with the sample images.
+    const demo = await insertDemoAnimals(admin, clinicId);
+    const demoMax = demo.find((animal) => animal.name === "Max");
+    const demoMici = demo.find((animal) => animal.name === "Mici");
+    if (!demoMax || !demoMici) throw new Error("demo animals were not created");
+
     const browser = await puppeteer.launch({ executablePath: CHROME_PATH, headless: true, args: ["--no-sandbox"] });
     try {
       const page = await browser.newPage();
@@ -346,6 +365,21 @@ async function main() {
         await page.waitForSelector("[role=dialog]");
         await inspect(page, size, "dialog-reset-confirm");
         await closeDialog(page);
+
+        for (const [label, ref, tabs] of [["max", demoMax, [1, 2, 3, 4]], ["mici", demoMici, [1, 4]]] as const) {
+          for (const tab of tabs) {
+            await page.goto(`${BASE_URL}/sheets/${ref.sheetId}?tab=${tab}`, { waitUntil: "networkidle2" });
+            await page.waitForSelector(tab === 4 ? "[data-report]" : "main h2");
+            if (tab === 1) {
+              await page.waitForSelector("[data-chart] [data-tooth]");
+              await page.evaluate(() => {
+                document.querySelector("[data-chart-section]")?.scrollIntoView({ block: "start" });
+                window.scrollBy(0, -72);
+              });
+            }
+            await inspect(page, size, `demo-${label}-tab-${tab}`);
+          }
+        }
 
         await page.goto(`${BASE_URL}/sheets/new?patient=${firstPatientId}`, { waitUntil: "networkidle2" });
         await page.waitForSelector("input[type=date]");

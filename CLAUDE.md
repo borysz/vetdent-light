@@ -83,8 +83,11 @@ Next.js 16 (App Router, Turbopack), React 19, TypeScript strict, Tailwind CSS 4,
 - PDF: `GET /api/v1/sheets/{id}/pdf` → `src/server/pdf.ts` a `/print/sheets/<id>` oldalt nyomtatja a szerveren futó Chrome-mal (`CHROME_PATH`, `INTERNAL_BASE_URL`). Az ő és ű helyességét a `npm run check:pdf` a PDF-ből kiolvasott szövegben ellenőrzi.
 - Ékezetes betűt tartalmazó tesztadatot a forráskódban kódpontból építs (`String.fromCharCode`): a szerkesztőeszköz a `\\u0151` jelölést valódi betűvé alakíthatja, a `tests/language.test.ts` pedig hibát jelez, ha a kódban ékezetes magyar betű van.
 
+## Demóadat
+`npm run seed:demo` felveszi Max kutyát és Mici macskát (a mintaképek példái, `supabase/seed/demo-data.json`) az első rendelőbe; `-- --reset` törli őket. A `check:layout` ugyanezt a demóadatot használja, így a képernyőképei a mintaképekkel vethetők össze.
+
 ## Állapot
-1–6. fázis kész (alapozás; adatbázis, API, belépés; alkalmazáshéj; 1. fül fogtáblával; 2. és 3. fül; 4. fül A4-es előnézettel, nyomtatással és szerveroldali PDF-fel). Következik: 7. fázis (demóadat: a két mintakép, Max kutya és Mici macska semleges demó rendelővel és e-mail-címekkel; teljes `check:layout` minden célméreten; a képernyőképek összevetése a mintaképekkel; dokumentáció frissítése). A többsoros szövegmezők a közös `src/components/ui/long-text.tsx` komponensen mennek át (a diktálás később ide kerül). A `String.replace` cseréjében a `$` egy `# VetDent Light – átadási jegyzék
+**Mind a 7 fázis kész.** Az elfogadási feltételek állapota és a mintaképekkel való összevetés: `docs/ELFOGADAS.md`. Nyitott, nem fejlesztői teendők: állatorvosi jóváhagyás (`docs/SZAKMAI_ELLENORZES.md`, `pending` szövegek), kipróbálás valódi tableten és nyomtatón, HTTPS és éles elérés, `TODO.md`. A szándékosan későbbre hagyottak (diktálás, e-mail a gazdinak, admin felület, jelszó-visszaállítás, szerepkörök, offline, fotófeltöltés) a `docs/OTLETEK.md`-ben gyűlnek, ha felmerülnek. A többsoros szövegmezők a közös `src/components/ui/long-text.tsx` komponensen mennek át (a diktálás később ide kerül). A `String.replace` cseréjében a `$` egy `# VetDent Light – átadási jegyzék
 
 @AGENTS.md
 
@@ -163,5 +166,10 @@ Next.js 16 (App Router, Turbopack), React 19, TypeScript strict, Tailwind CSS 4,
 - A route handlereket a tesztek közvetlenül hívják (`tests/helpers/fixtures.ts` `call`); a `next/headers` sütit a `tests/setup.ts` mockolja.
 
  jeleket. Írd fájlba, és úgy futtasd.
+
+## Zárójelentés és PDF (4. fül)
+- Egyetlen komponens: `src/components/report/report-document.tsx` (előnézet, böngészős nyomtatás, szerveroldali PDF). Az előnézet az aktuális szerkesztésből, a PDF a mentett lapból készül.
+- PDF: `GET /api/v1/sheets/{id}/pdf` → `src/server/pdf.ts` a `/print/sheets/<id>` oldalt nyomtatja a szerveren futó Chrome-mal (`CHROME_PATH`, `INTERNAL_BASE_URL`). Az ő és ű helyességét a `npm run check:pdf` a PDF-ből kiolvasott szövegben ellenőrzi.
+- Ékezetes betűt tartalmazó tesztadatot a forráskódban kódpontból építs (`String.fromCharCode`): a szerkesztőeszköz a `\\u0151` jelölést valódi betűvé alakíthatja, a `tests/language.test.ts` pedig hibát jelez, ha a kódban ékezetes magyar betű van.
 
 -ra egyszerűsödik: javítószkripthez használj függvényes cserét.

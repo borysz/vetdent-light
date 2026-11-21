@@ -81,7 +81,11 @@ export function ReportDocument({ data }: { data: ReportData }) {
 
   const anamnesis = content.anamnesis;
   const complaints = COMPLAINTS.filter((complaint) => anamnesis.complaints.includes(complaint));
-  const detailLines = [anamnesis.otherAnamnesis, anamnesis.homeHygiene && `${card("homeHygiene")}: ${anamnesis.homeHygiene}`, anamnesis.diet && `${card("diet")}: ${anamnesis.diet}`].filter(Boolean);
+  const detailLines = [
+    anamnesis.otherAnamnesis && t("details", { text: anamnesis.otherAnamnesis }),
+    anamnesis.homeHygiene && `${card("homeHygiene")}: ${anamnesis.homeHygiene}`,
+    anamnesis.diet && `${card("diet")}: ${anamnesis.diet}`,
+  ].filter(Boolean);
 
   const rows = affectedTeeth(data.species, teeth);
 
@@ -168,7 +172,7 @@ export function ReportDocument({ data }: { data: ReportData }) {
           ) : null}
           {detailLines.map((line) => (
             <p key={line} className="text-foreground-muted italic">
-              {t("details", { text: line })}
+              {line}
             </p>
           ))}
         </section>

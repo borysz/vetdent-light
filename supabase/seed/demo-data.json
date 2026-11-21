@@ -1,0 +1,150 @@
+{
+  "clinic": {
+    "name": "Minta Kisállatgyógyászati Rendelő",
+    "postalCode": "1111",
+    "city": "Budapest",
+    "street": "Minta utca 1.",
+    "phone": "+36 1 000 0000",
+    "email": "rendelo@example.com"
+  },
+  "animals": [
+    {
+      "species": "dog",
+      "name": "Max",
+      "breed": "Golden Retriever",
+      "sex": "male",
+      "owner": { "name": "Minta Péter", "email": "minta.peter@example.com", "phone": "+36 30 000 0001" },
+      "sheet": {
+        "treatmentDate": "2026-11-21",
+        "treatingVet": "Dr. Minta Eszter",
+        "ageYears": 6,
+        "ageMonths": 4,
+        "weightKg": 32.5,
+        "asa": "II",
+        "healthyTeethScaledAndPolished": true,
+        "content": {
+          "anamnesis": {
+            "complaints": ["halitosis", "calculus", "pain_chewing"],
+            "otherAnamnesis": "Jobb oldalon nem szívesen rág kemény eleséget.",
+            "homeHygiene": "Alkalmi fogmosás, heti 1x rágóka",
+            "diet": "Száraz táp + nedves táp vegyesen",
+            "lastFeeding": "Előző este 20:00 (12 órás koplalás)",
+            "preoperativeBlood": "Normál referenciaértékek",
+            "assistant": "Minta Vivien asszisztens"
+          },
+          "teeth": {
+            "108": {
+              "codes": ["FX-C", "PE", "PD2"],
+              "treatments": ["RX", "EXT-SURG"],
+              "pocketMm": { "mesial": 2, "buccal": 4, "distal": 2, "palatolingual": 2 }
+            },
+            "104": {
+              "codes": ["T2", "G2", "PD1"],
+              "treatments": ["U", "POL"],
+              "pocketMm": { "mesial": 2, "buccal": 3 },
+              "note": "Kifejezett buccalis fogkőlerakódás, szondázáskor enyhe marginális ínyvérzés."
+            },
+            "204": { "codes": ["T2", "G1"], "treatments": ["U", "POL"] },
+            "409": {
+              "codes": ["T2", "Fur1"],
+              "treatments": ["U", "POL", "CURE"],
+              "pocketMm": { "buccal": 4, "distal": 3 },
+              "note": "Buccalis furkáció kezdeti feltáródása, alapos zárt kürettálás történt."
+            },
+            "308": { "codes": ["M"] }
+          },
+          "periodontal": {
+            "stage": "2",
+            "calculusIndex": "T2 (közepes)",
+            "gingivitisIndex": "G1–G2",
+            "occlusion": "Normál (ollós harapás)"
+          },
+          "nerveBlocks": [
+            { "nerve": "infraorbital", "side": "right", "anesthetic": "bupivacaine_lidocaine", "amountMl": 1.2 },
+            { "nerve": "mentalis", "side": "right", "anesthetic": "lidocaine_2", "amountMl": 0.5 }
+          ],
+          "surgery": {
+            "suture": "Monocryl 4-0 reverz vágó tűvel",
+            "stitchType": "Egyszerű csomós feszülésmentes öltések a lebernyegen",
+            "description": "108-as fog szekcionálása vízhűtéses turbinával történt a bifurkációk mentén, a 3 különálló gyökér luxátorral és elevatorral atraumatikusan luxálva."
+          },
+          "radiology": {
+            "imageCount": 4,
+            "findings": "Pre- és poszt-extrakciós felvételek a 108-as fogról: a 3 gyökér teljesen eltávolításra került, periapikális lízis enyhe foka látható, gyökércsúcs nem maradt vissza.",
+            "intraoperative": "Nincs, vérzés minimális, mucoperiostealis lebernyeg primer zárása sikeres."
+          },
+          "medications": [
+            {
+              "name": "Meloxidyl 1,5 mg/ml orális szuszpenzió",
+              "dose": "32 kg-os jelzésig szívva fecskendővel",
+              "frequency": "Naponta 1x délelőtt eleséggel",
+              "durationDays": 5,
+              "instructions": "Gyulladáscsökkentő és fájdalomcsillapító. Mindig teli gyomorra adandó!"
+            },
+            {
+              "name": "Kesium 500 mg tabletta (Amoxicillin/Klavulánsav)",
+              "dose": "1 tabletta",
+              "frequency": "Naponta 2x (12 óránként)",
+              "durationDays": 7,
+              "instructions": "Széles spektrumú antibiotikum a szájüregi sebfertőzés megelőzésére."
+            },
+            {
+              "name": "Stomodine szájápoló gél",
+              "dose": "Borsónyi gél",
+              "frequency": "Naponta 2x este",
+              "durationDays": 10,
+              "instructions": "Kívülről a pofa felől óvatosan az ínyre juttatni a seb közvetlen piszkálása nélkül."
+            }
+          ],
+          "homecare": {
+            "feeding": "Puha eleség (konzerv, vízben puhított táp) etetése kötelező 10 napig. Tilos szilárd száraz tápot szárazon adni.",
+            "chewingRestrictions": "Rágócsontok, fadarabok, labdák, kemény rágójátékok tilosak 14 napig a varratok védelmében.",
+            "oralHygiene": "A seb környékét fogkefével tilos mosni. A gél alkalmazása javasolt.",
+            "closingNote": "A 108-as fogat sikeresen eltávolítottuk, a többi fogat fogkőmentesítettük és políroztuk. Láz, elesettség vagy étvágytalanság esetén azonnal jelentkezzenek."
+          },
+          "followUp": { "date": "2026-12-01", "purpose": "Varratkontroll és a sebgyógyulás klinikai ellenőrzése" }
+        }
+      }
+    },
+    {
+      "species": "cat",
+      "name": "Mici",
+      "breed": "Európai házimacska",
+      "sex": "spayed_female",
+      "owner": { "name": "Minta Andrea", "email": "minta.andrea@example.com", "phone": "+36 20 000 0002" },
+      "sheet": {
+        "treatmentDate": "2026-11-21",
+        "treatingVet": "Dr. Minta Eszter",
+        "ageYears": 7,
+        "ageMonths": 2,
+        "weightKg": 4.1,
+        "asa": "II",
+        "healthyTeethScaledAndPolished": true,
+        "content": {
+          "anamnesis": {
+            "complaints": ["hypersalivation", "face_rubbing"],
+            "otherAnamnesis": "Az utóbbi 2 hétben étvágya csökkent, a száraz tápot nem fogadja el.",
+            "homeHygiene": "Alkalmi fogmosás, heti 1x rágóka",
+            "diet": "Száraz táp + nedves táp vegyesen",
+            "lastFeeding": "Előző este 20:00 (12 órás koplalás)",
+            "preoperativeBlood": "Normál referenciaértékek"
+          },
+          "teeth": {
+            "108": { "codes": ["T2", "G1"], "treatments": ["U", "POL"] },
+            "208": { "codes": ["T2", "G1"], "treatments": ["U", "POL"] },
+            "407": { "codes": ["TR2", "G2"], "treatments": ["RX", "EXT-SURG"] },
+            "307": { "codes": ["TR3", "G3", "Mob2"], "treatments": ["RX", "EXT-SURG"] }
+          },
+          "periodontal": {
+            "stage": "2",
+            "calculusIndex": "T1–T2",
+            "gingivitisIndex": "G2 (lokális ínygyulladás a 307/407 körül)",
+            "occlusion": "Normál",
+            "stomatitis": "Enyhe lokalizált gingivostomatitis"
+          },
+          "followUp": { "date": "2026-12-01", "purpose": "Kontroll" }
+        }
+      }
+    }
+  ]
+}

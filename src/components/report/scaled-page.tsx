@@ -32,13 +32,18 @@ export function ScaledPage({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div ref={outer} className="w-full overflow-hidden print:h-auto! print:overflow-visible" style={{ height }}>
+    <div ref={outer} className="w-full print:h-auto! print:overflow-visible">
       <div
-        ref={inner}
-        className="w-[210mm] origin-top-left shadow-md print:w-auto print:transform-none! print:shadow-none"
-        style={{ transform: `scale(${scale})` }}
+        className="mx-auto overflow-hidden print:h-auto! print:w-auto! print:overflow-visible"
+        style={{ width: A4_WIDTH_PX * scale, height }}
       >
-        {children}
+        <div
+          ref={inner}
+          className="w-[210mm] origin-top-left shadow-md print:w-auto print:transform-none! print:shadow-none"
+          style={{ transform: `scale(${scale})` }}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

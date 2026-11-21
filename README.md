@@ -20,6 +20,7 @@ npm run dev                  # http://localhost:6438
 | `npm run user:create -- --email … --name … --title "Dr."` | Felhasználó és rendelőtagság létrehozása (jelszót rejtve kér be; a saját termináljában futtasd) |
 | `npm run check:layout` / `npm run check:flow` | Böngészős ellenőrzés (valódi Chrome) a futó éles szerveren: méretek, ablakok, mentési folyamat |
 | `npm run check:pdf` | A PDF-végpont ellenőrzése (ő és ű, oldalszám, fájlnév, jogosultság) a futó éles szerveren |
+| `npm run seed:demo` | Demóadat (Max kutya, Mici macska) az első rendelőbe; `-- --reset` törli őket |
 | `npm run i18n:sync` | Új vagy módosított szövegek felvétele az ellenőrzési jegyzékbe (`pending`) |
 
 ## Dokumentáció
