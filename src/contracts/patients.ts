@@ -6,6 +6,7 @@ export const sexValues = ["male", "female", "neutered_male", "spayed_female"] as
 export const speciesSchema = z.enum(speciesValues);
 export const sexSchema = z.enum(sexValues);
 export type Species = z.infer<typeof speciesSchema>;
+export type Sex = z.infer<typeof sexSchema>;
 
 const ownerEmail = optionalText(254).refine(
   (value) => value === null || z.email().safeParse(value).success,

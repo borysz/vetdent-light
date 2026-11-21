@@ -20,6 +20,580 @@
     "note": "",
     "textHash": "4f3f48f1b01d2f34"
   },
+  "card.age": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "72bf3e588e2d2c9a"
+  },
+  "card.asa": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e945870ee29feaf0"
+  },
+  "card.asaHint": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1b9eb13e0057d870"
+  },
+  "card.breed": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "989ed309f924277a"
+  },
+  "card.collapse": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e056aa86d464d4f1"
+  },
+  "card.expand": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1a6a1b61d10ea36c"
+  },
+  "card.invalidDate": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "2935ed54de24db36"
+  },
+  "card.invalidEmail": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "78d44e506dda6401"
+  },
+  "card.invalidNumber": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a05bfb721e7c2c90"
+  },
+  "card.months": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "34fb201344a4033d"
+  },
+  "card.ownerEmail": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "89e2b96989f9ad25"
+  },
+  "card.ownerName": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "aeb121aa1bc1ebe3"
+  },
+  "card.ownerPhone": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "321a70ea11568b61"
+  },
+  "card.patientName": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "82a4f20f7a9193c6"
+  },
+  "card.required": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "74c7591024af9a58"
+  },
+  "card.sex": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "f96d09c5797127fb"
+  },
+  "card.sexFemale": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "98be624e339ae5b8"
+  },
+  "card.sexMale": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "5eebd9da1107845e"
+  },
+  "card.sexNeuteredMale": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "9d8b76c531cf31dd"
+  },
+  "card.sexSpayedFemale": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "52a054806928fc9a"
+  },
+  "card.sexUnknown": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "7b9914384be5003b"
+  },
+  "card.species": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "985b87fa34b500d4"
+  },
+  "card.speciesCat": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "5c054b9a1207d25a"
+  },
+  "card.speciesDog": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "4ee3d78af5379c77"
+  },
+  "card.speciesLocked": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "96f7255472cea4a0"
+  },
+  "card.summaryAge": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a1cf269663c0aa65"
+  },
+  "card.summaryAsa": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b76acf30d30db6a5"
+  },
+  "card.summaryBreed": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "989ed309f924277a"
+  },
+  "card.summaryDate": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a749283a6b101636"
+  },
+  "card.summaryOwner": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "5ddb6e4a080e3d0a"
+  },
+  "card.summarySex": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "4043fb2d1b3912f0"
+  },
+  "card.summaryWeight": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "31d54d6cdd939d2f"
+  },
+  "card.title": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "aca13ccec0e076a2"
+  },
+  "card.treatingVet": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "735a37b4a2018e8c"
+  },
+  "card.treatmentDate": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "7a204b2667ec6d39"
+  },
+  "card.weight": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "c8d67d3535dec3fd"
+  },
+  "card.years": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1b09a9c5514f96b6"
+  },
+  "card.yearsMonths": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "2bb9197274f428e6"
+  },
+  "clinic.city": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "87e81ad3ca97115b"
+  },
+  "clinic.description": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "bde62f7fd4c400ba"
+  },
+  "clinic.email": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "032933089746e946"
+  },
+  "clinic.name": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "4a89188af1622665"
+  },
+  "clinic.phone": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "27ac4efd56d27389"
+  },
+  "clinic.postalCode": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a119fd9dd3d80a2b"
+  },
+  "clinic.save": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "887f19d386695b8f"
+  },
+  "clinic.saved": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "aa6fb3f54dbfb1d8"
+  },
+  "clinic.street": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "3767daf8467818ce"
+  },
+  "clinic.title": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "048116f8f4fea326"
+  },
+  "common.all": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a765af77a8a71f6f"
+  },
+  "common.cancel": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "626b32485a17bbd3"
+  },
+  "common.cat": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1da1f0c6c2d92b7a"
+  },
+  "common.close": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "dc1d3dfaad5dfe86"
+  },
+  "common.dog": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "816c0b342477244e"
+  },
+  "common.empty": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "96b162748f7df7cf"
+  },
+  "common.loading": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "cad97b67c2a1df40"
+  },
+  "common.nextPage": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "c72c00d98eae74c6"
+  },
+  "common.open": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b738fcd3280243cb"
+  },
+  "common.pageOf": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "59b556b0541d87c3"
+  },
+  "common.previousPage": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "8db688f12f3839d1"
+  },
+  "common.search": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "f7cd9ac86a650a42"
+  },
+  "common.soon": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "633e368a85aca945"
+  },
+  "editor.conflictBody": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a75665c4b21581b5"
+  },
+  "editor.conflictTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "ddca0efc4a53f2dc"
+  },
+  "editor.discardAndLeave": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e105ba80b5bc2d8c"
+  },
+  "editor.discardDraft": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b567f521cec40817"
+  },
+  "editor.draftFound": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "61d053bc1ac60e1a"
+  },
+  "editor.fixErrors": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "f2eb0dfbd023369d"
+  },
+  "editor.keepMine": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "2cbbec72aa85865d"
+  },
+  "editor.leaveBody": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "fa15e49d4634a6ba"
+  },
+  "editor.leaveTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "3f2b76cc7a3a6302"
+  },
+  "editor.loadFailed": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e48c316d69e40973"
+  },
+  "editor.loadTheirs": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e4c265124a5c8f6d"
+  },
+  "editor.notSaved": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e695ab819a8ec485"
+  },
+  "editor.resetBody": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b0c852027b3f6f8b"
+  },
+  "editor.resetConfirm": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "9c29fd69a24b874e"
+  },
+  "editor.resetTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "9c29fd69a24b874e"
+  },
+  "editor.restoreDraft": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "9c29fd69a24b874e"
+  },
+  "editor.saveAndLeave": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "2c65aaf9d434aa63"
+  },
+  "editor.saved": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "c072fca372ca9386"
+  },
+  "editor.saveFailed": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "ac354cebf0afc849"
+  },
+  "editor.stay": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "4f482b862e12f312"
+  },
+  "editor.unsaved": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "3f2b76cc7a3a6302"
+  },
   "errors.bad_request": {
     "status": "pending",
     "reviewer": null,
@@ -104,19 +678,187 @@
     "note": "",
     "textHash": "00d8d49fde6af0df"
   },
-  "home.placeholderBody": {
+  "header.clinicData": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "fa37a06c4708eb5f"
+    "textHash": "048116f8f4fea326"
   },
-  "home.placeholderTitle": {
+  "header.emailOwner": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "41b82bd9fdd4787e"
+    "textHash": "932572274937277e"
+  },
+  "header.home": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "189fe96321e57414"
+  },
+  "header.logout": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "2834ab0a5ba32c2a"
+  },
+  "header.newSheet": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "39b0cfbc2b5c5588"
+  },
+  "header.pdf": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "2623018e94fd5a28"
+  },
+  "header.reset": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "93b40ae61372a79a"
+  },
+  "header.save": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "887f19d386695b8f"
+  },
+  "header.saving": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b9a1838da73cdf69"
+  },
+  "header.sheets": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b2df1095aaa45396"
+  },
+  "header.soonShort": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "633e368a85aca945"
+  },
+  "header.tabsLabel": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "30a110ad55064cf7"
+  },
+  "header.userMenu": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "6562b4309ed74714"
+  },
+  "home.catSubtitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "eb76a8e4f3e3e9a5"
+  },
+  "home.catTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1da1f0c6c2d92b7a"
+  },
+  "home.dogSubtitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "366f41ea27ce7dec"
+  },
+  "home.dogTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "816c0b342477244e"
+  },
+  "home.newCat": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "cf28b16e575b8e77"
+  },
+  "home.newDog": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "113fa7bb2afbb3ec"
+  },
+  "home.noSheets": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "aad05e3f2fb68f1e"
+  },
+  "home.owner": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "306c2c2f510754ef"
+  },
+  "home.recent": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "718b602cbe7c1aba"
+  },
+  "home.searchLabel": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "54177a61f51d2f48"
+  },
+  "home.searchPlaceholder": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "01e413c029d3b049"
+  },
+  "home.searchResults": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "c92e15365d7ae086"
+  },
+  "home.treatedOn": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "8ba6ac6c3ed9e7e9"
   },
   "login.email": {
     "status": "pending",
@@ -160,33 +902,131 @@
     "note": "",
     "textHash": "721a5477d7c5299e"
   },
-  "session.clinic": {
+  "newSheetDialog.cat": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "425b1fb33916339e"
+    "textHash": "5c054b9a1207d25a"
   },
-  "session.greeting": {
+  "newSheetDialog.description": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "a0109df608cf8815"
+    "textHash": "cb8c866f3b74d8b8"
   },
-  "session.loading": {
+  "newSheetDialog.dog": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "cad97b67c2a1df40"
+    "textHash": "4ee3d78af5379c77"
   },
-  "session.logout": {
+  "newSheetDialog.existing": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "2834ab0a5ba32c2a"
+    "textHash": "cd125c7acd291683"
+  },
+  "newSheetDialog.newAnimal": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "2fae7c3fbd4e1a1d"
+  },
+  "newSheetDialog.searchLabel": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a7d9ae4d71f631fc"
+  },
+  "newSheetDialog.title": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "dbcddb11f98f5ef9"
+  },
+  "newSheetDialog.useAnimal": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "444ceaa6ed8c56e6"
+  },
+  "sheetsDialog.animals": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "000404dd8b1bcb5c"
+  },
+  "sheetsDialog.description": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "5c2643a554f4ee9b"
+  },
+  "sheetsDialog.newForAnimal": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "0ffc74809efaf976"
+  },
+  "sheetsDialog.noAnimals": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "f28ad2b0c34683c4"
+  },
+  "sheetsDialog.noSheetsForAnimal": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "ecddef4ccbeb3290"
+  },
+  "sheetsDialog.owner": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "306c2c2f510754ef"
+  },
+  "sheetsDialog.pickAnimal": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "78d22b05bd6648c4"
+  },
+  "sheetsDialog.searchPlaceholder": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "01e413c029d3b049"
+  },
+  "sheetsDialog.sheetsOf": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "356e1e6d7ec2c0d5"
+  },
+  "sheetsDialog.title": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b2df1095aaa45396"
   },
   "tabs.anesthesia": {
     "status": "pending",
@@ -209,11 +1049,46 @@
     "note": "",
     "textHash": "1f2d664a85079774"
   },
+  "tabs.placeholder": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "20ed330e56a092ce"
+  },
   "tabs.report": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
     "textHash": "7605cdf1a4f5a9c0"
+  },
+  "tabs.shortAnesthesia": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "012171cba1d674de"
+  },
+  "tabs.shortHomecare": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b1193e9d23f97fa8"
+  },
+  "tabs.shortOdontogram": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "dc5937e85babd25c"
+  },
+  "tabs.shortReport": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e922fcc67b883fcb"
   }
 }

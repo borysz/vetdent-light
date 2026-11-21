@@ -50,3 +50,22 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 |---|---|---|
 | Az oldalak és az API URI-jei, valamint a teljes forráskód mindig angol. A bejelentkezési oldal `/login` (nem `/belepes`); a tervezett útvonalak: `/sheets/[id]`, `/sheets/new?species=dog|cat` vagy `?patient=<id>`, fül: `?tab=1..4` (nem `/lapok`, `?faj=`, `?paciens=`, `?ful=`) | A megrendelő kérése; a `MASTER_PROMPT.md` magyar útvonalai ezzel felülíródnak | `src/app/`, `src/proxy.ts`, `tests/language.test.ts` |
 | A `tests/language.test.ts` hibát jelez, ha a `src`, `scripts`, `tests` vagy `supabase` mappában ékezetes magyar szöveg vagy magyar útvonalnév van | Hogy a szabály ne sérülhessen észrevétlenül | `tests/language.test.ts` |
+
+## 3. fázis
+
+| Döntés | Indok | Módosítás helye |
+|---|---|---|
+| A felugró ablakok, gombok és fülek shadcn-stílusú, kézzel írt komponensek a `radix-ui` csomagra építve (nem a `shadcn` CLI-vel generáltak) | A CLI felülírná a mért színtokeneket a `globals.css`-ben; ugyanazok a Radix-alapok, a tokenekből stílusozva | `src/components/ui/` |
+| 1536 px alatt (laptop, tablet) a fejléc gombjai csak ikonok (feliratuk `aria-label` és `title`), a fülek rövid nevűek („1. Odontogram”, „2. Anesztézia”, „3. Hazaadó lap”, „4. Zárójelentés”); 1536 px-től a teljes felirat és a „FOGÁSZATI LAP” címke is látszik | A 1280×580-as laptopon a fejlécnek egy sorba kell férnie (kb. 500 px marad a táblázatnak); a hosszú feliratok a mintaképek szerintiek | `src/components/shell/app-header.tsx`, `messages/hu.json` |
+| Álló tableten (xl alatt) a fülek külön, teljes szélességű második sorba törnek | A leírás szerint | `app-header.tsx` |
+| A mentés gomb alatt mindig látszik az állapot („Mentve 10:42”, „Nem mentett változások”, „Még nincs mentve”) pöttyel jelezve | A leírás szerint | `app-header.tsx`, `sheet-editor.tsx` |
+| A PDF mentés és az e-mail a gazdinak gomb letiltva („Hamarosan” az `aria-label`-ben és a `title`-ben) | A PDF a 6. fázisban készül, az e-mail-küldés később | `app-header.tsx` |
+| A kezelés dátuma külön mező a páciens-kártyában (a mintaképen csak az összegző sorban kattintva módosítható) | Egyszerűbb és érintőbarátabb; az összegző sorban a dátum látszik | `patient-card.tsx` |
+| A páciens-kártya a 3. fázisban a mentéshez szükséges mezőket tartalmazza (név, faj, fajta, kor, súly, gazdi, nem, ASA, kezelőorvos, dátum); az anamnézis mezői a 4. fázisban jönnek | A mentés és a folyamat kipróbálható legyen | `patient-card.tsx` |
+| Új lap meglévő állathoz: a faj nem módosítható; új állatnál az első mentésig módosítható | A faj csak addig módosítható, amíg az állatnak nincs lapja | `patient-card.tsx`, `sheet-editor.tsx` |
+| A fül és az első mentés utáni cím (`/sheets/<id>`) a böngésző előzményének cseréjével (`history.replaceState`) frissül, a szerkesztő nem töltődik újra | Ne vesszenek el a beírt adatok, nincs villogás | `sheet-editor.tsx` |
+| A nem mentett változások helyi piszkozata a `localStorage`-ban él (`vetdent:draft:…`), a lap azonosítója vagy a kiindulás (új állat faja, meglévő állat) a kulcs; mentés után törlődik | A leírás szerint; a tároló hiányozhat vagy betelhet, ezért minden hívás védett | `src/client/local-draft.ts` |
+| Elhagyás előtt (fejléc, ablakok, kilépés) a szerkesztő rákérdez (Mentés és tovább, Elvetés és tovább, Maradok); böngészőablak bezárásakor `beforeunload` figyelmeztet | Böngészőben nincs beépített útvonal-elhagyás elleni védelem a Next App Routerben | `shell-context.tsx`, `sheet-editor.tsx` |
+| Ütközésnél (409) két választás: „Az én változatom mentése” (a legfrissebb verzióra rámentve) vagy „A másik változat betöltése” | Csendben semmi nem veszhet el | `sheet-editor.tsx` |
+| A listák (kezdőképernyő, ablakok) lapozhatók, nem görgethetők, 3–4 sorral | A felugró ablakok nem görgethetők, a kezdőképernyő egy képernyőn elfér | `patient-picker.tsx`, `home-screen.tsx`, `sheets-dialog.tsx` |
+| `check:layout` (valódi Chrome, 7 méret, 12 oldal- és ablakállapot méretenként) és `check:flow` (létrehozás, piszkozat, elhagyás, ütközés) éles buildre fut, saját jelölt adattal, és utána töröl | A leírás szerint; a fejlesztői szerver saját gombokat tesz az oldalra, ezért éles buildet használunk | `scripts/check-layout.ts`, `scripts/check-flow.ts` |

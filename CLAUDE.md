@@ -19,7 +19,7 @@ Next.js 16 (App Router, Turbopack), React 19, TypeScript strict, Tailwind CSS 4,
 - Titkot soha ne olvass ki és ne írj ki; a `.env*` fájlok Gitben nincsenek (`.env.example` igen).
 
 ## Parancsok
-`npm run dev` (port **6438**), `npm run build`, `npm run check` (lint + typecheck + test + i18n), `npm run i18n:sync`.
+`npm run dev` (port **6438**), `npm run build`, `npm run check` (lint + typecheck + test + i18n), `npm run i18n:sync`. Felületi ellenőrzés éles buildre: `npm run build && npm run start`, majd `npm run check:layout` (méretek, görgethető ablakok, 44 px-es célok, képernyőképek a `template pics/screenshots/` mappába) és `npm run check:flow` (mentés, piszkozat, ütközés). Minden felületi változtatás után futtasd; ami ott nem zöld, az nincs kész.
 
 ## Gépfüggő tudnivalók (Windows, nincs rendszergazdai jog)
 - A shell nem örökli a friss PATH-t: `$env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')`, és `npm.cmd` / `npx.cmd`.
@@ -36,4 +36,4 @@ Next.js 16 (App Router, Turbopack), React 19, TypeScript strict, Tailwind CSS 4,
 - A route handlereket a tesztek közvetlenül hívják (`tests/helpers/fixtures.ts` `call`); a `next/headers` sütit a `tests/setup.ts` mockolja.
 
 ## Állapot
-1. és 2. fázis kész (alapozás; adatbázis, API-váz, belépés, `user:create`, integrációs tesztek). Következik: 3. fázis (alkalmazáshéj: fejléc, kezdőképernyő, „Kezelési lapok” ablak, új lap folyamata, mentés, `check:layout`).
+1–3. fázis kész (alapozás; adatbázis, API, belépés; alkalmazáshéj: fejléc, kezdőképernyő, „Kezelési lapok” és új lap ablak, lapszerkesztő mentéssel, piszkozattal, ütközéskezeléssel, `check:layout`, `check:flow`). Következik: 4. fázis (1. fül: a páciens-kártya anamnézis mezői, fogkatalógus, a fogtáblázat SVG-vel pontosan a minták szerint, fogszerkesztő, gyorsbevitel, periodontális összesítő). A 4. fázis a legnehezebb: ott erősebb modell és magasabb fokozat érdemes.

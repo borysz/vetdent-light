@@ -10,6 +10,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "check:i18n": "tsx scripts/i18n.ts check",
+    "check:layout": "tsx --env-file=.env.local scripts/check-layout.ts",
+    "check:flow": "tsx --env-file=.env.local scripts/check-flow.ts",
     "i18n:sync": "tsx scripts/i18n.ts sync",
     "user:create": "tsx --env-file=.env.local scripts/create-user.ts",
     "check": "npm run lint && npm run typecheck && npm run test && npm run check:i18n"
@@ -23,6 +25,7 @@
     "lucide-react": "^1.77.0",
     "next": "16.4.6",
     "next-intl": "^4.15.3",
+    "radix-ui": "^1.8.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "tailwind-merge": "^3.7.1",
