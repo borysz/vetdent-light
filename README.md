@@ -17,6 +17,7 @@ npm run dev                  # http://localhost:6438
 | `npm run dev` / `npm run start` | Fejlesztői / éles szerver a 6438-as porton |
 | `npm run build` | Éles build |
 | `npm run check` | lint + típusellenőrzés + tesztek + i18n-ellenőrzés |
+| `npm run user:create -- --email … --name … --title "Dr."` | Felhasználó és rendelőtagság létrehozása (jelszót rejtve kér be; a saját termináljában futtasd) |
 | `npm run i18n:sync` | Új vagy módosított szövegek felvétele az ellenőrzési jegyzékbe (`pending`) |
 
 ## Dokumentáció

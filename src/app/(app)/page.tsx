@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { SessionPanel } from "@/components/session-panel";
 
 export default async function Home() {
   const app = await getTranslations("app");
@@ -15,6 +16,7 @@ export default async function Home() {
         </div>
         <h2 className="mt-6 text-lg font-semibold">{home("placeholderTitle")}</h2>
         <p className="mt-2 text-foreground-muted">{home("placeholderBody")}</p>
+        <SessionPanel />
       </section>
     </main>
   );

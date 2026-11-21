@@ -2,8 +2,12 @@
 
 | # | Kérdés | Jelenlegi alapértelmezés | Kinek |
 |---|---|---|---|
-| 1 | Supabase CLI bejelentkezés és projekt-összekötés (`npx supabase login`, `npx supabase link --project-ref <ref>`) | Az összekötés még nincs kész; a 2. fázis előtt kell | Megrendelő (saját terminálban) |
-| 2 | Supabase Auth önregisztráció kikapcsolása (Authentication → Sign In / Providers → „Allow new users to sign up”) | Még nincs kikapcsolva | Megrendelő |
-| 3 | Adatbázisjelszó a migrációkhoz (`SUPABASE_DB_PASSWORD` a `.env.local`-ban, vagy a parancs kéri) | Nincs megadva | Megrendelő |
-| 4 | Impeccable telepítés és hook bekötése | Elhalasztva, lásd `TODO.md` | Megrendelő |
-| 5 | A rendelő pontos neve, címe a demóhoz | Semleges demóadat | Megrendelő |
+| 1 | Impeccable telepítés és hook bekötése | A hook működik a munkafában; a bejelentkezéses telepítés elhalasztva, lásd `TODO.md` | Megrendelő |
+| 2 | A rendelő pontos neve, címe a demóhoz | Semleges demóadat | Megrendelő |
+| 3 | Éles (HTTPS) elérés: a publikus cím most HTTP-n megy, a belépési süti `Secure` jelzője csak HTTPS-en kapcsol be | Fejlesztéshez HTTP is működik | Megrendelő |
+| 4 | Felhasználók létrehozása: az első rendelői felhasználót a megrendelő hozza létre a saját termináljában (`npm run user:create -- --email … --name … --title "Dr."`) | A szkript kész, felhasználó még nincs | Megrendelő |
+
+## Megoldva
+
+- Supabase CLI összekötve a `vetdent-light` projekttel (ref `xysdcrrwljyukxwbnswc`); a migrációk `npx supabase db push --remote` paranccsal mennek, adatbázisjelszó nem kellett.
+- Supabase Auth önregisztráció kikapcsolva (megrendelő, 2026-11-21).

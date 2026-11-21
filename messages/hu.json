@@ -12,6 +12,34 @@
   },
   "home": {
     "placeholderTitle": "Az alkalmazás váza elkészült",
-    "placeholderBody": "A belépés, a kezdőképernyő és a kezelési lap a következő fázisokban készül el."
+    "placeholderBody": "A kezdőképernyő és a kezelési lap a következő fázisokban készül el."
+  },
+  "login": {
+    "title": "Belépés",
+    "subtitle": "Jelentkezzen be a kezelési lapok eléréséhez.",
+    "email": "E-mail-cím",
+    "password": "Jelszó",
+    "submit": "Belépés",
+    "submitting": "Belépés…"
+  },
+  "session": {
+    "greeting": "Üdvözöljük, {name}!",
+    "clinic": "Rendelő: {clinic}",
+    "logout": "Kilépés",
+    "loading": "Betöltés…"
+  },
+  "errors": {
+    "bad_request": "A kérés hibás.",
+    "validation_failed": "Néhány adat hibás vagy hiányzik.",
+    "unauthenticated": "A munkamenet lejárt, kérjük, lépjen be újra.",
+    "invalid_credentials": "Hibás e-mail-cím vagy jelszó.",
+    "forbidden": "Nincs jogosultsága ehhez a művelethez.",
+    "not_a_member": "A felhasználó nem tartozik egyetlen rendelőhöz sem.",
+    "origin_not_allowed": "A kérés nem megbízható forrásból érkezett. Töltse újra az oldalt.",
+    "not_found": "A keresett elem nem található.",
+    "version_conflict": "A lapot közben más is módosította.",
+    "species_locked": "A faj nem módosítható, mert az állatnak már van kezelési lapja.",
+    "internal_error": "Váratlan hiba történt. Kérjük, próbálja újra.",
+    "network": "Nem sikerült kapcsolódni a szerverhez. Ellenőrizze az internetkapcsolatot."
   }
 }

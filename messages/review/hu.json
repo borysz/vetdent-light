@@ -20,12 +20,96 @@
     "note": "",
     "textHash": "4f3f48f1b01d2f34"
   },
+  "errors.bad_request": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "f267d2e16c7aa291"
+  },
+  "errors.forbidden": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "f9c27d63e294298d"
+  },
+  "errors.internal_error": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "0573cf602308fc7b"
+  },
+  "errors.invalid_credentials": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "6f8ebb2500d08180"
+  },
+  "errors.network": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "78f89165a2a44e94"
+  },
+  "errors.not_a_member": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a631eeb6eedef8a0"
+  },
+  "errors.not_found": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1703a1cbd49f5f3e"
+  },
+  "errors.origin_not_allowed": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "22adc90e743d7cd5"
+  },
+  "errors.species_locked": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "96f7255472cea4a0"
+  },
+  "errors.unauthenticated": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1345e9c08d057a7b"
+  },
+  "errors.validation_failed": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "966cc3f31a464abd"
+  },
+  "errors.version_conflict": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "00d8d49fde6af0df"
+  },
   "home.placeholderBody": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "a75b2eaa4cd88e4a"
+    "textHash": "fa37a06c4708eb5f"
   },
   "home.placeholderTitle": {
     "status": "pending",
@@ -33,6 +117,76 @@
     "reviewedAt": null,
     "note": "",
     "textHash": "41b82bd9fdd4787e"
+  },
+  "login.email": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "032933089746e946"
+  },
+  "login.password": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "0e57cbdca0d2208e"
+  },
+  "login.submit": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "721a5477d7c5299e"
+  },
+  "login.submitting": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "784f38777dd73e31"
+  },
+  "login.subtitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "5e7d24a515b4c4e5"
+  },
+  "login.title": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "721a5477d7c5299e"
+  },
+  "session.clinic": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "425b1fb33916339e"
+  },
+  "session.greeting": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a0109df608cf8815"
+  },
+  "session.loading": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "cad97b67c2a1df40"
+  },
+  "session.logout": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "2834ab0a5ba32c2a"
   },
   "tabs.anesthesia": {
     "status": "pending",

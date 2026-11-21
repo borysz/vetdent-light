@@ -17,6 +17,27 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 | Rétegszabály az ESLintben: `src/app/(app)`, `src/components`, `src/client` nem importálhat `@/server`-t és `@supabase/*`-t | API-first architektúra | `eslint.config.mjs` |
 | A mintaképek ismert hibái javítva: „Hazadobó Lap” → „Hazaadó lap & Gyógyszerek” (`messages/hu.json`); a többi (108-as fog kvadránsa, „Pulznyitott”, tizedesjel) a megfelelő fázisban | A képek hibáit nem vesszük át | `messages/hu.json` |
 
+## 2. fázis
+
+| Döntés | Indok | Módosítás helye |
+|---|---|---|
+| A lap egy dokumentumként mentődik (`treatment_sheets.content jsonb`), zod-dal ellenőrizve (`src/contracts/sheets.ts`), `schema_version`-nel | Egyszerű mentés és verziózás; ha később elemzés kell, a fogadatok normalizálhatók | `src/contracts/sheets.ts`, `supabase/migrations/` |
+| Külön gazdi-nyilvántartás nincs, a gazdi adatai az állatnál vannak | Elég a jelenlegi igényhez; később bővíthető | `patients` tábla |
+| A becsült születési hónap a laphoz megadott korból számolódik (`src/domain/age.ts`), a páciens kora a mai napra ebből adódik | A következő lapon a kor magától nő | `src/domain/age.ts` |
+| A páciens utolsó testtömege a legutóbb mentett lap testtömege | Egyszerű, nem szükséges külön mező kezelése | `save_sheet`, `create_patient_with_sheet` |
+| Az új állat és az első lap egy adatbázis-függvényben (`create_patient_with_sheet`) készül, a mentés (`save_sheet`) is függvény; mindkettő `security invoker`, `set search_path = ''` | Atomi művelet, az RLS a hívóra érvényes | `supabase/migrations/20261121140000_core_schema.sql` |
+| Meglévő állathoz új lap két lépésben készül (lap beszúrása, majd az állat korának és súlyának frissítése), ez nem egy tranzakció | Az állat adatainak frissítése másodlagos, a lap nem veszhet el miatta; a követelmény csak az új állat + lap párosra vonatkozik | `src/server/services/sheets.ts` |
+| `is_clinic_member` `security definer` | A `clinic_members` saját szabályába ütközne (rekurzió); csak egy logikai értéket ad vissza | migráció |
+| Törlés nincs (nincs `delete` szabály az RLS-ben) | A leírás szerint most nem kell | migráció |
+| A sütis munkamenet `httpOnly`, `SameSite=Lax`, a `Secure` jelző akkor kapcsol be, ha a kérés HTTPS-en jött | A publikus fejlesztői cím HTTP-n megy, ott a `Secure` süti nem működne | `src/server/auth.ts`, `src/proxy.ts` |
+| Sütis kérésnél az állapotváltoztató metódusokra kötelező az azonos eredetű `Origin` (CSRF-védelem); Bearer-kérésnél nincs ilyen ellenőrzés | A süti automatikusan megy a kéréssel, a Bearer token nem | `src/server/http.ts` |
+| A belépés és a kilépés elfogadja az `Origin` nélküli kérést (nem böngészős kliens); a belépés csak a `returnTokens: true` kérésre ad vissza tokent | Nem böngészős kliensnek is kell tudnia belépni; a böngésző a sütit használja | `src/app/api/v1/auth/login/route.ts` |
+| A hibás belépés mindig `invalid_credentials` (nem derül ki, melyik adat rossz) | Felhasználók felderítése ellen | login route |
+| `GET /reference-data` egyelőre csak kódokat ad (faj, nem, ASA, stádium); a fogkatalógus és a kódlisták a 4. fázisban jönnek | A megnevezések felületi szövegek, szakmai jóváhagyással | `src/contracts/reference.ts` |
+| A `GET /sheets/{id}/pdf` a 6. fázisban készül el | A leírás fázisbeosztása szerint | – |
+| Az API-integrációs tesztek a valódi Supabase-projekten futnak, saját jelölt adattal (`itest-<futás>-…@vetdent-light.test`, „itest …” rendelők), és utána törlik azt | A leírás szerint; a futás végén a projekt üres | `tests/` |
+| A `supabase db push` ehhez a CLI-verzióhoz `--remote` kapcsolót kér (alapból a helyi Dockeres adatbázist célozza) | Tapasztalat | `CLAUDE.md` |
+
 ## Későbbi fázisokra előre rögzítve
 
 - A gazdi e-mail-címe nem kötelező (csak formátumellenőrzés), amíg nincs e-mail-küldés.

@@ -28,5 +28,12 @@ Next.js 16 (App Router, Turbopack), React 19, TypeScript strict, Tailwind CSS 4,
 - Git: távoli `git@github.com:borysz/vetdent-light.git`, ág `main`; `--force` soha; munkafán a saját ágra pusholj.
 - Supabase CLI: `npx supabase projects list`; ha nincs belépve, a felhasználó futtassa a `npx supabase login` parancsot a saját termináljában. A céges hálózati védelem miatt a tanúsítvány-ellenőrzést nem kapcsoljuk ki.
 
+## Adatbázis és API
+- Migrációk: `supabase/migrations/`; feltöltés: `npx supabase db push --remote` (e nélkül a helyi Dockeres adatbázist célozza); típusok: `npx supabase gen types typescript --linked` → `src/server/db/database.types.ts` (BOM nélkül mentsd). Új migráció után mindig frissítsd a típusokat.
+- API: `src/app/api/v1/**`, szerződések `src/contracts/`, szolgáltatások `src/server/services/`, OpenAPI: `GET /api/v1/openapi.json`. A kérések a felhasználó tokenjével futnak (RLS), a secret key csak `src/server/admin.ts`-ben (szkriptek, tesztek).
+- Belépés: `npm run user:create` (a felhasználó saját termináljában); regisztrációs felület nincs.
+- Tesztek (`npm test`) a valódi Supabase-projekten futnak saját, utána törölt adattal; `.env.local` kell hozzá.
+- A route handlereket a tesztek közvetlenül hívják (`tests/helpers/fixtures.ts` `call`); a `next/headers` sütit a `tests/setup.ts` mockolja.
+
 ## Állapot
-1. fázis (alapozás) kész, kivéve a Supabase CLI összekötését (`docs/NYITOTT_KERDESEK.md`). Következik: 2. fázis (adatbázis, API-váz, belépés).
+1. és 2. fázis kész (alapozás; adatbázis, API-váz, belépés, `user:create`, integrációs tesztek). Következik: 3. fázis (alkalmazáshéj: fejléc, kezdőképernyő, „Kezelési lapok” ablak, új lap folyamata, mentés, `check:layout`).
