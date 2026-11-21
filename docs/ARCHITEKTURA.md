@@ -50,6 +50,12 @@ Az alapszabály: **a felület csak az API-n át ér el adatot.** Az `src/compone
 - Sütis, állapotváltoztató kérésnél azonos eredetű `Origin` kell (CSRF-védelem, `src/server/http.ts`).
 - Jogosultság: aki a rendelő tagja, az mindent lát és szerkeszt a rendelőben; aki nem tag, 403-at kap. Regisztrációs felület nincs, a felhasználót a `npm run user:create` hozza létre.
 
+## Keresés és lapozás
+
+- Minden lista szerveroldalon lapoz (`page`, `pageSize`), a felület 4 elemet mutat oldalanként, első / előző / következő / utolsó gombbal.
+- Az állatkereső a névben, a gazdi nevében és a telefonszámban keres; az ékezet és a kis- és nagybetű nem számít (a `search_text` számított oszlop és a `foldForSearch` ugyanúgy alakít), a telefonszám szóközök nélkül és 06-tal is megy (`phone_digits`).
+- Nagy adatmennyiségre a `npm run check:volume` ellenőrzi (alapból 300, `-- --animals 1500`).
+
 ## Adatmodell
 
 Táblák: `clinics`, `clinic_members`, `patients`, `treatment_sheets` (`supabase/migrations/20261121140000_core_schema.sql`). A lap részletei egyetlen, zod-dal ellenőrzött `content jsonb` dokumentumban vannak (anamnézis, fogak foganként, periodontális összesítő, idegblokkok, varratok, röntgen, gyógyszerek, tanácsok, kontroll), `schema_version`-nel. Új mező a `content`-ben **nem kér migrációt**, csak a séma bővítését (lásd lent).

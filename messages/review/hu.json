@@ -1063,6 +1063,20 @@
     "note": "",
     "textHash": "96b162748f7df7cf"
   },
+  "common.firstPage": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "664f339c5b60ec70"
+  },
+  "common.lastPage": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "8662281095f38711"
+  },
   "common.loading": {
     "status": "pending",
     "reviewer": null,

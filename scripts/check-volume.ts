@@ -1,7 +1,8 @@
 /**
  * Volume check with a real Chrome against a running server (production build recommended):
  * a clinic with hundreds of dogs and cats, owners and sheets. Checks what the home screen shows (paged lists,
- * never everything at once), paging to the end, the search (animal, owner, phone, case, part of a word, no hit),
+ * never everything at once), paging to the end, the search (animal, owner, phone, case, accents, phone typed
+ * without spaces or with 06, part of a word, no hit),
  * the sheets of one animal, and the response times. Uses a marked test user (e2e-...@vetdent-light.test) and
  * deletes everything it created.
  *
@@ -10,6 +11,7 @@
  */
 import puppeteer, { type Page } from "puppeteer-core";
 import messages from "../messages/hu.json";
+import { foldForSearch, phoneSearchDigits } from "../src/domain/text";
 import { createAdminClient } from "../src/server/admin";
 import { createE2eUser } from "./lib/e2e";
 
@@ -53,10 +55,16 @@ function makeAnimals(count: number): Animal[] {
   return animals;
 }
 
-/** How many animals the search should find: case-insensitive part of the name, owner name or phone. */
+/** How many animals the search should find: the same rule as the server (accents and case ignored, phone digits). */
 function expectedHits(animals: Animal[], q: string): number {
-  const needle = q.toLowerCase();
-  return animals.filter((x) => [x.name, x.owner, x.phone].some((field) => field.toLowerCase().includes(needle))).length;
+  const needle = foldForSearch(q);
+  const digits = phoneSearchDigits(q);
+  return animals.filter(
+    (x) =>
+      foldForSearch(`${x.name} ${x.owner}`).includes(needle) ||
+      x.phone.toLowerCase().includes(q.toLowerCase()) ||
+      (digits !== "" && x.phone.replace(/\D/g, "").includes(digits)),
+  ).length;
 }
 
 const searchSection = `section[aria-label="${messages.home.searchResults}"]`;
@@ -158,7 +166,12 @@ async function main() {
     const page2 = await itemsIn(page, searchSection);
     ok("next page shows other animals", page2.length === 4 && (await pagerOf(page, searchSection))?.page === 2);
     const pages = animalsPager?.pages ?? 0;
-    info("reaching the last animal page", `${pages} pages of 4: only previous/next buttons, so the last page is ${pages - 1} taps away`);
+    await page.click(`${searchSection} button[aria-label="${messages.common.lastPage}"]`);
+    await page.waitForFunction((s, n) => new RegExp(`${n}\\. oldal`).test((document.querySelector(s) as HTMLElement).innerText), {}, searchSection, pages);
+    ok("one tap reaches the last animal page", (await pagerOf(page, searchSection))?.page === pages && (await itemsIn(page, searchSection)).length > 0, `page ${pages}`);
+    await page.click(`${searchSection} button[aria-label="${messages.common.firstPage}"]`);
+    await page.waitForFunction((s) => /^1\. oldal/m.test((document.querySelector(s) as HTMLElement).innerText), {}, searchSection);
+    ok("one tap goes back to the first page", (await pagerOf(page, searchSection))?.page === 1);
     const lastPage = await timedFetch(page, `/api/v1/patients?page=${pages}&pageSize=4`);
     ok("the last animal page loads quickly", lastPage.status === 200 && lastPage.ms < MAX_API_MS, `${lastPage.ms} ms`);
     const lastSheets = await timedFetch(page, `/api/v1/sheets?page=${recentPager?.pages ?? 1}&pageSize=4`);
@@ -174,6 +187,11 @@ async function main() {
       { label: "owner given name in upper case", q: "ESZTER" },
       { label: "phone number as stored", q: animals[42].phone },
       { label: "end of a phone number", q: animals[42].phone.slice(-4) },
+      { label: "owner name without accents", q: "Kovacs" },
+      { label: "owner name with accents", q: SURNAMES[0] },
+      { label: "animal name, accents typed where there are none", q: "Cs" + String.fromCharCode(0xed) + "llag" },
+      { label: "phone number without spaces", q: animals[42].phone.replace(/\D/g, "").slice(-7) },
+      { label: "phone number with 06", q: "06" + animals[42].phone.replace(/\D/g, "").slice(2) },
     ];
     for (const c of cases) {
       const ms = await search(page, c.q);
@@ -186,15 +204,6 @@ async function main() {
     await search(page, "Nincsilyen");
     ok("a search without hits says so", (await page.$eval(searchSection, (el) => (el as HTMLElement).innerText)).includes(messages.home.searchPlaceholder) && !(await pagerOf(page, searchSection)));
 
-    // Search conveniences that are not promised today: reported, not failed.
-    const accentFree = "Kovacs";
-    await search(page, accentFree);
-    const accentHits = (await pagerOf(page, searchSection))?.total ?? (await itemsIn(page, searchSection)).length;
-    info("search without accents", `"${accentFree}" finds ${accentHits} of ${expectedHits(animals, SURNAMES[0])} animals of owners named ${SURNAMES[0]}`);
-    const digits = animals[42].phone.replace(/\D/g, "").slice(-7);
-    await search(page, digits);
-    const digitHits = (await pagerOf(page, searchSection))?.total ?? (await itemsIn(page, searchSection)).length;
-    info("phone number typed without spaces", `"${digits}" finds ${digitHits} (the stored number is "${animals[42].phone}")`);
 
     // 4. A new search starts again on page 1.
     await search(page, "Luna");

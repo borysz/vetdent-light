@@ -20,6 +20,8 @@
     "cancel": "Mégse",
     "previousPage": "Előző oldal",
     "nextPage": "Következő oldal",
+    "firstPage": "Első oldal",
+    "lastPage": "Utolsó oldal",
     "pageOf": "{page}. oldal / {pages} ({total} találat)",
     "loading": "Betöltés…",
     "search": "Keresés",

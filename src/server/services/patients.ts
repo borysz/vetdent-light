@@ -1,5 +1,6 @@
 import type { Page } from "@/contracts/common";
 import type { Patient, PatientInput, PatientPatch, Species } from "@/contracts/patients";
+import { foldForSearch, phoneSearchDigits } from "@/domain/text";
 import type { AuthContext } from "../auth";
 import { ApiError, fromDb } from "../errors";
 import type { Database } from "../db/database.types";
@@ -25,8 +26,12 @@ export async function listPatients(
 
   if (opts.species) query = query.eq("species", opts.species);
   if (opts.q) {
-    const value = likeFilterValue(opts.q);
-    query = query.or(`name.ilike.${value},owner_name.ilike.${value},owner_phone.ilike.${value}`);
+    // Accents and case do not matter (search_text is folded the same way); a phone number may be typed
+    // with or without spaces, or starting with 06.
+    const filters = [`search_text.like.${likeFilterValue(foldForSearch(opts.q))}`, `owner_phone.ilike.${likeFilterValue(opts.q)}`];
+    const digits = phoneSearchDigits(opts.q);
+    if (digits) filters.push(`phone_digits.like.${likeFilterValue(digits)}`);
+    query = query.or(filters.join(","));
   }
 
   const { data, error, count } = await query;
