@@ -38,6 +38,7 @@ npm run dev            # http://localhost:6438
 | `npm run check:layout` | Valódi Chrome, 7 méret: túlcsordulás, görgethető ablakok, 44 px-es célok, a teljes fogtábla; képernyőképek a `template pics/screenshots/` mappába |
 | `npm run check:flow` | Böngészős folyamat: mentés, piszkozat, ütközés, fogtábla, fülek, PDF-letöltés, nyomtatás |
 | `npm run check:pdf` | PDF-végpont: ő és ű a PDF-ből kiolvasva, A4, oldalszám, jogosultság |
+| `npm run check:volume` | Sok adattal (alapból 300 állat): kezdőlap, lapozás, kereső, válaszidők |
 | `npm run user:create -- --email … --name … --title "Dr."` | Felhasználó és rendelőtagság létrehozása |
 | `npm run seed:demo` | Demóadat az első rendelőbe; `-- --reset` törli |
 | `npm run i18n:sync` | Új vagy módosított szövegek felvétele az ellenőrzési jegyzékbe (`pending`) |

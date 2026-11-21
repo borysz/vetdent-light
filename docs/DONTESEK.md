@@ -153,6 +153,17 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 | A `CLAUDE.md` egyszer megduplázódott egy javítószkript miatt (`String.replace` és a `$` jelek): újraírva; a `tests/docs.test.ts` őrzi az ismétlődő bekezdéseket és a nem létező fájlokra mutató hivatkozásokat | A hiba így nem ismétlődhet észrevétlenül | `CLAUDE.md`, `tests/docs.test.ts` |
 | Új dokumentum: `docs/ARCHITEKTURA.md` (felépítés, adatfolyam, bővítés lépései); a `README.md` a teljes indulási útmutatót tartalmazza | Új fejlesztő gyorsan eligazodjon | `docs/`, `README.md` |
 
+## Elfelejtett jelszó
+
+| Döntés | Indok | Módosítás helye |
+|---|---|---|
+| A levelet ideiglenesen a Supabase beépített levelezője küldi; saját levélküldő rendszer később | Megrendelői döntés; a korlátokat a `docs/JELSZO_VISSZAALLITAS.md` írja le | `TODO.md` |
+| A kérés válasza mindig ugyanaz (202), akár létezik a fiók, akár nem | Ne lehessen kipróbálni, kinek van fiókja | `src/app/api/v1/auth/password-reset/route.ts` |
+| A `/auth/confirm` a levél kétféle linkjét is elfogadja: `token_hash` (saját sablon, bármelyik eszközön működik) és `code` (alapsablon, csak a kérő böngészőben) | A sablon cseréje nem töri el a már kiküldött linkeket | `src/server/services/password.ts` |
+| A `/auth/confirm` relatív címre irányít át | A szerver a saját belső címét látja (0.0.0.0, proxy mögött), nem a publikusat | `src/app/auth/confirm/route.ts` |
+| Az új jelszó legalább 12 karakter, kétszer kell beírni; ugyanez a szabály a parancssori `user:create` és `user:password` esetén | Egy helyen definiálva (`MIN_PASSWORD_LENGTH`) | `src/contracts/auth.ts` |
+| A belépési, az elfelejtett jelszó és az új jelszó oldal közös kártyát használ | Egy kinézet, egy helyen javítható | `src/components/auth/auth-card.tsx` |
+
 ## Telepítés: Render.com
 
 | Döntés | Indok | Módosítás helye |

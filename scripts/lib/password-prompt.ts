@@ -1,4 +1,5 @@
 import { createInterface } from "node:readline";
+import { MIN_PASSWORD_LENGTH } from "../../src/contracts/auth";
 
 /** Terminal escape sequences (e.g. the bracketed-paste markers ESC[200~ / ESC[201~) and other control characters. */
 const ESCAPE_SEQUENCE = /\u001b\[[0-9;?]*[ -/]*[@-~]/g;
@@ -49,9 +50,9 @@ function readHidden(question: string): Promise<string> {
  * mangled paste cannot silently become the stored password. Piped input is read once.
  */
 export async function promptNewPassword(): Promise<string> {
-  const password = await readHidden("Password (at least 12 characters): ");
-  if (password.length < 12) {
-    console.error("The password must be at least 12 characters.");
+  const password = await readHidden(`Password (at least ${MIN_PASSWORD_LENGTH} characters): `);
+  if (password.length < MIN_PASSWORD_LENGTH) {
+    console.error(`The password must be at least ${MIN_PASSWORD_LENGTH} characters.`);
     process.exit(2);
   }
   if (process.stdin.isTTY) {

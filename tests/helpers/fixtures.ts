@@ -48,6 +48,12 @@ export async function createTestUser(label: string, opts: { clinic?: boolean } =
   return { id, email, token: signedIn.data.session.access_token, clinicId };
 }
 
+/** Whether the e-mail and password sign in. */
+export async function signIn(email: string, password: string): Promise<boolean> {
+  const { data, error } = await publishableClient().auth.signInWithPassword({ email, password });
+  return !error && Boolean(data.session);
+}
+
 /** A Supabase client acting as the given user (RLS applies). */
 export function clientFor(user: TestUser) {
   return createClient<Database>(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, {

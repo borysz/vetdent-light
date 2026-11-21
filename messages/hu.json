@@ -338,7 +338,28 @@
     "email": "E-mail-cím",
     "password": "Jelszó",
     "submit": "Belépés",
-    "submitting": "Belépés…"
+    "submitting": "Belépés…",
+    "forgotPassword": "Elfelejtette a jelszavát?"
+  },
+  "forgotPassword": {
+    "title": "Elfelejtett jelszó",
+    "subtitle": "Adja meg a fiókjához tartozó e-mail-címet. Küldünk egy linket, amellyel új jelszót állíthat be.",
+    "email": "E-mail-cím",
+    "submit": "Link küldése",
+    "submitting": "Küldés…",
+    "sent": "Ha ehhez az e-mail-címhez tartozik fiók, néhány percen belül megérkezik a link. Nézze meg a levélszemét mappát is.",
+    "linkInvalid": "A link érvénytelen vagy lejárt. Kérjen újat.",
+    "backToLogin": "Vissza a belépéshez"
+  },
+  "resetPassword": {
+    "title": "Új jelszó beállítása",
+    "subtitle": "Az új jelszó legalább {min} karakter legyen.",
+    "password": "Új jelszó",
+    "passwordAgain": "Új jelszó még egyszer",
+    "tooShort": "A jelszónak legalább {min} karakterből kell állnia.",
+    "mismatch": "A két jelszó nem egyezik.",
+    "submit": "Jelszó mentése",
+    "submitting": "Mentés…"
   },
   "errors": {
     "bad_request": "A kérés hibás.",
@@ -351,6 +372,9 @@
     "not_found": "A keresett elem nem található.",
     "version_conflict": "A lapot közben más is módosította.",
     "species_locked": "A faj nem módosítható, mert az állatnak már van kezelési lapja.",
+    "rate_limited": "Túl sok kérés érkezett. Kérjük, próbálja újra néhány perc múlva.",
+    "weak_password": "A jelszó túl gyenge. Válasszon hosszabb vagy összetettebb jelszót.",
+    "same_password": "Az új jelszó nem lehet azonos a régivel.",
     "internal_error": "Váratlan hiba történt. Kérjük, próbálja újra.",
     "network": "Nem sikerült kapcsolódni a szerverhez. Ellenőrizze az internetkapcsolatot."
   },

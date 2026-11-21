@@ -14,6 +14,7 @@
     "check:layout": "tsx --env-file=.env.local scripts/check-layout.ts",
     "check:flow": "tsx --env-file=.env.local scripts/check-flow.ts",
     "check:pdf": "tsx --env-file=.env.local scripts/check-pdf.ts",
+    "check:volume": "tsx --env-file=.env.local scripts/check-volume.ts",
     "i18n:sync": "tsx scripts/i18n.ts sync",
     "user:create": "tsx --env-file=.env.local scripts/create-user.ts",
     "user:password": "tsx --env-file=.env.local scripts/set-password.ts",

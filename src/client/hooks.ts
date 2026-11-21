@@ -18,6 +18,14 @@ export function useLogin() {
   });
 }
 
+export function useRequestPasswordReset() {
+  return useMutation({ mutationFn: (email: string) => api.requestPasswordReset(email) });
+}
+
+export function useChangePassword() {
+  return useMutation({ mutationFn: (password: string) => api.changePassword(password) });
+}
+
 export function useLogout() {
   const queryClient = useQueryClient();
   return useMutation({

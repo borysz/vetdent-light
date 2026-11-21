@@ -27,6 +27,7 @@ Next.js 16 (App Router, Turbopack), React 19, TypeScript strict, Tailwind CSS 4,
 | `npm run check:layout` | Valódi Chrome, 7 méret: túlcsordulás, görgethető ablakok, 44 px-es célok, a teljes fogtábla; képernyőképek a `template pics/screenshots/` mappába |
 | `npm run check:flow` | Böngészős folyamat: mentés, piszkozat, ütközés, fogtábla, 2. és 3. fül, PDF-letöltés, nyomtatás |
 | `npm run check:pdf` | PDF-végpont: ő és ű a PDF-ből kiolvasva, A4, oldalszám, jogosultság |
+| `npm run check:volume` | Sok adat (alapból 300 állat, `-- --animals 1500`): kezdőlap lapozóval, lapozás, kereső, válaszidők; a végén mindent töröl |
 | `npm run i18n:sync` | Új vagy módosított szövegek felvétele az ellenőrzési jegyzékbe |
 | `npm run user:create` / `npm run seed:demo` | Felhasználó létrehozása (a saját termináljában) / demóadat |
 | `npm run user:password -- --email <cím>` | Meglévő felhasználó új jelszava (a saját termináljában, kétszer kéri) |
@@ -43,7 +44,7 @@ Minden felületi változtatás után futtasd a három böngészős ellenőrzést
 ## Adatbázis és API
 - Migrációk: `supabase/migrations/`; feltöltés: `npx supabase db push --remote` (e nélkül a helyi Dockeres adatbázist célozza); típusok: `npx supabase gen types typescript --linked` → `src/server/db/database.types.ts` (BOM nélkül mentsd). Új migráció után mindig frissítsd a típusokat.
 - API: `src/app/api/v1/**`, szerződések `src/contracts/`, szolgáltatások `src/server/services/`, OpenAPI: `GET /api/v1/openapi.json`. A kérések a felhasználó tokenjével futnak (RLS), a secret key csak `src/server/admin.ts`-ben (szkriptek, tesztek).
-- Belépés: `npm run user:create`; regisztrációs felület nincs.
+- Belépés: `npm run user:create`; regisztrációs felület nincs. Elfelejtett jelszó: `/forgot-password` → levél (ideiglenesen a Supabase küldi) → `/auth/confirm` → `/reset-password`; a Supabase-beállítás: `docs/JELSZO_VISSZAALLITAS.md`.
 - Tesztek (`npm test`): a route handlereket közvetlenül hívják (`tests/helpers/fixtures.ts` `call`), saját, utána törölt adattal; a `next/headers` sütit a `tests/setup.ts` mockolja.
 
 ## Fogtábla (1. fül)
@@ -68,4 +69,4 @@ Render.com, natív Node-szolgáltatás: `render.yaml` és `docs/TELEPITES_RENDER
 - A Windows-os fájlok sorvége néha CRLF (pl. `.gitignore`): soralapúan szerkessz, ne `\n`-re illessz.
 
 ## Állapot
-**Mind a 7 fázis kész.** Az elfogadási feltételek állapota és a mintaképekkel való összevetés: `docs/ELFOGADAS.md`. Nyitott, nem fejlesztői teendők: állatorvosi jóváhagyás (`docs/SZAKMAI_ELLENORZES.md`, `pending` szövegek), kipróbálás valódi tableten és nyomtatón, HTTPS és éles elérés (`TODO.md`). A szándékosan későbbre hagyottak (diktálás, e-mail a gazdinak, admin felület, jelszó-visszaállítás, szerepkörök, offline, fotófeltöltés) a `docs/OTLETEK.md`-ben gyűlnek, ha felmerülnek. A többsoros szövegmezők a közös `src/components/ui/long-text.tsx` komponensen mennek át (a diktálás később ide kerül).
+**Mind a 7 fázis kész.** Az elfogadási feltételek állapota és a mintaképekkel való összevetés: `docs/ELFOGADAS.md`. Nyitott, nem fejlesztői teendők: állatorvosi jóváhagyás (`docs/SZAKMAI_ELLENORZES.md`, `pending` szövegek), kipróbálás valódi tableten és nyomtatón, HTTPS és éles elérés (`TODO.md`). A szándékosan későbbre hagyottak (diktálás, e-mail a gazdinak, admin felület, saját levélküldő rendszer, szerepkörök, offline, fotófeltöltés) a `docs/OTLETEK.md`-ben gyűlnek, ha felmerülnek. A többsoros szövegmezők a közös `src/components/ui/long-text.tsx` komponensen mennek át (a diktálás később ide kerül).

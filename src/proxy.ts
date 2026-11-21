@@ -2,12 +2,16 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { serverEnv } from "@/server/env";
 
-const PUBLIC_PAGES = new Set(["/login"]);
+/** Pages for signed-out users only (signed-in users go home). */
+const PUBLIC_PAGES = new Set(["/login", "/forgot-password"]);
+/** Open to everyone: the target of the password reset e-mail link. */
+const OPEN_PAGES = new Set(["/auth/confirm"]);
 const PUBLIC_API = new Set([
   "/api/v1/health",
   "/api/v1/openapi.json",
   "/api/v1/auth/login",
   "/api/v1/auth/logout",
+  "/api/v1/auth/password-reset",
 ]);
 
 function isHttps(request: NextRequest): boolean {
@@ -63,6 +67,7 @@ export async function proxy(request: NextRequest) {
     return response;
   }
 
+  if (OPEN_PAGES.has(pathname)) return response;
   if (!signedIn && !PUBLIC_PAGES.has(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";

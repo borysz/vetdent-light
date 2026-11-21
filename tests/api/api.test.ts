@@ -6,13 +6,15 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { GET as clinicGET, PUT as clinicPUT } from "@/app/api/v1/clinic/route";
 import { GET as healthGET } from "@/app/api/v1/health/route";
 import { GET as meGET } from "@/app/api/v1/auth/me/route";
+import { PUT as passwordPUT } from "@/app/api/v1/auth/password/route";
+import { POST as passwordResetPOST } from "@/app/api/v1/auth/password-reset/route";
 import { GET as openapiGET } from "@/app/api/v1/openapi.json/route";
 import { GET as patientGET, PATCH as patientPATCH } from "@/app/api/v1/patients/[id]/route";
 import { GET as patientSheetsGET } from "@/app/api/v1/patients/[id]/sheets/route";
 import { GET as patientsGET, POST as patientsPOST } from "@/app/api/v1/patients/route";
 import { GET as sheetGET, PUT as sheetPUT } from "@/app/api/v1/sheets/[id]/route";
 import { GET as sheetsGET, POST as sheetsPOST } from "@/app/api/v1/sheets/route";
-import { call, cleanup, clientFor, createTestUser, runId, type TestUser } from "../helpers/fixtures";
+import { call, cleanup, clientFor, createTestUser, runId, signIn, type TestUser } from "../helpers/fixtures";
 
 const hasEnv = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SECRET_KEY);
 
@@ -95,6 +97,39 @@ describe.skipIf(!hasEnv)("API v1 (real Supabase)", () => {
       });
       expect(res.status).toBe(403);
       expect(res.body.error.code).toBe("origin_not_allowed");
+    });
+  });
+
+  describe("password", () => {
+    it("checks the reset request before any e-mail is sent", async () => {
+      const bad = await call(passwordResetPOST, "/api/v1/auth/password-reset", {
+        method: "POST",
+        body: { email: "not-an-address" },
+        headers: { origin: "http://localhost" },
+      });
+      expect(bad.status).toBe(422);
+      const noOrigin = await call(passwordResetPOST, "/api/v1/auth/password-reset", { method: "POST", body: { email: alice.email } });
+      expect(noOrigin.status).toBe(403);
+    });
+
+    it("sets a new password for the signed-in user", async () => {
+      const user = await createTestUser("password");
+      const short = await call(passwordPUT, "/api/v1/auth/password", { method: "PUT", token: user.token, body: { password: "short" } });
+      expect(short.status).toBe(422);
+      const anonymous = await call(passwordPUT, "/api/v1/auth/password", {
+        method: "PUT",
+        body: { password: "long enough password" },
+        headers: { origin: "http://localhost" },
+      });
+      expect(anonymous.status).toBe(401);
+
+      const password = `new-${runId}-${Date.now()}`;
+      const changed = await call(passwordPUT, "/api/v1/auth/password", { method: "PUT", token: user.token, body: { password } });
+      expect(changed.status).toBe(204);
+      expect(await signIn(user.email, password)).toBe(true);
+      const same = await call(passwordPUT, "/api/v1/auth/password", { method: "PUT", token: user.token, body: { password } });
+      expect(same.status).toBe(422);
+      expect(same.body.error.code).toBe("same_password");
     });
   });
 

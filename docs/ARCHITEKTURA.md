@@ -44,6 +44,7 @@ Az alapszabály: **a felület csak az API-n át ér el adatot.** Az `src/compone
 ## Hitelesítés és jogosultság
 
 - Belépés: `POST /auth/login` e-mail + jelszóval; a böngésző `httpOnly` sütit kap, a böngészőben nincs Supabase-kulcs.
+- Elfelejtett jelszó: `POST /auth/password-reset` levelet kér, a levél linkje a `/auth/confirm` útvonalon lép be, az új jelszót a `PUT /auth/password` menti (`docs/JELSZO_VISSZAALLITAS.md`).
 - Más kliens `Authorization: Bearer <token>` fejlécet is küldhet; a tokent a Supabase ellenőrzi (`src/server/auth.ts`).
 - Minden kérés **a felhasználó tokenjével** fut az adatbázisban, ezért az RLS mindig érvényes. A secret key csak szkriptekben és tesztekben használható (`src/server/admin.ts`).
 - Sütis, állapotváltoztató kérésnél azonos eredetű `Origin` kell (CSRF-védelem, `src/server/http.ts`).

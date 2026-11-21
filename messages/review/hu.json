@@ -1371,6 +1371,20 @@
     "note": "",
     "textHash": "22adc90e743d7cd5"
   },
+  "errors.rate_limited": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a699e62092b82204"
+  },
+  "errors.same_password": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "58dd4451a369aa2a"
+  },
   "errors.species_locked": {
     "status": "pending",
     "reviewer": null,
@@ -1398,6 +1412,69 @@
     "reviewedAt": null,
     "note": "",
     "textHash": "00d8d49fde6af0df"
+  },
+  "errors.weak_password": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "04d51bb3b473ed50"
+  },
+  "forgotPassword.backToLogin": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "30f7cdda9b4cce31"
+  },
+  "forgotPassword.email": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "032933089746e946"
+  },
+  "forgotPassword.linkInvalid": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "3feefc3466f9dcea"
+  },
+  "forgotPassword.sent": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "99446b7a44dbbd0a"
+  },
+  "forgotPassword.submit": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "d7f8bdbaa0e48a14"
+  },
+  "forgotPassword.submitting": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "9a1614363f88feec"
+  },
+  "forgotPassword.subtitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "53304d456169d086"
+  },
+  "forgotPassword.title": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "4a15461d1830bdba"
   },
   "header.clinicData": {
     "status": "pending",
@@ -1741,6 +1818,13 @@
     "reviewedAt": null,
     "note": "",
     "textHash": "032933089746e946"
+  },
+  "login.forgotPassword": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "53c64216c1216936"
   },
   "login.password": {
     "status": "pending",
@@ -2616,6 +2700,62 @@
     "reviewedAt": null,
     "note": "",
     "textHash": "02a4d2f012ef73a1"
+  },
+  "resetPassword.mismatch": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "bbe5017905107b76"
+  },
+  "resetPassword.password": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "159183c368fc1f1c"
+  },
+  "resetPassword.passwordAgain": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "72025dfa43730ab0"
+  },
+  "resetPassword.submit": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a7d6c4d112695e59"
+  },
+  "resetPassword.submitting": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b9a1838da73cdf69"
+  },
+  "resetPassword.subtitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "099d503acf6a7946"
+  },
+  "resetPassword.title": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "381fd3f0c9e71448"
+  },
+  "resetPassword.tooShort": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "ed36c4a218d8c1f2"
   },
   "sheetsDialog.animals": {
     "status": "pending",
