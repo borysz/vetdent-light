@@ -1,0 +1,58 @@
+{
+  "name": "vetdent-light",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -H 0.0.0.0 -p 6438",
+    "build": "next build",
+    "start": "next start -H 0.0.0.0 -p 6438",
+    "chrome:install": "npx @puppeteer/browsers install chrome-headless-shell@stable --path .chrome",
+    "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "check:i18n": "tsx scripts/i18n.ts check",
+    "check:layout": "tsx --env-file=.env.local scripts/check-layout.ts",
+    "check:flow": "tsx --env-file=.env.local scripts/check-flow.ts",
+    "check:pdf": "tsx --env-file=.env.local scripts/check-pdf.ts",
+    "i18n:sync": "tsx scripts/i18n.ts sync",
+    "user:create": "tsx --env-file=.env.local scripts/create-user.ts",
+    "seed:demo": "tsx --env-file=.env.local scripts/seed-demo.ts",
+    "check": "npm run lint && npm run typecheck && npm run test && npm run check:i18n"
+  },
+  "dependencies": {
+    "@puppeteer/browsers": "^3.2.7",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.2",
+    "@tanstack/react-query": "^5.108.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.77.0",
+    "next": "16.4.6",
+    "next-intl": "^4.15.3",
+    "puppeteer-core": "^25.18.1",
+    "radix-ui": "^1.8.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "tailwind-merge": "^3.7.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "4.3.3",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.6",
+    "pdfjs-dist": "^6.5.438",
+    "supabase": "^3.2.0",
+    "tailwindcss": "4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1"
+  },
+  "description": "Veterinary dental treatment sheet for dogs and cats",
+  "engines": {
+    "node": ">=24"
+  }
+}
