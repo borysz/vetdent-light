@@ -164,6 +164,15 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 | Az új jelszó legalább 12 karakter, kétszer kell beírni; ugyanez a szabály a parancssori `user:create` és `user:password` esetén | Egy helyen definiálva (`MIN_PASSWORD_LENGTH`) | `src/contracts/auth.ts` |
 | A belépési, az elfelejtett jelszó és az új jelszó oldal közös kártyát használ | Egy kinézet, egy helyen javítható | `src/components/auth/auth-card.tsx` |
 
+## Sok adat: kereső és lapozó
+
+| Döntés | Indok | Módosítás helye |
+|---|---|---|
+| A listák mindig lapoznak (4 elem oldalanként), sosem jelenik meg minden egyszerre; a lapozón első és utolsó oldal gomb is van | 1500 állatnál 375 oldal lett, az utolsó oldal csak előre-hátra lépkedve 374 koppintás lett volna | `src/components/ui/pager.tsx` |
+| A kereső nem érzékeny az ékezetekre és a kis- és nagybetűre („Kovacs” megtalálja a „Kovács” gazdit) | Tableten gyakran ékezet nélkül gépelnek | `supabase/migrations/20261122090000_patient_search.sql`, `src/domain/text.ts` |
+| Telefonszám szóközök nélkül és 06-tal kezdve is kereshető | A rendelőben így mondják és gépelik | `src/server/services/patients.ts` |
+| A keresőmezők az adatbázisban számított oszlopok (`search_text`, `phone_digits`), nem külön index | 1500 állattal és 3000 lappal is fél másodperc alatt válaszol (`npm run check:volume`) | `supabase/migrations/` |
+
 ## Telepítés: Render.com
 
 | Döntés | Indok | Módosítás helye |

@@ -2,9 +2,7 @@
 import { teethOf, type Species, type Tooth } from "./teeth/catalog";
 import type { PocketSite } from "./teeth/codes";
 import { isEmptyEntry, type TeethRecord, type ToothEntry } from "./teeth/entry";
-
-/** Combining accent marks (U+0300 to U+036F), written by code point so the source stays plain ASCII. */
-const COMBINING_ACCENTS = new RegExp(`[${String.fromCharCode(0x300)}-${String.fromCharCode(0x36f)}]`, "g");
+import { COMBINING_ACCENTS } from "./text";
 
 /**
  * File name of the downloaded PDF: `fogaszati-lap_<animal name>_<date>.pdf`, ASCII only

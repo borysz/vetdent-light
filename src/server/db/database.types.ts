@@ -120,6 +120,8 @@ export type Database = {
           owner_email: string | null
           owner_name: string
           owner_phone: string | null
+          phone_digits: string | null
+          search_text: string | null
           sex: string | null
           species: string
           updated_at: string
@@ -137,6 +139,8 @@ export type Database = {
           owner_email?: string | null
           owner_name: string
           owner_phone?: string | null
+          phone_digits?: string | null
+          search_text?: string | null
           sex?: string | null
           species: string
           updated_at?: string
@@ -154,6 +158,8 @@ export type Database = {
           owner_email?: string | null
           owner_name?: string
           owner_phone?: string | null
+          phone_digits?: string | null
+          search_text?: string | null
           sex?: string | null
           species?: string
           updated_at?: string
@@ -243,6 +249,7 @@ export type Database = {
         Args: { p_clinic_id: string; p_patient: Json; p_sheet: Json }
         Returns: Json
       }
+      immutable_unaccent: { Args: { value: string }; Returns: string }
       is_clinic_member: { Args: { p_clinic_id: string }; Returns: boolean }
       save_sheet: {
         Args: {
