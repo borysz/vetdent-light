@@ -113,3 +113,20 @@ select,
 textarea {
   font-size: 16px; /* iOS does not zoom into 16 px fields */
 }
+
+/* A4 report: the same page rules for the browser's print dialog and the server-side PDF. */
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff;
+  }
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

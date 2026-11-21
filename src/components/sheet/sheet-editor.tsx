@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api, ApiClientError } from "@/client/api";
-import { useInvalidateSheetData } from "@/client/hooks";
+import { useClinic, useInvalidateSheetData } from "@/client/hooks";
 import { draftKey, readDraft, removeDraft, writeDraft, type StoredDraft } from "@/client/local-draft";
 import {
   draftFromSheet,
@@ -19,12 +19,13 @@ import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useShell } from "@/components/shell/shell-context";
 import { OdontogramTab } from "@/components/chart/odontogram-tab";
+import { reportFromDraft } from "@/components/report/report-data";
+import { ReportTab } from "@/components/report/report-tab";
+import { missingAdvice } from "@/domain/report";
 import { adaptTeethToSpecies, type TeethRecord } from "@/domain/teeth/entry";
 import { AnesthesiaTab } from "./anesthesia-tab";
 import { HomecareTab } from "./homecare-tab";
 import { PatientCard } from "./patient-card";
-
-const TAB_KEYS = ["odontogram", "anesthesia", "homecare", "report"] as const;
 
 function clampTab(value: string | null): number {
   const number = Number(value);
@@ -53,7 +54,7 @@ export type SheetEditorProps = {
 export function SheetEditor(props: SheetEditorProps) {
   const t = useTranslations("editor");
   const errorText = useTranslations("errors");
-  const tabsText = useTranslations("tabs");
+  const reportText = useTranslations("reportTab");
   const { setBridge } = useShell();
   const invalidate = useInvalidateSheetData();
   const searchParams = useSearchParams();
@@ -72,6 +73,10 @@ export function SheetEditor(props: SheetEditorProps) {
   const [leave, setLeave] = useState<{ proceed: () => void } | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
   const [conflict, setConflict] = useState(false);
+  const [pdfBusy, setPdfBusy] = useState(false);
+  const [pdfError, setPdfError] = useState<string | null>(null);
+  const [preflight, setPreflight] = useState<{ unsaved: boolean; missing: boolean } | null>(null);
+  const clinic = useClinic(true);
 
   // What this sheet was opened from decides its draft key; the key follows the sheet once it has an id.
   const keyFor = useCallback(
@@ -130,12 +135,12 @@ export function SheetEditor(props: SheetEditorProps) {
     [sheetId, keyFor, tab, invalidate],
   );
 
-  const save = useCallback(async (): Promise<boolean> => {
+  const saveSheet = useCallback(async (): Promise<string | null> => {
     if (Object.keys(validateDraft(draft)).length > 0) {
       setShowErrors(true);
       setCardOpen(true);
       setSaveError(t("fixErrors"));
-      return false;
+      return null;
     }
     setSaving(true);
     setSaveError(null);
@@ -146,15 +151,16 @@ export function SheetEditor(props: SheetEditorProps) {
           ? await api.createSheet(toCreateBody(requested, patientId ?? undefined))
           : await api.updateSheet(sheetId, toUpdateBody(requested, version as number));
       adopt(result, requested);
-      return true;
+      return result.id;
     } catch (error) {
       if (error instanceof ApiClientError && error.code === "version_conflict") setConflict(true);
       else setSaveError(error instanceof ApiClientError ? errorText(error.code) : t("saveFailed"));
-      return false;
+      return null;
     } finally {
       setSaving(false);
     }
   }, [draft, sheetId, patientId, version, adopt, t, errorText]);
+  const save = useCallback(async () => (await saveSheet()) !== null, [saveSheet]);
 
   /** Conflict, option 1: keep my edits and save them on top of the newer version. */
   const keepMine = useCallback(async () => {
@@ -190,6 +196,38 @@ export function SheetEditor(props: SheetEditorProps) {
     }
   }, [sheetId, key, t, errorText]);
 
+  /** Download the saved sheet as a PDF (made on the server from the same report component). */
+  const runPdf = useCallback(
+    async (id: string) => {
+      setPdfBusy(true);
+      setPdfError(null);
+      try {
+        const { blob, fileName } = await api.sheetPdf(id);
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 10_000);
+      } catch (error) {
+        setPdfError(error instanceof ApiClientError ? errorText(error.code) : reportText("pdfFailed"));
+      } finally {
+        setPdfBusy(false);
+      }
+    },
+    [errorText, reportText],
+  );
+
+  /** The PDF is made from the saved state: unsaved changes must be saved first; empty required advice only warns. */
+  const startPdf = useCallback(() => {
+    const unsaved = dirty || sheetId === null;
+    const missing = missingAdvice(draft.content.homecare);
+    if (unsaved || missing) setPreflight({ unsaved, missing });
+    else if (sheetId) void runPdf(sheetId);
+  }, [dirty, sheetId, draft.content.homecare, runPdf]);
+
   const requestLeave = useCallback(
     (proceed: () => void) => {
       if (dirty) setLeave({ proceed });
@@ -204,9 +242,9 @@ export function SheetEditor(props: SheetEditorProps) {
   }, []);
 
   // The header talks to the editor through the bridge; callbacks go through a ref so the bridge is not rebuilt on every keystroke.
-  const actions = useRef({ save, requestLeave, onTab });
+  const actions = useRef({ save, requestLeave, onTab, startPdf });
   useEffect(() => {
-    actions.current = { save, requestLeave, onTab };
+    actions.current = { save, requestLeave, onTab, startPdf };
   });
 
   let statusTone: "saved" | "dirty" | "saving" | "new" | "error" = "new";
@@ -233,9 +271,11 @@ export function SheetEditor(props: SheetEditorProps) {
       onTab: (next) => actions.current.onTab(next),
       onSave: () => void actions.current.save(),
       onReset: () => setConfirmReset(true),
+      onPdf: () => actions.current.startPdf(),
+      pdfBusy,
       requestLeave: (proceed) => actions.current.requestLeave(proceed),
     });
-  }, [setBridge, dirty, saving, statusText, statusTone, tab]);
+  }, [setBridge, dirty, saving, statusText, statusTone, tab, pdfBusy]);
   useEffect(() => () => setBridge(null), [setBridge]);
 
   const change = (patch: Partial<SheetDraft>) => {
@@ -251,9 +291,9 @@ export function SheetEditor(props: SheetEditorProps) {
   };
 
   return (
-    <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-3 p-3">
+    <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-3 p-3 print:max-w-none print:p-0">
       {restorable ? (
-        <div role="status" className="flex flex-wrap items-center gap-3 rounded-xl border border-amber-300 bg-amber-50 px-4 py-2">
+        <div role="status" className="flex flex-wrap items-center gap-3 rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 print:hidden">
           <p className="min-w-0 flex-1 text-amber-950">
             {t("draftFound", { time: formatTime(new Date(restorable.savedAt)) })}
           </p>
@@ -277,21 +317,23 @@ export function SheetEditor(props: SheetEditorProps) {
         </div>
       ) : null}
 
-      {saveError ? (
-        <p role="alert" className="rounded-xl border border-red-300 bg-red-50 px-4 py-2 font-medium text-red-900">
-          {saveError}
+      {saveError || pdfError ? (
+        <p role="alert" className="rounded-xl border border-red-300 bg-red-50 px-4 py-2 font-medium text-red-900 print:hidden">
+          {saveError ?? pdfError}
         </p>
       ) : null}
 
-      <PatientCard
-        draft={draft}
-        onChange={change}
-        onAnamnesis={(patch) => change({ content: { ...draft.content, anamnesis: { ...draft.content.anamnesis, ...patch } } })}
-        errors={errors}
-        speciesLocked={sheetId !== null || patientId !== null}
-        expanded={cardOpen}
-        onToggle={() => setCardOpen((open) => !open)}
-      />
+      <div className="print:hidden">
+        <PatientCard
+          draft={draft}
+          onChange={change}
+          onAnamnesis={(patch) => change({ content: { ...draft.content, anamnesis: { ...draft.content.anamnesis, ...patch } } })}
+          errors={errors}
+          speciesLocked={sheetId !== null || patientId !== null}
+          expanded={cardOpen}
+          onToggle={() => setCardOpen((open) => !open)}
+        />
+      </div>
 
       {tab === 1 ? (
         <OdontogramTab key={draft.species} species={draft.species} content={draft.content} onContent={(content) => change({ content })} />
@@ -300,13 +342,7 @@ export function SheetEditor(props: SheetEditorProps) {
       ) : tab === 3 ? (
         <HomecareTab content={draft.content} onContent={(content) => change({ content })} />
       ) : (
-        <section
-          aria-label={tabsText(TAB_KEYS[tab - 1])}
-          className="rounded-xl border border-border bg-surface p-6 text-foreground-muted"
-        >
-          <h2 className="mb-1 text-lg font-semibold text-foreground">{tabsText(TAB_KEYS[tab - 1])}</h2>
-          <p>{tabsText("placeholder")}</p>
-        </section>
+        <ReportTab data={reportFromDraft(draft, clinic.data ?? null)} pdfBusy={pdfBusy} onPdf={startPdf} />
       )}
 
       <ConfirmDialog
@@ -357,6 +393,41 @@ export function SheetEditor(props: SheetEditorProps) {
               setConfirmReset(false);
             },
           },
+        ]}
+      />
+
+      <ConfirmDialog
+        open={preflight !== null}
+        title={reportText("preflightTitle")}
+        body={[preflight?.unsaved && reportText("preflightUnsaved"), preflight?.missing && reportText("preflightMissing")].filter(Boolean).join(" ")}
+        onDismiss={() => setPreflight(null)}
+        actions={[
+          {
+            label: preflight?.missing ? reportText("fillIn") : t("stay"),
+            onClick: () => {
+              const missing = preflight?.missing;
+              setPreflight(null);
+              if (missing) onTab(3);
+            },
+          },
+          preflight?.unsaved
+            ? {
+                label: reportText("saveAndPdf"),
+                variant: "primary" as const,
+                onClick: async () => {
+                  setPreflight(null);
+                  const id = await saveSheet();
+                  if (id) await runPdf(id);
+                },
+              }
+            : {
+                label: reportText("pdfAnyway"),
+                variant: "primary" as const,
+                onClick: () => {
+                  setPreflight(null);
+                  if (sheetId) void runPdf(sheetId);
+                },
+              },
         ]}
       />
 

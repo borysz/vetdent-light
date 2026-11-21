@@ -66,7 +66,24 @@ function query(params: Record<string, string | number | undefined>): string {
 
 type PageParams = { page?: number; pageSize?: number };
 
+/** The saved sheet as a PDF file (blob and the file name the server proposed). */
+async function sheetPdf(id: string): Promise<{ blob: Blob; fileName: string }> {
+  let response: Response;
+  try {
+    response = await fetch(`/api/v1/sheets/${id}/pdf`, { credentials: "same-origin" });
+  } catch {
+    throw new ApiClientError("network", 0);
+  }
+  if (!response.ok) {
+    const parsed = errorResponseSchema.safeParse(await response.json().catch(() => null));
+    throw new ApiClientError(parsed.success ? parsed.data.error.code : "internal_error", response.status);
+  }
+  const fileName = /filename="([^"]+)"/.exec(response.headers.get("content-disposition") ?? "")?.[1] ?? "report.pdf";
+  return { blob: await response.blob(), fileName };
+}
+
 export const api = {
+  sheetPdf,
   login: (email: string, password: string): Promise<LoginResponse> =>
     request("POST", "/auth/login", loginResponseSchema, { email, password }),
   logout: async (): Promise<void> => {

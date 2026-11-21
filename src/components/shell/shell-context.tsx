@@ -14,6 +14,8 @@ export type EditorBridge = {
   onTab: (tab: number) => void;
   onSave: () => void;
   onReset: () => void;
+  onPdf: () => void;
+  pdfBusy: boolean;
   /** Run `proceed` (navigation, sign-out) after asking about unsaved changes, if there are any. */
   requestLeave: (proceed: () => void) => void;
 };

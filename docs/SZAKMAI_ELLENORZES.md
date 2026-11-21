@@ -57,3 +57,18 @@ Forrás: `src/domain/anesthesia.ts`, `src/domain/medications.ts` és a `messages
 | Szájápoló gél sablon | Stomodine szájápoló gél; naponta 2x este; 10 nap; „Kívülről a pofa felől óvatosan az ínyre juttatni a seb közvetlen piszkálása nélkül.” | Ugyanezek a kérdések |
 | Az adag | Egyik sablon sem tölti ki; a minta példái (pl. „32 kg-os jelzésig szívva fecskendővel”) egy konkrét állatra szóltak | – |
 | Hazaadó lap felirata | „Hazaadó lap & Gyógyszerek” (a mintán elírt „Hazadobó”) | Helyes-e? |
+
+## 6. fázis: zárójelentés
+
+Forrás: `messages/hu.json` `report.*`, `reportTab.*`; elrendezés: `src/components/report/`.
+
+| Téma | Jelenlegi megvalósítás | Kérdés az állatorvosnak |
+|---|---|---|
+| Felirat: „ÁLLATORVOSI FOGÁSZATI LAP” | A minta szerint | – |
+| A páciens- és gazdiblokk feliratai | Páciens neve, Faj / Fajta, Kor / Súly, Állat neme; Gazdi neve, E-mail, Kezelőorvos, ASA altatási státusz | Helyesek-e? |
+| „Érintett & kezelt fogak részletezése”: állapotoszlop | Az állapotkódok „KÓD: megnevezés” alakban; ha nincs állapotkód, „–” | Kell-e, hogy a csak kezelt, állapot nélküli fogakon „Egészséges” álljon? (Most nem írjuk oda, mert nem rögzítettük.) |
+| Tasak (mm) oszlop | „M:2 B:4 D:2 L:2” (mesialis, buccalis, distalis, linguális/palatinális) | Jó-e a rövidítés? |
+| „Műtéti & érzéstelenítési napló” | Idegblokkok „(Jobb oldal, érzéstelenítő, mennyiség ml)” alakban, varratok, röntgen | – |
+| „Otthoni utókezelési terv & gazdi tájékoztató” | Gyógyszertábla, táplálási javaslat, rágási és fizikai kímélet, szájhigiénia, záró megjegyzés, kontroll | Megfelel-e a gazdi tájékoztatónak? |
+| „Kelt:” sor | A kezelés dátuma és a rendelő irányítószáma, települése | Kell-e külön „kelt” dátum a kezelés dátuma mellett? |
+| Lábléc | „VetDent Pro digitális orvosi rendszerből generálva”; a kezelőorvos neve és „Kezelőorvos aláírása és bélyegzője” | – |

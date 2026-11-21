@@ -6,6 +6,9 @@
  *   npm run check:flow
  */
 import { randomBytes } from "node:crypto";
+import { mkdtempSync, readdirSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import puppeteer, { type Page } from "puppeteer-core";
 import messages from "../messages/hu.json";
 import { createAdminClient } from "../src/server/admin";
@@ -148,6 +151,46 @@ async function main() {
     await page.click(`[aria-label="${messages.tabs.odontogram}"]`);
     await page.waitForSelector("[data-chart] [data-tooth]");
     await page.click(`[aria-label="${messages.card.expand}"]`);
+
+    // 1d. report tab: live A4 preview, warning before the PDF, real download
+    const downloadDir = mkdtempSync(join(tmpdir(), "vetdent-pdf-"));
+    const cdp = await page.createCDPSession();
+    await cdp.send("Browser.setDownloadBehavior", { behavior: "allow", downloadPath: downloadDir });
+    await page.click(`[aria-label="${messages.tabs.report}"]`);
+    await page.waitForSelector("[data-report]");
+    ok("the A4 preview shows the entered data", (await page.$eval("[data-report]", (el) => el.textContent ?? "")).includes("FlowDog"));
+    await clickText(page, messages.reportTab.pdf);
+    await page.waitForFunction((t) => document.body.innerText.includes(t), { timeout: 10000 }, messages.reportTab.preflightMissing);
+    ok("empty required advice warns before the PDF is made", true);
+    await clickText(page, messages.reportTab.fillIn);
+    await page.waitForSelector(sectionSelector(messages.homecare.adviceTitle));
+    ok("the warning leads to the home care tab", true);
+    await fillByLabel(page, messages.homecare.feeding, "Soft food for ten days");
+    await fillByLabel(page, messages.homecare.chewing, "No chew toys");
+    await clickText(page, messages.header.save);
+    await page.waitForFunction(() => /Mentve \d\d:\d\d/.test(document.body.innerText) && !document.body.innerText.includes("Nem mentett"), { timeout: 15000 });
+    await page.click(`[aria-label="${messages.tabs.report}"]`);
+    await page.waitForSelector("[data-report]");
+    await clickText(page, messages.reportTab.pdf);
+    let downloaded = "";
+    for (let waited = 0; waited < 45000 && !downloaded; waited += 500) {
+      downloaded = readdirSync(downloadDir).find((name) => name.endsWith(".pdf")) ?? "";
+      if (!downloaded) await pause(500);
+    }
+    ok("the PDF is downloaded with an ASCII file name", /^fogaszati-lap_flowdog_\d{4}-\d{2}-\d{2}\.pdf$/.test(downloaded), downloaded || "no file");
+    // Direct printing from the browser: the app chrome is hidden, the report stays.
+    await page.emulateMediaType("print");
+    const printed = await page.evaluate(() => ({
+      header: getComputedStyle(document.querySelector("header") as Element).display,
+      card: getComputedStyle(document.querySelector("main > div.print\\:hidden") as Element).display,
+      report: getComputedStyle(document.querySelector("[data-report]") as Element).display,
+    }));
+    await page.emulateMediaType("screen");
+    ok("printing from the browser hides the header and the patient card but keeps the report", printed.header === "none" && printed.card === "none" && printed.report !== "none", JSON.stringify(printed));
+    await page.click(`[aria-label="${messages.tabs.odontogram}"]`);
+    await page.waitForSelector("[data-chart] [data-tooth]");
+    const expandButton = await page.$(`[aria-label="${messages.card.expand}"]`);
+    if (expandButton) await expandButton.click();
 
     // 2. dirty state, then draft restore after a reload
     await fillByLabel(page, messages.card.breed, "Beagle");

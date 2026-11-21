@@ -106,3 +106,24 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 | A számmezők (mennyiség, felvételek száma, időtartam) tizedesvesszőt fogadnak, és csak érvényes értéket tárolnak (gépelés közben a szöveg megmarad, pl. „1,”) | A tizedesjel egységesen vessző | `src/components/ui/number-input.tsx` |
 | A táplálási javaslat és a rágási korlátozás mezője csillagos (kötelező jelzéssel), de a mentést nem tiltja; a PDF készítésekor (6. fázis) figyelmeztet, ha üres | A leírás szerint | `homecare-tab.tsx` |
 | Keskenyebb képernyőn az idegblokk sora két sorba tördelődik (ideg és oldal fent, érzéstelenítő és mennyiség lent, törlés jobbra), a hosszú nevek így nem vágódnak le | Álló tableten a nevek egy sorban nem fértek el | `anesthesia-tab.tsx` |
+
+## 6. fázis
+
+| Döntés | Indok | Módosítás helye |
+|---|---|---|
+| Az A4-es zárójelentés **egyetlen React-komponens** (`ReportDocument`): az előnézet, a böngészős nyomtatás és a szerveroldali PDF is ebből készül | A leírás szerint; ami az előnézeten látszik, az kerül a papírra | `src/components/report/report-document.tsx` |
+| Az előnézet az **aktuális, akár mentetlen** szerkesztésből készül; a PDF a **mentett** állapotból | A PDF-et a szerver állítja elő, ami csak mentett adatot lát | `report-data.ts`, `src/server/pdf.ts` |
+| A PDF gomb (a 4. fülön és a fejlécben) mentetlen változásnál felajánlja a mentést („Mentés és PDF”); üres táplálási javaslatnál vagy rágási korlátozásnál figyelmeztet, de nem tilt („PDF így is” / „Kitöltöm”) | A leírás szerint | `sheet-editor.tsx` |
+| A PDF-et a szerveren futó **valódi Chrome** nyomtatja (`puppeteer-core`, `CHROME_PATH`) a `/print/sheets/<id>` oldalból, a hívó hitelesítő adataival (Bearer fejléc vagy süti), így az oldal a lapot az API-n át, a hívó jogaival olvassa | A leírás szerint; az RLS itt is érvényes | `src/server/pdf.ts`, `src/app/print/sheets/[id]/page.tsx` |
+| A Chrome a szerver saját címén éri el a nyomtatási oldalt (`INTERNAL_BASE_URL`, alapérték `http://127.0.0.1:6438`), nem a publikus néven | A publikus név a saját hálózatból nem biztos, hogy elérhető | `src/server/env.ts` |
+| Egyszerre legfeljebb 2 Chrome fut, a többi kérés sorban vár | A memóriahasználat korlátozása | `src/server/pdf.ts` |
+| A nyomtatási oldalt (`/print/…`) a proxy csak bejelentkezettnek vagy Bearer fejléces kérésnek engedi | Az oldal maga nem tartalmaz adatot, de nem lehet nyilvános | `src/proxy.ts` |
+| A fájlnév ékezet nélküli: `fogaszati-lap_<allatnev>_<datum>.pdf` (pl. „Őzike” → `ozike`) | A leírás szerint | `src/domain/report.ts` |
+| Az ő és ű betűk a PDF-ben helyesek: a Chrome a használt betűkészletet (Inter, `latin-ext`) beágyazza; a `check:pdf` a PDF-ből kiolvasott szövegben ellenőrzi őket | Ismert csapda a PDF-könyvtárak alapbetűivel (Latin-1) | `scripts/check-pdf.ts` |
+| A „Érintett & kezelt fogak” táblázat csak azokat a fogakat sorolja, amelyeken lelet, kezelés, tasakmélység vagy megjegyzés van; ha egy fogon csak kezelés van és nincs állapotkód, az állapot „–” (nem „Egészséges”) | Az alkalmazás rögzít, nem dönt: egészségesnek csak az „0” kód jelöli | `src/domain/report.ts`, `report-document.tsx` |
+| A táblázatfejléc minden oldalon ismétlődik, a sorok és a nagy blokkok nem törnek két oldalra (`break-inside: avoid`) | A leírás szerint | `report-document.tsx` |
+| A zárójelentés fogtáblája rögzített sormagasságú (`compact`), így a képernyőtől függetlenül ugyanúgy néz ki; a keskeny állapotokban a sorfeliratok rövidek („Calculus (0-3)”, „Gingivitis (0-3)”) | A hosszú feliratok háromsorosra törtek és egymásba értek | `dental-chart.tsx` |
+| Az előnézet A4 szélességű lap, amely a rendelkezésre álló szélességhez kicsinyítve látszik (felfelé nem nagyít), így nincs vízszintes görgetés | A leírás szerint | `scaled-page.tsx` |
+| Böngészős nyomtatásnál a fejléc, a páciens-kártya és az eszköztár rejtett, csak a zárójelentés nyomtatódik; az `@page` A4, 12 mm margó | Közvetlen nyomtatás | `globals.css`, `app-header.tsx`, `sheet-editor.tsx` |
+| A `puppeteer-core` éles függőség (nem csak fejlesztői); az `@next` külső csomagként kezeli | A szerver futás közben használja | `package.json`, `next.config.ts` |
+| A `.env.local`-ban (és éles környezetben) szükséges: `CHROME_PATH`, opcionálisan `INTERNAL_BASE_URL` | A PDF-hez Chrome kell a szerver gépén | `.env.example` |

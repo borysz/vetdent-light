@@ -23,7 +23,9 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isApi = pathname.startsWith("/api/");
 
-  if (isApi && /^Bearer\s+/i.test(request.headers.get("authorization") ?? "")) {
+  // Bearer requests are verified by the API itself; the print page (opened by the server's own Chrome) reads data through it.
+  const isPrint = pathname.startsWith("/print/");
+  if ((isApi || isPrint) && /^Bearer\s+/i.test(request.headers.get("authorization") ?? "")) {
     return NextResponse.next();
   }
 

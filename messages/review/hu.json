@@ -636,12 +636,26 @@
     "note": "",
     "textHash": "c3e8620148647fcb"
   },
+  "chart.rowCalculusShort": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "c1ab7bc450976cde"
+  },
   "chart.rowGingivitis": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
     "textHash": "75807816d4e2fd12"
+  },
+  "chart.rowGingivitisShort": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "04c61bc7b0250e88"
   },
   "chart.rowMobility": {
     "status": "pending",
@@ -2168,6 +2182,440 @@
     "reviewedAt": null,
     "note": "",
     "textHash": "b6275c09b93d5c34"
+  },
+  "report.affected": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "c6dc712ad8446509"
+  },
+  "report.ageWeight": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "6f70b4bc4a462665"
+  },
+  "report.amountMl": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "213466b87766beb1"
+  },
+  "report.asa": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "05ff10bb6ce15b7b"
+  },
+  "report.badge": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "d02db7655f0a372e"
+  },
+  "report.chartSpecies": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "4849569921412b69"
+  },
+  "report.chartTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "2ee8e8adb99d1402"
+  },
+  "report.chewing": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "728b8328c25429c1"
+  },
+  "report.closingNote": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "9fa40e67574767db"
+  },
+  "report.colName": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "2dcf2d19204500bc"
+  },
+  "report.colNote": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "8b88caffaf78df7e"
+  },
+  "report.colPathology": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "d99529d514fd5de8"
+  },
+  "report.colPocket": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "559ed0f9bba8d36e"
+  },
+  "report.colTooth": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "4bb1c7ecf47a2383"
+  },
+  "report.colTreatment": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "367001b648b5926a"
+  },
+  "report.date": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "41bd231414fef1e4"
+  },
+  "report.daysValue": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "353c6a5ce201162e"
+  },
+  "report.details": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "20d1cbcded6a8bec"
+  },
+  "report.feeding": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e3117dc67a2acda6"
+  },
+  "report.followUp": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b8265bc1dc1f5e4e"
+  },
+  "report.followUpPurpose": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a711b27ad96c39bb"
+  },
+  "report.generatedBy": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "433756b8c923ff0e"
+  },
+  "report.healthy": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "971b78813146a88f"
+  },
+  "report.history": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "21d054ae98ba1721"
+  },
+  "report.homecare": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "6838560892d58182"
+  },
+  "report.intraoperative": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1b12fbf741a95d27"
+  },
+  "report.issuedAt": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "8e1261cfadd96b43"
+  },
+  "report.loading": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "bda9ebf4c4c56ba2"
+  },
+  "report.medDose": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "f7c0b99ad0f1f4a6"
+  },
+  "report.medDuration": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "829eb4c97b1c4a80"
+  },
+  "report.medFrequency": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "7ba9408e9580b22d"
+  },
+  "report.medInstructions": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "bb29b9ded08bdcbe"
+  },
+  "report.medName": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1acfc80bef215cb5"
+  },
+  "report.medsList": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "67684672b0a770bb"
+  },
+  "report.nerveBlocks": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "87c89337088b76db"
+  },
+  "report.oralHygiene": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1ae30a03a165d3eb"
+  },
+  "report.ownerEmail": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "63db10d8a086385e"
+  },
+  "report.ownerName": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "065c8502f635ae23"
+  },
+  "report.patientName": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "fa190e695d7dc9f5"
+  },
+  "report.sex": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "4edcc3c5428b1a8c"
+  },
+  "report.sideSuffix": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "91d704199de905dd"
+  },
+  "report.signature": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1e4827255aeda242"
+  },
+  "report.speciesBreed": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "558334f186f448f5"
+  },
+  "report.surgeryLog": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "d605bc1e243829bd"
+  },
+  "report.sutures": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "ce1ef050ce2138fd"
+  },
+  "report.vet": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1568a57a838fd6ee"
+  },
+  "report.xrayCount": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1fb5ff481a808a17"
+  },
+  "report.xrayCountValue": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "d11d6275d330b5e2"
+  },
+  "report.xrayFindings": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "3d394442b705daf5"
+  },
+  "reportTab.email": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e3ec5c6723e68ae9"
+  },
+  "reportTab.fillIn": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "78745b69b91d292e"
+  },
+  "reportTab.hint": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "8b5e00a5b86f4ae7"
+  },
+  "reportTab.pdf": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "dbe2e366a808597d"
+  },
+  "reportTab.pdfAnyway": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e641fa8f3683cfbf"
+  },
+  "reportTab.pdfBusy": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "f97047e25c8a95b7"
+  },
+  "reportTab.pdfFailed": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "818e8a5723ba8ccb"
+  },
+  "reportTab.preflightMissing": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "0396217a1ec9d365"
+  },
+  "reportTab.preflightTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "cb267457299d134f"
+  },
+  "reportTab.preflightUnsaved": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "ecc1b8cb6fc14771"
+  },
+  "reportTab.print": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "41f4d042a6f5ba02"
+  },
+  "reportTab.saveAndPdf": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "ac9e213fff2180e1"
+  },
+  "reportTab.title": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "02a4d2f012ef73a1"
   },
   "sheetsDialog.animals": {
     "status": "pending",

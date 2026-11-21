@@ -44,6 +44,7 @@ export function DentalChart({
   selected,
   onToothClick,
   maxChipLines,
+  compact = false,
   className,
 }: {
   species: Species;
@@ -53,6 +54,8 @@ export function DentalChart({
   onToothClick?: (code: string, event: MouseEvent) => void;
   /** Lines of codes shown in the "other" cell before the rest is summarised as "+n". */
   maxChipLines: number;
+  /** Fixed row sizes independent of the screen (report preview, print and PDF must look the same everywhere). */
+  compact?: boolean;
   className?: string;
 }) {
   const t = useTranslations("chart");
@@ -60,7 +63,10 @@ export function DentalChart({
     <div
       data-chart
       className={cn(
-        "rounded-xl border border-border bg-surface p-1.5 [--chart-index-h:18px] [--chart-number-h:17px] [--chart-tooth-h:40px] [@media(min-height:700px)]:[--chart-index-h:24px] [@media(min-height:700px)]:[--chart-tooth-h:56px] [--chart-label:84px] [--chart-mid:10px] sm:p-2 lg:[--chart-label:132px] lg:[--chart-mid:18px]",
+        "rounded-xl border border-border bg-surface",
+        compact
+          ? "p-2 [--chart-index-h:20px] [--chart-number-h:18px] [--chart-tooth-h:44px] [--chart-label:104px] [--chart-mid:10px]"
+          : "p-1.5 [--chart-index-h:18px] [--chart-number-h:17px] [--chart-tooth-h:40px] [@media(min-height:700px)]:[--chart-index-h:24px] [@media(min-height:700px)]:[--chart-tooth-h:56px] [--chart-label:104px] [--chart-mid:10px] sm:p-2 lg:[--chart-label:132px] lg:[--chart-mid:18px]",
         className,
       )}
     >
@@ -70,9 +76,9 @@ export function DentalChart({
         <span className="px-2 font-bold tracking-widest text-chart-title">{species === "dog" ? t("centerDog") : t("centerCat")}</span>
         <span className="text-right text-foreground-muted">{t("leftSide")}</span>
       </div>
-      <ArchBlock species={species} arch="upper" teeth={teeth} selected={selected} onToothClick={onToothClick} maxChipLines={maxChipLines} />
+      <ArchBlock species={species} arch="upper" teeth={teeth} selected={selected} onToothClick={onToothClick} maxChipLines={maxChipLines} compact={compact} />
       <div className="my-1 border-t border-border" />
-      <ArchBlock species={species} arch="lower" teeth={teeth} selected={selected} onToothClick={onToothClick} maxChipLines={maxChipLines} />
+      <ArchBlock species={species} arch="lower" teeth={teeth} selected={selected} onToothClick={onToothClick} maxChipLines={maxChipLines} compact={compact} />
       <div className="flex flex-wrap justify-between gap-x-4 pt-1 text-[11px] text-foreground-muted">
         <span>{t("legendMarks")}</span>
         {onToothClick ? <span>{t("legendClicks")}</span> : null}
@@ -88,6 +94,7 @@ function ArchBlock({
   selected,
   onToothClick,
   maxChipLines,
+  compact,
 }: {
   species: Species;
   arch: Arch;
@@ -95,6 +102,7 @@ function ArchBlock({
   selected: ReadonlySet<string>;
   onToothClick?: (code: string, event: MouseEvent) => void;
   maxChipLines: number;
+  compact: boolean;
 }) {
   const t = useTranslations("chart");
   const names = useToothNames();
@@ -119,6 +127,10 @@ function ArchBlock({
   }, [perSide]);
   const charsPerLine = Math.max(3, Math.floor(columnPx / CHIP_CHAR_PX));
 
+  const shortLabels: Partial<Record<RowKey, string>> = {
+    calculus: t("rowCalculusShort"),
+    gingivitis: t("rowGingivitisShort"),
+  };
   const labels: Record<RowKey, string> = {
     calculus: t("rowCalculus"),
     gingivitis: t("rowGingivitis"),
@@ -146,7 +158,7 @@ function ArchBlock({
             row === "drawing" ? "text-xs" : "",
           )}
         >
-          <RowLabel text={labels[row]} />
+          <RowLabel full={labels[row]} short={shortLabels[row]} compact={compact} />
         </span>
       ))}
 
@@ -176,13 +188,14 @@ function ArchBlock({
   );
 }
 
-/** Row label; a trailing "(0-3)" never breaks in the middle. */
-function RowLabel({ text }: { text: string }) {
-  const at = text.lastIndexOf(" (");
-  if (at < 0) return <>{text}</>;
+/** Row label on one line: the short text unless there is room for the full one (wide screens, not in the report). */
+function RowLabel({ full, short, compact }: { full: string; short?: string; compact: boolean }) {
+  if (!short || short === full) return <span className="whitespace-nowrap">{full}</span>;
+  if (compact) return <span className="whitespace-nowrap">{short}</span>;
   return (
-    <span>
-      {text.slice(0, at)} <span className="whitespace-nowrap">{text.slice(at + 1)}</span>
+    <span className="whitespace-nowrap">
+      <span className="lg:hidden">{short}</span>
+      <span className="hidden lg:inline">{full}</span>
     </span>
   );
 }

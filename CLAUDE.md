@@ -78,8 +78,13 @@ Next.js 16 (App Router, Turbopack), React 19, TypeScript strict, Tailwind CSS 4,
 
  jeleket. Írd fájlba, és úgy futtasd.
 
+## Zárójelentés és PDF (4. fül)
+- Egyetlen komponens: `src/components/report/report-document.tsx` (előnézet, böngészős nyomtatás, szerveroldali PDF). Az előnézet az aktuális szerkesztésből, a PDF a mentett lapból készül.
+- PDF: `GET /api/v1/sheets/{id}/pdf` → `src/server/pdf.ts` a `/print/sheets/<id>` oldalt nyomtatja a szerveren futó Chrome-mal (`CHROME_PATH`, `INTERNAL_BASE_URL`). Az ő és ű helyességét a `npm run check:pdf` a PDF-ből kiolvasott szövegben ellenőrzi.
+- Ékezetes betűt tartalmazó tesztadatot a forráskódban kódpontból építs (`String.fromCharCode`): a szerkesztőeszköz a `\\u0151` jelölést valódi betűvé alakíthatja, a `tests/language.test.ts` pedig hibát jelez, ha a kódban ékezetes magyar betű van.
+
 ## Állapot
-1–5. fázis kész (alapozás; adatbázis, API, belépés; alkalmazáshéj; 1. fül fogtáblával; 2. fül: idegblokkok, varratok, dentális RTG; 3. fül: gyógyszerterv sablonokkal, hazaadó tanácsok, kontroll). Következik: 6. fázis (4. fül: A4-es zárójelentés előnézet, nyomtatás, szerveroldali PDF az `GET /sheets/{id}/pdf` végponttal, ékezetek, tördelés), majd 7. fázis (demóadat, simítás). A 6. fázis PDF-es része (szerveroldali Chrome, beágyazott betűkészlet, tördelés) ismét erősebb modellt kívánhat. A többsoros szövegmezők a közös `src/components/ui/long-text.tsx` komponensen mennek át (a diktálás később ide kerül). A `String.replace` cseréjében a `$` egy `# VetDent Light – átadási jegyzék
+1–6. fázis kész (alapozás; adatbázis, API, belépés; alkalmazáshéj; 1. fül fogtáblával; 2. és 3. fül; 4. fül A4-es előnézettel, nyomtatással és szerveroldali PDF-fel). Következik: 7. fázis (demóadat: a két mintakép, Max kutya és Mici macska semleges demó rendelővel és e-mail-címekkel; teljes `check:layout` minden célméreten; a képernyőképek összevetése a mintaképekkel; dokumentáció frissítése). A többsoros szövegmezők a közös `src/components/ui/long-text.tsx` komponensen mennek át (a diktálás később ide kerül). A `String.replace` cseréjében a `$` egy `# VetDent Light – átadási jegyzék
 
 @AGENTS.md
 
@@ -159,4 +164,4 @@ Next.js 16 (App Router, Turbopack), React 19, TypeScript strict, Tailwind CSS 4,
 
  jeleket. Írd fájlba, és úgy futtasd.
 
--ra egyszerűsödik: ilyen szöveget tartalmazó javítószkripthez használj függvényes cserét.
+-ra egyszerűsödik: javítószkripthez használj függvényes cserét.

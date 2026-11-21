@@ -49,6 +49,7 @@ const operations: Operation[] = [
   { method: "post", path: "/sheets", summary: "Create a sheet for an existing patient (patientId) or a new one (patient), atomically", auth: true, request: createSheetRequestSchema, response: sheetDetailSchema, status: 201 },
   { method: "get", path: "/sheets/{id}", summary: "Get a sheet with its patient", auth: true, response: sheetDetailSchema },
   { method: "put", path: "/sheets/{id}", summary: "Save a sheet; a stale version answers 409", auth: true, request: updateSheetRequestSchema, response: sheetDetailSchema },
+  { method: "get", path: "/sheets/{id}/pdf", summary: "The saved sheet as an A4 PDF (application/pdf, attachment)", auth: true },
 ];
 
 const schemaOf = (schema: z.ZodType, io: "input" | "output") =>

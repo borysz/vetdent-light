@@ -29,7 +29,7 @@ export function AppHeader() {
   const { bridge, navigate, openDialog, openSheets } = useShell();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-surface">
+    <header className="sticky top-0 z-30 border-b border-border bg-surface print:hidden">
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 px-3 py-2 xl:flex-nowrap">
         <button
           type="button"
@@ -117,9 +117,10 @@ export function AppHeader() {
               </button>
               <Button
                 variant="dark"
-                disabled
-                aria-label={`${t("pdf")} (${t("soonShort")})`}
-                title={`${t("pdf")}: ${t("soonShort")}`}
+                disabled={bridge.pdfBusy}
+                aria-label={t("pdf")}
+                title={t("pdf")}
+                onClick={bridge.onPdf}
                 className="px-0 w-11 2xl:w-auto 2xl:px-4"
               >
                 <FileDown className="size-5" aria-hidden />
