@@ -6,7 +6,8 @@
  *
  * It creates a marked test user (e2e-…@vetdent-light.test) with a few animals and sheets, signs in through the
  * login page, visits every main page and opens every dialog at every target size, and fails on:
- * horizontal page scroll, elements outside the screen, scrollable or clipped dialogs, touch targets under 44 px,
+ * horizontal page scroll, elements outside the screen, scrollable or clipped dialogs, touch targets under 44 px
+ * (tablet sizes run as emulated touch devices, like the device mode of Chrome DevTools),
  * and for the dental chart: it must fit whole under the header, show every tooth, and keep its text at 11 px or more.
  * Screenshots go to SCREENSHOT_DIR (default "template pics/screenshots", local, not in git). Everything it
  * created is deleted at the end.
@@ -26,14 +27,18 @@ const CHROME_PATH = process.env.CHROME_PATH ?? "C:\\Program Files\\Google\\Chrom
 
 /** Target sizes (usable browser area in CSS px) and secondary sizes where nothing may break either. */
 const SIZES = [
-  { name: "laptop-1280x580", width: 1280, height: 580 },
-  { name: "ipad-820x1100", width: 820, height: 1100 },
-  { name: "ipad9-810x1000", width: 810, height: 1000 },
-  { name: "android-800x1150", width: 800, height: 1150 },
-  { name: "secondary-768x1024", width: 768, height: 1024 },
-  { name: "tablet-landscape-1180x820", width: 1180, height: 820 },
-  { name: "desktop-1920x1080", width: 1920, height: 1080 },
+  { name: "laptop-1280x580", width: 1280, height: 580, tablet: false },
+  { name: "ipad-820x1100", width: 820, height: 1100, tablet: true },
+  { name: "ipad9-810x1000", width: 810, height: 1000, tablet: true },
+  { name: "android-800x1150", width: 800, height: 1150, tablet: true },
+  { name: "secondary-768x1024", width: 768, height: 1024, tablet: true },
+  { name: "tablet-landscape-1180x820", width: 1180, height: 820, tablet: true },
+  { name: "desktop-1920x1080", width: 1920, height: 1080, tablet: false },
 ];
+
+/** An iPad's Safari identifies itself like this (iPadOS asks for the desktop site by default). */
+const TABLET_USER_AGENT =
+  "Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1";
 
 type Failure = { size: string; state: string; issue: string };
 const failures: Failure[] = [];
@@ -271,6 +276,7 @@ async function main() {
     if (!demoMax || !demoMici) throw new Error("demo animals were not created");
 
     const browser = await puppeteer.launch({ executablePath: CHROME_PATH, headless: true, args: ["--no-sandbox"] });
+    const desktopUserAgent = await browser.userAgent();
     try {
       const page = await browser.newPage();
       page.setDefaultTimeout(30_000);
@@ -286,7 +292,12 @@ async function main() {
 
       const h = messages.header;
       for (const size of SIZES) {
-        await page.setViewport({ width: size.width, height: size.height });
+        // Tablets are emulated as real devices (mobile viewport, touch, 2x pixels, tablet browser), like the
+        // device mode of Chrome DevTools; laptops and desktops as plain windows.
+        await page.emulate({
+          userAgent: size.tablet ? TABLET_USER_AGENT : desktopUserAgent,
+          viewport: { width: size.width, height: size.height, deviceScaleFactor: size.tablet ? 2 : 1, isMobile: size.tablet, hasTouch: size.tablet },
+        });
 
         await page.goto(`${BASE_URL}/`, { waitUntil: "networkidle2" });
         await page.waitForSelector("main ul li");
