@@ -4,6 +4,8 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
+  // Public DNS name forwarded to this dev machine (hostnames only, no port).
+  allowedDevOrigins: ["borysz.tplinkdns.com"],
   // cacheComponents stays off: every signed-in page is dynamic (see docs/DONTESEK.md).
   turbopack: {
     rules: {
