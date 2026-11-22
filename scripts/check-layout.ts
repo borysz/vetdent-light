@@ -9,21 +9,21 @@
  * horizontal page scroll, elements outside the screen, scrollable or clipped dialogs, touch targets under 44 px
  * (tablet sizes run as emulated touch devices, like the device mode of Chrome DevTools),
  * and for the dental chart: it must fit whole under the header, show every tooth, and keep its text at 11 px or more.
- * Screenshots go to SCREENSHOT_DIR (default "template pics/screenshots", local, not in git). Everything it
+ * Screenshots go to SCREENSHOT_DIR (default "screenshots", not in git). Everything it
  * created is deleted at the end.
  */
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
-import puppeteer, { type Page } from "puppeteer-core";
+import type { Page } from "puppeteer-core";
 import messages from "../messages/hu.json";
 import { teethOf } from "../src/domain/teeth/catalog";
 import { createAdminClient } from "../src/server/admin";
+import { launchBrowser } from "./lib/browser";
 import { insertDemoAnimals } from "./lib/demo";
 import { createE2eUser } from "./lib/e2e";
 
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:6438";
-const SCREENSHOT_DIR = process.env.SCREENSHOT_DIR ?? join("template pics", "screenshots");
-const CHROME_PATH = process.env.CHROME_PATH ?? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+const SCREENSHOT_DIR = process.env.SCREENSHOT_DIR ?? "screenshots";
 
 /**
  * Target sizes (usable browser area in CSS px) and secondary sizes where nothing may break either.
@@ -293,7 +293,7 @@ async function main() {
     const demoMici = demo.find((animal) => animal.name === "Mici");
     if (!demoMax || !demoMici) throw new Error("demo animals were not created");
 
-    const browser = await puppeteer.launch({ executablePath: CHROME_PATH, headless: true, args: ["--no-sandbox"] });
+    const browser = await launchBrowser();
     const desktopUserAgent = await browser.userAgent();
     try {
       const page = await browser.newPage();

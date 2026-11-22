@@ -2,7 +2,15 @@
 
 @AGENTS.md
 
-Állatorvosi fogászati kezelési lap webalkalmazás (kutya 42, macska 30 fog), tabletre és laptopra. A megrendelő nem fejlesztő. Az eredeti igény a helyi `template pics/MASTER_PROMPT.md` (Gitben nincs, a főmappában: `C:\Users\Borysz\Work\vetdent-light\template pics\`), a mintaképekkel együtt. A termékkontextus a `PRODUCT.md`-ben, a felépítés a `docs/ARCHITEKTURA.md`-ben van.
+Állatorvosi fogászati kezelési lap webalkalmazás (kutya 42, macska 30 fog), tabletre és laptopra. A megrendelő nem fejlesztő. Az eredeti igény a `docs/requirements/MASTER_PROMPT.md`, a mintaképek a `docs/requirements/samples/` mappában. A termékkontextus a `PRODUCT.md`-ben, a felépítés a `docs/ARCHITEKTURA.md`-ben van.
+
+## Munkamenet: több eszközön, nem egyszerre
+A projektet a megrendelő több gépen fejleszti (Claude Code, Claude Cowork), felváltva. **A Git `main` ága az egyetlen igazság**; a részletek: `docs/TOBB_ESZKOZ.md`.
+- **Új eszközön először:** az eszköz saját deploy kulcsa (`npm run setup:deploy-key`, a klónozás előtti lépések a `docs/TOBB_ESZKOZ.md`-ben), utána `npm run setup:check`.
+- **Elején:** `git pull` (vagy munkafán `git fetch` + `origin/main` beolvasztása), ha a `package-lock.json` változott: `npm ci`; `npm run setup:check`; olvasd el a `docs/MUNKANAPLO.md` legfelső bejegyzését és a `TODO.md`-t.
+- **Végén** (a feladat kész, minden ellenőrzés zöld): új bejegyzés a `docs/MUNKANAPLO.md` tetejére (magyarul: kész, félbemaradt, következő lépés); commit; a munka a `main`-re kerül (munkafán: a helyi `main`-t előbb `origin/main`-re hozod, majd `--no-ff` merge), és **push** kérdés nélkül. Ha a környezet nem tud pusholni, mondd meg a felhasználónak, hogy futtassa a `git push`-t.
+- Ha piros valami, nem kerül `main`-re; a félbemaradt állapot a munkanaplóba és a saját ágra kerül.
+- A tartós szabályok és a megrendelő kérései ide vagy a `docs/`-ba kerülnek, ne csak a helyi memóriába: az nem utazik a géppel.
 
 ## Nyelv
 Csevegés: magyarul, tegezve. Felület: magyar, magázó, de **i18n-képes** (`docs/I18N.md` felülírja a MASTER_PROMPT egynyelvűségét). **Az URI-k (oldalak és API) és a teljes forráskód (azonosítók, megjegyzések, szkriptek, tesztek, commit-üzenetek) mindig angolok**: pl. `/login`, `/sheets/[id]`, `/sheets/new?species=dog`, nem `/belepes`, `/lapok`. Magyar csak a `messages/`-ben, a `supabase/seed/demo-data.json`-ban, a `docs/`-ban és a gyökérdokumentumokban van; a `tests/language.test.ts` őrzi.
@@ -24,7 +32,9 @@ Next.js 16 (App Router, Turbopack), React 19, TypeScript strict, Tailwind CSS 4,
 | `npm run dev` | Fejlesztői szerver a **6438**-as porton |
 | `npm run check` | lint + típusellenőrzés + tesztek + i18n-ellenőrzés (a tesztek a valódi Supabase-projekten futnak) |
 | `npm run build && npm run start` | Éles build és szerver; erre futnak a böngészős ellenőrzések |
-| `npm run check:layout` | Valódi Chrome, 7 méret: túlcsordulás, görgethető ablakok, 44 px-es célok, a teljes fogtábla; képernyőképek a `template pics/screenshots/` mappába |
+| `npm run setup:deploy-key` | Az eszköz saját deploy kulcsa: létrehozás, felvétel a GitHubon (a GitHub CLI-vel vagy útmutatással), olvasási és írási próba |
+| `npm run setup:check` | Kész-e a gép a folytatásra: Node, csomagok, `.env.local` (csak nevek), Supabase, Chrome, Git (lemaradás az `origin/main`-hez) |
+| `npm run check:layout` | Valódi Chrome, 9 méret (telefon is): túlcsordulás, görgethető ablakok, 44 px-es célok, a teljes fogtábla; képernyőképek a `screenshots/` mappába |
 | `npm run check:flow` | Böngészős folyamat: mentés, piszkozat, ütközés, fogtábla, 2. és 3. fül, PDF-letöltés, nyomtatás |
 | `npm run check:pdf` | PDF-végpont: ő és ű a PDF-ből kiolvasva, A4, oldalszám, jogosultság |
 | `npm run check:volume` | Sok adat (alapból 300 állat, `-- --animals 1500`): kezdőlap lapozóval, lapozás, kereső, válaszidők; a végén mindent töröl |
@@ -35,11 +45,11 @@ Next.js 16 (App Router, Turbopack), React 19, TypeScript strict, Tailwind CSS 4,
 
 Minden felületi változtatás után futtasd a három böngészős ellenőrzést; ami ott nem zöld, az nincs kész.
 
-## Gépfüggő tudnivalók (Windows, nincs rendszergazdai jog)
-- A shell nem örökli a friss PATH-t: `$env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')`, és `npm.cmd` / `npx.cmd`.
-- Chrome headless: `C:\Program Files\Google\Chrome\Application\chrome.exe` (az Edge itt nem indul); a `CHROME_PATH` a `.env.local`-ban van.
-- Munkafán (worktree) a Gitben nem lévő fájlok (`template pics/`, `.env.supabase`, `.env.local`) nincsenek meg: abszolút úttal olvasd őket a főmappából, a `.env.local`-t át kell másolni.
-- Git: távoli `git@github.com:borysz/vetdent-light.git`, ág `main`; `--force` soha; munkafán a saját ágra pusholj.
+## Gépfüggő tudnivalók
+- **Chrome:** a szkriptek és a PDF maguk keresik meg (`CHROME_PATH`, a `.chrome/` a `npm run chrome:install` után, vagy a rendszer szokásos helye Windowson, macOS-en, Linuxon); `src/server/chrome.ts`, `scripts/lib/browser.ts`.
+- **Git:** távoli `git@github.com:borysz/vetdent-light.git` (privát), ág `main`; `--force` soha. Minden eszköz saját, írási joggal felvett deploy kulccsal pushol (`~/.ssh/vetdent_light_deploy_ed25519`, a repó `core.sshCommand` beállítása); létrehozás és ellenőrzés: `npm run setup:deploy-key` (`-- --check`: csak ellenőriz).
+- **Munkafán (worktree)** a Gitben nem lévő fájlok (`.env.local`) nincsenek meg: a főmappából kell átmásolni.
+- **A megrendelő Windows-gépén** (nincs rendszergazdai jog): a shell nem örökli a friss PATH-t: `$env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')`, és `npm.cmd` / `npx.cmd`; az Edge headless módban nem indul, a Chrome igen.
 - Supabase CLI: `npx supabase projects list`; ha nincs belépve, a felhasználó futtassa a `npx supabase login` parancsot a saját termináljában. A céges hálózati védelem miatt a tanúsítvány-ellenőrzést nem kapcsoljuk ki.
 
 ## Adatbázis és API

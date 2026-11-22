@@ -9,14 +9,14 @@
  *   npm run check:volume              (default 300 animals)
  *   npm run check:volume -- --animals 600
  */
-import puppeteer, { type Page } from "puppeteer-core";
+import type { Page } from "puppeteer-core";
 import messages from "../messages/hu.json";
 import { foldForSearch, phoneSearchDigits } from "../src/domain/text";
 import { createAdminClient } from "../src/server/admin";
+import { launchBrowser } from "./lib/browser";
 import { createE2eUser } from "./lib/e2e";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:6438";
-const CHROME_PATH = process.env.CHROME_PATH ?? "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const argIndex = process.argv.indexOf("--animals");
 const ANIMALS = argIndex >= 0 ? Number(process.argv[argIndex + 1]) : 300;
 /** Slowest acceptable answer for one list or search request, in ms. */
@@ -111,7 +111,7 @@ async function main() {
   const e2e = await createE2eUser(admin, { clinicName: "e2e volume", displayName: "E2E Volume" });
   const animals = makeAnimals(ANIMALS);
   const sheetCount = animals.reduce((sum, x) => sum + x.sheets.length, 0);
-  const browser = await puppeteer.launch({ executablePath: CHROME_PATH, headless: true });
+  const browser = await launchBrowser();
   try {
     // Data: patients and sheets in batches.
     const loadStarted = Date.now();

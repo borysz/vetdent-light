@@ -46,11 +46,11 @@ Confirmed primary value: a fast, precise interactive dental chart (42 teeth for 
 
 ## Brand Commitments
 
-Product name in the interface: "VetDent Pro" with the label "FOGÁSZATI LAP". Species colours are binding: dog orange, cat purple. The owner supplied sample screenshots (`template pics/`: 1, 3, 4, 5, 6, kutya, macska) as the source of look and behaviour; the dental chart must match `kutya.png` and `macska.png` exactly. Colours are to be measured from those images. Names, e-mails and clinics in the samples are examples only.
+Product name in the interface: "VetDent Pro" with the label "FOGÁSZATI LAP". Species colours are binding: dog orange, cat purple. The owner supplied sample screenshots (`docs/requirements/samples/`: 1, 3, 4, 5, 6, kutya, macska) as the source of look and behaviour; the dental chart must match `kutya.png` and `macska.png` exactly. Colours are to be measured from those images. Names, e-mails and clinics in the samples are examples only.
 
 ## Evidence on Hand
 
-- Seven sample screenshots and `MASTER_PROMPT.md` in `C:\Users\Borysz\Work\vetdent-light\template pics\` (local, git-ignored).
+- Seven sample screenshots in `docs/requirements/samples/` and the original brief `docs/requirements/MASTER_PROMPT.md`.
 - Supabase project credentials in `.env.supabase` (local, git-ignored; never read or print values).
 - Absent: real clinic data, real owner or patient data, logo, approved clinical option lists. Do not fabricate them; demo data uses neutral names and `example.com` / `.test` addresses.
 - The `referencia/*.jpg` images of the older vetdent project are copyrighted and must not be copied or redrawn.
