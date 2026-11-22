@@ -7,9 +7,12 @@ import { ApiClientError } from "@/client/api";
 import { useChangePassword } from "@/client/hooks";
 import { MIN_PASSWORD_LENGTH } from "@/contracts/auth";
 import { inputStyles } from "@/components/ui/input-styles";
-import { AuthCard, AuthError, authSubmitStyles } from "./auth-card";
+import { AuthCard, AuthError, AuthLink, authSubmitStyles } from "./auth-card";
 
-/** Set a new password (the reset link has signed the user in). Asked twice; afterwards the app opens. */
+/**
+ * Set a new password: after a reset link (which signs the user in) or from the user menu (Change password).
+ * Asked twice; afterwards the app opens.
+ */
 export function ResetPasswordForm() {
   const t = useTranslations("resetPassword");
   const errors = useTranslations("errors");
@@ -69,6 +72,7 @@ export function ResetPasswordForm() {
       <button type="submit" disabled={change.isPending || password === "" || again === ""} className={authSubmitStyles}>
         {change.isPending ? t("submitting") : t("submit")}
       </button>
+      <AuthLink href="/">{t("cancel")}</AuthLink>
     </AuthCard>
   );
 }

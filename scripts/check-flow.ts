@@ -238,6 +238,21 @@ async function main() {
     await page.waitForFunction(() => document.body.innerText.includes("FlowDog"), { timeout: 10000 }).catch(() => undefined);
     ok("home lists the saved animal and its sheet", (await bodyText(page)).includes("FlowDog"));
 
+    // 5b. the user menu offers Change password; Cancel goes back home
+    await page.click(`[aria-label="${messages.header.userMenu}"]`);
+    await page.waitForSelector("[role=menuitem]");
+    await page.evaluate((t) => {
+      const entry = [...document.querySelectorAll("[role=menuitem]")].find((el) => el.textContent?.includes(t));
+      (entry as HTMLElement).click();
+    }, messages.header.changePassword);
+    await page.waitForFunction(() => location.pathname === "/reset-password", { timeout: 10000 });
+    ok("the user menu leads to the change password form", Boolean(await page.$("#new-password")));
+    await Promise.all([
+      page.waitForFunction(() => location.pathname === "/", { timeout: 10000 }),
+      page.evaluate((t) => [...document.querySelectorAll("a")].find((a) => a.textContent?.includes(t))?.click(), messages.resetPassword.cancel),
+    ]);
+    ok("Cancel on the change password form goes back home", true);
+
     // 6. forgotten password: link on the sign-in page, reset link, new password, sign in with it
     const guest = await (await browser.createBrowserContext()).newPage();
     await guest.evaluateOnNewDocument("window.__name = (t) => t;");

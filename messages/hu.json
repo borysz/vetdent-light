@@ -44,6 +44,7 @@
     "userMenu": "Felhasználói menü",
     "clinicData": "Rendelő adatai",
     "logout": "Kilépés",
+    "changePassword": "Jelszó módosítása",
     "home": "Kezdőképernyő",
     "tabsLabel": "Fülek"
   },
@@ -361,7 +362,8 @@
     "tooShort": "A jelszónak legalább {min} karakterből kell állnia.",
     "mismatch": "A két jelszó nem egyezik.",
     "submit": "Jelszó mentése",
-    "submitting": "Mentés…"
+    "submitting": "Mentés…",
+    "cancel": "Mégse, vissza a kezdőlapra"
   },
   "errors": {
     "bad_request": "A kérés hibás.",
