@@ -64,8 +64,8 @@ Minden felületi változtatás után futtasd a három böngészős ellenőrzést
 - A teljes táblának minden célméreten egyben kell látszania: a `check:layout` ezt, a 42/30 fogat és a 11 px-es legkisebb betűt is ellenőrzi.
 
 ## Röntgenképek (2. fül)
-- A „Digitális fogászati röntgen” szekcióban képek csatolhatók (ráhúzással vagy fájlválasztással): `src/components/sheet/radiograph-gallery.tsx`. Csak mentett laphoz; JPEG, PNG, WebP, képenként legfeljebb 15 MB, laponként legfeljebb 30 kép (`src/contracts/radiographs.ts`).
-- **A kép az adatbázisban van** (megrendelői döntés): a `sheet_radiographs.image` (bytea) oszlopban, a rendelő tagságát ellenőrző RLS-sel. Írás és olvasás a `add_sheet_radiograph` és `sheet_radiograph_image` adatbázis-függvénnyel (base64), a listák a képet nem töltik le. A kép csak az API-n át érhető el (`GET /api/v1/radiographs/{id}/image`), a típust a szerver a fájl első bájtjaiból ellenőrzi (`src/server/services/radiographs.ts`). A rendelő vagy a lap törlése a képeket is törli.
+- A „Digitális fogászati röntgen” szekcióban képek csatolhatók (ráhúzással vagy fájlválasztással): `src/components/sheet/radiograph-gallery.tsx`. Csak mentett laphoz; JPEG, PNG, WebP és PDF (a rendelő röntgenszoftvere JPEG-et és PDF-et exportál), fájlonként legfeljebb 15 MB, laponként legfeljebb 30 fájl (`src/contracts/radiographs.ts`). A kép bélyegképként és nagy nézetben, a PDF új lapon, a böngésző PDF-nézőjében nyílik.
+- **A kép az adatbázisban van** (megrendelői döntés): a `sheet_radiographs.image` (bytea) oszlopban, a rendelő tagságát ellenőrző RLS-sel. Írás és olvasás a `add_sheet_radiograph` és `sheet_radiograph_image` adatbázis-függvénnyel (base64), a listák a képet nem töltik le. A fájl csak az API-n át érhető el (`GET /api/v1/radiographs/{id}/file`), a típust a szerver a fájl első bájtjaiból ellenőrzi (`src/server/services/radiographs.ts`). A rendelő vagy a lap törlése a képeket is törli.
 - Az adatbázis mérete: a Supabase ingyenes csomagjában 500 MB; a képek ebbe számítanak bele.
 
 ## Zárójelentés és PDF (4. fül)

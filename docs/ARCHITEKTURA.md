@@ -52,7 +52,7 @@ Az alapszabály: **a felület csak az API-n át ér el adatot.** Az `src/compone
 
 ## Röntgenképek
 
-- Feltöltés: `POST /sheets/{id}/radiographs` (multipart, `file` mező), lista: `GET /sheets/{id}/radiographs`, kép: `GET /radiographs/{id}/image`, törlés: `DELETE /radiographs/{id}`.
+- Feltöltés: `POST /sheets/{id}/radiographs` (multipart, `file` mező), lista: `GET /sheets/{id}/radiographs`, fájl: `GET /radiographs/{id}/file` (kép vagy PDF, a böngészőben megnyitva), törlés: `DELETE /radiographs/{id}`.
 - A kép bájtjai az adatbázisba, a `sheet_radiographs.image` oszlopba kerülnek a felhasználó tokenjével (RLS: csak a rendelő tagja írhatja és olvashatja); a szerver base64-ben küldi és kapja az `add_sheet_radiograph` és `sheet_radiograph_image` függvénnyel (`supabase/migrations/20261122140000_radiographs_in_database.sql`). A listák csak az adatokat kérik le, a képet nem.
 - A felület a képet az API-tól kéri a munkamenet sütijével; Supabase-cím vagy -kulcs nem kerül a böngészőbe.
 

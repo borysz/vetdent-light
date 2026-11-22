@@ -30,16 +30,17 @@ function toRadiograph(row: Row): Radiograph {
     contentType: row.content_type as RadiographType,
     sizeBytes: row.size_bytes,
     createdAt: row.created_at,
-    imageUrl: `/api/v1/radiographs/${row.id}/image`,
+    fileUrl: `/api/v1/radiographs/${row.id}/file`,
   };
 }
 
 /** The real type from the first bytes of the file (the declared type alone could be wrong or forged). */
-export function sniffImageType(bytes: Uint8Array): RadiographType | null {
+export function sniffFileType(bytes: Uint8Array): RadiographType | null {
   const ascii = (from: number, to: number) => String.fromCharCode(...bytes.subarray(from, to));
   if (bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return "image/jpeg";
   if (bytes.length >= 8 && bytes[0] === 0x89 && ascii(1, 4) === "PNG") return "image/png";
   if (bytes.length >= 12 && ascii(0, 4) === "RIFF" && ascii(8, 12) === "WEBP") return "image/webp";
+  if (bytes.length >= 5 && ascii(0, 5) === "%PDF-") return "application/pdf";
   return null;
 }
 
@@ -72,16 +73,16 @@ export async function listRadiographs(ctx: AuthContext, sheetId: string): Promis
   return data.map(toRadiograph);
 }
 
-/** Store one image for a sheet in the database: checked type (by its bytes), size and count. */
+/** Store one radiograph file (image or PDF) in the database: checked type (by its bytes), size and count. */
 export async function addRadiograph(ctx: AuthContext, sheetId: string, file: File): Promise<Radiograph> {
   await assertSheet(ctx, sheetId);
   if (file.size === 0) throw new ApiError("validation_failed", "The file is empty", { file: "empty" });
   if (file.size > RADIOGRAPH_MAX_BYTES) throw new ApiError("file_too_large", "The file is larger than 15 MB");
 
   const bytes = new Uint8Array(await file.arrayBuffer());
-  const type = sniffImageType(bytes);
+  const type = sniffFileType(bytes);
   if (!type || !(RADIOGRAPH_TYPES as readonly string[]).includes(type)) {
-    throw new ApiError("unsupported_file_type", "Only JPEG, PNG or WebP images");
+    throw new ApiError("unsupported_file_type", "Only JPEG, PNG, WebP or PDF files");
   }
 
   const { count, error: countError } = await ctx.db
@@ -112,13 +113,13 @@ async function findRadiograph(ctx: AuthContext, id: string): Promise<Row> {
   return data;
 }
 
-/** The image bytes and type, for the image endpoint. */
-export async function radiographImage(ctx: AuthContext, id: string): Promise<{ body: Uint8Array; contentType: string }> {
+/** The file bytes, type and name, for the file endpoint. */
+export async function radiographFile(ctx: AuthContext, id: string): Promise<{ body: Uint8Array; contentType: string; fileName: string }> {
   const row = await findRadiograph(ctx, id);
   const { data, error } = await ctx.db.rpc("sheet_radiograph_image", { p_id: row.id });
   if (error) throw fromDb(error);
   if (!data) throw new ApiError("not_found", "The image is missing");
-  return { body: new Uint8Array(Buffer.from(data, "base64")), contentType: row.content_type };
+  return { body: new Uint8Array(Buffer.from(data, "base64")), contentType: row.content_type, fileName: row.file_name };
 }
 
 export async function deleteRadiograph(ctx: AuthContext, id: string): Promise<void> {
