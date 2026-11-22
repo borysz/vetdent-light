@@ -15,7 +15,7 @@ export type AuthContext = {
   email: string | null;
   clinicId: string;
   clinicName: string;
-  member: { displayName: string; title: string | null };
+  member: { displayName: string };
 };
 
 function bearerToken(req: Request): string | null {
@@ -56,7 +56,7 @@ export async function cookieClient(req: Request): Promise<Db> {
 export async function loadMembership(db: Db, userId: string) {
   const { data, error } = await db
     .from("clinic_members")
-    .select("clinic_id, display_name, title, clinics(name)")
+    .select("clinic_id, display_name, clinics(name)")
     .eq("user_id", userId)
     .order("created_at", { ascending: true })
     .limit(1)
@@ -66,7 +66,7 @@ export async function loadMembership(db: Db, userId: string) {
   return {
     clinicId: data.clinic_id,
     clinicName: data.clinics?.name ?? "",
-    member: { displayName: data.display_name, title: data.title },
+    member: { displayName: data.display_name },
   };
 }
 

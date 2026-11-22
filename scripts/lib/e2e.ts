@@ -20,7 +20,7 @@ export type E2eUser = {
 
 export async function createE2eUser(
   admin: Admin,
-  opts: { clinicName: string; displayName: string; title?: string; clinicFields?: ClinicFields },
+  opts: { clinicName: string; displayName: string; clinicFields?: ClinicFields },
 ): Promise<E2eUser> {
   const email = `e2e-${randomBytes(4).toString("hex")}@vetdent-light.test`;
   const password = randomBytes(24).toString("base64url");
@@ -41,7 +41,7 @@ export async function createE2eUser(
     clinicId = clinic.data.id;
     const member = await admin
       .from("clinic_members")
-      .insert({ clinic_id: clinicId, user_id: id, display_name: opts.displayName, title: opts.title ?? "Dr." });
+      .insert({ clinic_id: clinicId, user_id: id, display_name: opts.displayName });
     if (member.error) throw member.error;
   } catch (error) {
     await remove();

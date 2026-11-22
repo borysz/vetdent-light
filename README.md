@@ -28,7 +28,7 @@ npx supabase db push --remote
 Felhasználó létrehozása (a jelszót rejtve kéri be; regisztrációs felület nincs), majd az alkalmazás:
 
 ```bash
-npm run user:create -- --email te@pelda.hu --name "Neved" --title "Dr."
+npm run user:create -- --email te@pelda.hu --name "Dr. Neved"
 npm run seed:demo      # opcionális: Max kutya és Mici macska demóadatként
 npm run dev            # http://localhost:6438
 ```
@@ -45,7 +45,7 @@ npm run dev            # http://localhost:6438
 | `npm run check:flow` | Böngészős folyamat: mentés, piszkozat, ütközés, fogtábla, fülek, PDF-letöltés, nyomtatás |
 | `npm run check:pdf` | PDF-végpont: ő és ű a PDF-ből kiolvasva, A4, oldalszám, jogosultság |
 | `npm run check:volume` | Sok adattal (alapból 300 állat): kezdőlap, lapozás, kereső, válaszidők |
-| `npm run user:create -- --email … --name … --title "Dr."` | Felhasználó és rendelőtagság létrehozása |
+| `npm run user:create -- --email … --name "Dr. …"` | Felhasználó és rendelőtagság létrehozása (a név titulussal együtt) |
 | `npm run seed:demo` | Demóadat az első rendelőbe; `-- --reset` törli |
 | `npm run i18n:sync` | Új vagy módosított szövegek felvétele az ellenőrzési jegyzékbe (`pending`) |
 | `npm run chrome:install` | Chrome headless shell letöltése a `.chrome/` mappába (szerveren, ahol nincs Chrome; a szerver magától megtalálja) |

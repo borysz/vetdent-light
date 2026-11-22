@@ -1,7 +1,9 @@
 /**
  * Create a confirmed Auth user and a clinic membership. Run it in your own terminal:
  *
- *   npm run user:create -- --email vet@example.com --name "Jane Doe" --title "Dr." [--clinic "Clinic name"]
+ *   npm run user:create -- --email vet@example.com --name "Dr. Jane Doe" [--clinic "Clinic name"]
+ *
+ * The name is written as it should appear on sheets, title included.
  *
  * The password is asked for hidden, twice (or read once from stdin when piped); it is never a command-line argument.
  */
@@ -16,10 +18,9 @@ function arg(name: string): string | undefined {
 async function main() {
   const email = arg("email");
   const displayName = arg("name");
-  const title = arg("title") ?? null;
   const clinicName = arg("clinic") ?? "Demo clinic";
   if (!email || !displayName) {
-    console.error('Usage: npm run user:create -- --email <email> --name "<display name>" [--title "Dr."] [--clinic "<clinic>"]');
+    console.error('Usage: npm run user:create -- --email <email> --name "<name, e.g. Dr. Jane Doe>" [--clinic "<clinic>"]');
     process.exit(2);
   }
 
@@ -44,7 +45,7 @@ async function main() {
 
   const member = await admin
     .from("clinic_members")
-    .insert({ clinic_id: clinicId, user_id: user.data.user.id, display_name: displayName, title });
+    .insert({ clinic_id: clinicId, user_id: user.data.user.id, display_name: displayName });
   if (member.error) {
     await admin.auth.admin.deleteUser(user.data.user.id);
     throw member.error;

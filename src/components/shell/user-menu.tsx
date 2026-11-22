@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, KeyRound, LogOut, UserRound } from "lucide-react";
+import { Building2, LogOut, UserRound, UserRoundPen } from "lucide-react";
 import { DropdownMenu } from "radix-ui";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -16,7 +16,7 @@ export function UserMenu() {
   const router = useRouter();
   const me = useMe();
   const logout = useLogout();
-  const { openDialog, guard, navigate } = useShell();
+  const { openDialog, guard } = useShell();
 
   async function onLogout() {
     await logout.mutateAsync();
@@ -25,7 +25,7 @@ export function UserMenu() {
   }
 
   const member = me.data?.member;
-  const name = member ? [member.title, member.displayName].filter(Boolean).join(" ") : "";
+  const name = member?.displayName ?? "";
 
   return (
     <DropdownMenu.Root>
@@ -52,9 +52,9 @@ export function UserMenu() {
             <Building2 className="size-5" aria-hidden />
             {t("clinicData")}
           </DropdownMenu.Item>
-          <DropdownMenu.Item className={item} onSelect={() => navigate("/reset-password")}>
-            <KeyRound className="size-5" aria-hidden />
-            {t("changePassword")}
+          <DropdownMenu.Item className={item} onSelect={() => openDialog("profile")}>
+            <UserRoundPen className="size-5" aria-hidden />
+            {t("profile")}
           </DropdownMenu.Item>
           <DropdownMenu.Item
             className={item}

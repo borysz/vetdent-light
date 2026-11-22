@@ -205,7 +205,7 @@ async function clickButtonText(page: Page, text: string) {
 
 async function main() {
   const admin = createAdminClient();
-  const e2e = await createE2eUser(admin, { clinicName: "e2e layout", displayName: "E2E Test" });
+  const e2e = await createE2eUser(admin, { clinicName: "e2e layout", displayName: "Dr. E2E Test" });
   const { email, password, clinicId } = e2e;
 
   try {
@@ -383,6 +383,16 @@ async function main() {
         await clinicItem?.click();
         await page.waitForSelector("[role=dialog] form");
         await inspect(page, size, "dialog-clinic");
+        await closeDialog(page);
+
+        await clickByLabel(page, h.userMenu);
+        await page.waitForSelector("[role=menu]");
+        await page.evaluate((label) => {
+          const entry = [...document.querySelectorAll("[role=menuitem]")].find((el) => el.textContent?.includes(label));
+          (entry as HTMLElement).click();
+        }, h.profile);
+        await page.waitForSelector("#profile-name");
+        await inspect(page, size, "dialog-profile");
         await closeDialog(page);
 
         await page.goto(`${BASE_URL}/sheets/new?species=dog`, { waitUntil: "networkidle2" });

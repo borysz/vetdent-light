@@ -5,7 +5,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { GET as clinicGET, PUT as clinicPUT } from "@/app/api/v1/clinic/route";
 import { GET as healthGET } from "@/app/api/v1/health/route";
-import { GET as meGET } from "@/app/api/v1/auth/me/route";
+import { GET as meGET, PATCH as mePATCH } from "@/app/api/v1/auth/me/route";
 import { PUT as passwordPUT } from "@/app/api/v1/auth/password/route";
 import { POST as passwordResetPOST } from "@/app/api/v1/auth/password-reset/route";
 import { GET as openapiGET } from "@/app/api/v1/openapi.json/route";
@@ -86,7 +86,25 @@ describe.skipIf(!hasEnv)("API v1 (real Supabase)", () => {
       expect(res.status).toBe(200);
       expect(res.body.user.email).toBe(alice.email);
       expect(res.body.clinic.id).toBe(alice.clinicId);
-      expect(res.body.member.title).toBe("Dr.");
+      expect(res.body.member.displayName).toBe("Dr. Test alice");
+      expect(res.body.member).not.toHaveProperty("title");
+    });
+
+    it("lets a user change their own name (title included), and only their own", async () => {
+      const user = await createTestUser("rename");
+      const renamed = await call(mePATCH, "/api/v1/auth/me", { token: user.token, method: "PATCH", body: { displayName: "  Dr. Uj Nev  " } });
+      expect(renamed.status).toBe(200);
+      expect(renamed.body.member.displayName).toBe("Dr. Uj Nev");
+      expect((await call(meGET, "/api/v1/auth/me", { token: user.token })).body.member.displayName).toBe("Dr. Uj Nev");
+      // Alice's name is untouched.
+      expect((await call(meGET, "/api/v1/auth/me", { token: alice.token })).body.member.displayName).toBe("Dr. Test alice");
+
+      const empty = await call(mePATCH, "/api/v1/auth/me", { token: user.token, method: "PATCH", body: { displayName: "   " } });
+      expect(empty.status).toBe(422);
+      const tooLong = await call(mePATCH, "/api/v1/auth/me", { token: user.token, method: "PATCH", body: { displayName: "x".repeat(121) } });
+      expect(tooLong.status).toBe(422);
+      const outsiderRename = await call(mePATCH, "/api/v1/auth/me", { token: outsider.token, method: "PATCH", body: { displayName: "Nobody" } });
+      expect(outsiderRename.status).toBe(403);
     });
 
     it("refuses a cookie-session write from another origin (CSRF)", async () => {

@@ -45,7 +45,7 @@
     "userMenu": "Felhasználói menü",
     "clinicData": "Rendelő adatai",
     "logout": "Kilépés",
-    "changePassword": "Jelszó módosítása",
+    "profile": "Profil",
     "home": "Kezdőképernyő",
     "tabsLabel": "Fülek"
   },
@@ -323,6 +323,18 @@
     "invalidDate": "Érvénytelen dátum.",
     "invalidEmail": "Érvénytelen e-mail-cím.",
     "invalidNumber": "Érvénytelen szám."
+  },
+  "profile": {
+    "title": "Profil",
+    "nameTitle": "Név",
+    "name": "Név (titulussal együtt)",
+    "nameHint": "Így jelenik meg a kezelési lapokon és a zárójelentésben, például: Dr. Minta Eszter.",
+    "saveName": "Név mentése",
+    "nameSaved": "A név elmentve.",
+    "passwordTitle": "Jelszó módosítása",
+    "savePassword": "Jelszó mentése",
+    "passwordSaved": "A jelszó megváltozott.",
+    "saving": "Mentés…"
   },
   "clinic": {
     "title": "Rendelő adatai",

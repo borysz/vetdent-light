@@ -39,7 +39,7 @@ export async function createTestUser(label: string, opts: { clinic?: boolean } =
     createdClinics.push(clinicId);
     const member = await getAdmin()
       .from("clinic_members")
-      .insert({ clinic_id: clinicId, user_id: id, display_name: `Test ${label}`, title: "Dr." });
+      .insert({ clinic_id: clinicId, user_id: id, display_name: `Dr. Test ${label}` });
     if (member.error) throw member.error;
   }
 

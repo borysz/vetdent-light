@@ -117,6 +117,7 @@ export const api = {
   changePassword: async (password: string): Promise<void> => {
     await request("PUT", "/auth/password", null, { password });
   },
+  updateProfile: (displayName: string): Promise<Me> => request("PATCH", "/auth/me", meResponseSchema, { displayName }),
   me: (): Promise<Me> => request("GET", "/auth/me", meResponseSchema),
   patients: (params: PageParams & { q?: string; species?: Species }) =>
     request("GET", `/patients${query(params)}`, patientPageSchema),
