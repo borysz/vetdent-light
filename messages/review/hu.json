@@ -1490,6 +1490,13 @@
     "note": "",
     "textHash": "4a15461d1830bdba"
   },
+  "header.changePassword": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e6ca4b8c50c88e50"
+  },
   "header.clinicData": {
     "status": "pending",
     "reviewer": null,
@@ -2714,6 +2721,13 @@
     "reviewedAt": null,
     "note": "",
     "textHash": "02a4d2f012ef73a1"
+  },
+  "resetPassword.cancel": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "8a7ec2c589a992b0"
   },
   "resetPassword.mismatch": {
     "status": "pending",
