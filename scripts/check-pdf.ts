@@ -13,15 +13,15 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { createClient } from "@supabase/supabase-js";
-import puppeteer from "puppeteer-core";
 import messages from "../messages/hu.json";
 import { createAdminClient } from "../src/server/admin";
+import { launchBrowser } from "./lib/browser";
 import { createE2eUser, type E2eUser } from "./lib/e2e";
 import type { Database } from "../src/server/db/database.types";
 import { teethOf } from "../src/domain/teeth/catalog";
 
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:6438";
-const OUT_DIR = process.env.SCREENSHOT_DIR ?? join("template pics", "screenshots");
+const OUT_DIR = process.env.SCREENSHOT_DIR ?? "screenshots";
 
 const results: string[] = [];
 const ok = (name: string, pass: boolean, extra = "") => results.push(`${pass ? "PASS" : "FAIL"}  ${name}${extra ? " - " + extra : ""}`);
@@ -168,7 +168,7 @@ async function main() {
     ok("the PDF contains the long o and u letters", letters > 10, `${letters} occurrences`);
 
     // The same print view as an image, for a look at the layout (PDF pages cannot be rendered here).
-    const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH, headless: true });
+    const browser = await launchBrowser();
     try {
       const page = await browser.newPage();
       await page.setViewport({ width: 794, height: 1123 });

@@ -10,13 +10,13 @@ import { randomBytes } from "node:crypto";
 import { mkdtempSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import puppeteer, { type Page } from "puppeteer-core";
+import type { Page } from "puppeteer-core";
 import messages from "../messages/hu.json";
 import { createAdminClient } from "../src/server/admin";
+import { launchBrowser } from "./lib/browser";
 import { createE2eUser } from "./lib/e2e";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:6438";
-const CHROME_PATH = process.env.CHROME_PATH ?? "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const results: string[] = [];
 const ok = (name: string, pass: boolean, extra = "") =>
   results.push(`${pass ? "PASS" : "FAIL"}  ${name}${extra ? " - " + extra : ""}`);
@@ -53,7 +53,7 @@ async function main() {
   const admin = createAdminClient();
   const e2e = await createE2eUser(admin, { clinicName: "e2e flow", displayName: "E2E Flow" });
   const { email, password } = e2e;
-  const browser = await puppeteer.launch({ executablePath: CHROME_PATH, headless: true });
+  const browser = await launchBrowser();
   try {
     const page = await browser.newPage();
     await page.evaluateOnNewDocument("window.__name = (t) => t;");

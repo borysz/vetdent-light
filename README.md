@@ -4,6 +4,10 @@
 
 Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · Supabase (Postgres + Auth) · next-intl (jelenleg magyar felület) · Vitest.
 
+## Folytatás másik eszközön
+
+A projekt több gépen fejleszthető (nem egyszerre). Új eszközön az első lépés az eszköz saját deploy kulcsa (`npm run setup:deploy-key`), utána `npm ci`, a `.env.local` átmásolása és `npm run setup:check`; később minden munkamenet `git pull`-lal kezdődik. A lépések és a munkamenetek rendje: `docs/TOBB_ESZKOZ.md`; hol tart a munka: `docs/MUNKANAPLO.md`.
+
 ## Indulás
 
 Szükséges: Node.js 24, Git, Google Chrome (a PDF-hez és az ellenőrzésekhez), egy Supabase-projekt.
@@ -13,7 +17,7 @@ npm install
 copy .env.example .env.local   # Windows; máshol: cp .env.example .env.local
 ```
 
-Töltsd ki a `.env.local`-t a Supabase-adatokkal és a `CHROME_PATH`-szal (a változók a `.env.example`-ben). Az adatbázis-migrációk feltöltése (egyszer):
+Töltsd ki a `.env.local`-t a Supabase-adatokkal (a változók a `.env.example`-ben; a Chrome-ot a program magától megtalálja). Ellenőrzés: `npm run setup:check`. Az adatbázis-migrációk feltöltése (egyszer):
 
 ```bash
 npx supabase login
@@ -35,7 +39,9 @@ npm run dev            # http://localhost:6438
 |---|---|
 | `npm run dev` / `npm run start` | Fejlesztői / éles szerver a 6438-as porton (`npm run build` után) |
 | `npm run check` | lint + típusellenőrzés + tesztek + i18n-ellenőrzés (a tesztek a valódi Supabase-projekten futnak, saját, utána törölt adattal) |
-| `npm run check:layout` | Valódi Chrome, 7 méret: túlcsordulás, görgethető ablakok, 44 px-es célok, a teljes fogtábla; képernyőképek a `template pics/screenshots/` mappába |
+| `npm run setup:deploy-key` | Az eszköz saját deploy kulcsa a GitHub-tárolóhoz: létrehozás és olvasási/írási próba |
+| `npm run setup:check` | Kész-e a gép a folytatásra (Node, csomagok, titkok, Supabase, Chrome, Git, push-jog) |
+| `npm run check:layout` | Valódi Chrome, 9 méret (telefon is): túlcsordulás, görgethető ablakok, 44 px-es célok, a teljes fogtábla; képernyőképek a `screenshots/` mappába |
 | `npm run check:flow` | Böngészős folyamat: mentés, piszkozat, ütközés, fogtábla, fülek, PDF-letöltés, nyomtatás |
 | `npm run check:pdf` | PDF-végpont: ő és ű a PDF-ből kiolvasva, A4, oldalszám, jogosultság |
 | `npm run check:volume` | Sok adattal (alapból 300 állat): kezdőlap, lapozás, kereső, válaszidők |
@@ -52,6 +58,8 @@ A három böngészős ellenőrzés a futó **éles** szervert használja: `npm r
 |---|---|
 | `PRODUCT.md` | Kinek készül, mire való, milyen korlátok és elvek érvényesek |
 | `CLAUDE.md` | Átadási jegyzék a fejlesztőnek (és a következő munkamenetnek): szabályok, parancsok, gépfüggő tudnivalók |
+| `docs/TOBB_ESZKOZ.md`, `docs/MUNKANAPLO.md` | Fejlesztés több eszközön; hol tart a munka |
+| `docs/requirements/` | Az eredeti igény (`MASTER_PROMPT.md`) és a mintaképek |
 | `docs/ARCHITEKTURA.md` | Felépítés, rétegek, adatfolyam, bővítés lépései |
 | `docs/TELEPITES_RENDER.md` | Telepítés a Render.com-ra (natív Node-szolgáltatás, a `render.yaml` Blueprint) |
 | `docs/DONTESEK.md` | Minden döntés indoklással és a módosítás helyével |

@@ -17,7 +17,7 @@ A `MASTER_PROMPT.md` 13. fejezetének tíz feltétele, a bizonyítékkal együtt
 
 ## Összevetés a mintaképekkel
 
-A saját képernyőképeket (`template pics/screenshots/`, a `check:layout` hozza létre, a Max és Mici demólapokról) egyenként összenéztük a mintaképekkel.
+A saját képernyőképeket (`screenshots/`, a `check:layout` hozza létre, a Max és Mici demólapokról) egyenként összenéztük a mintaképekkel.
 
 | Minta | Eredmény |
 |---|---|

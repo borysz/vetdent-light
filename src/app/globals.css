@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
- * Design tokens, measured from the sample images in `template pics/`
+ * Design tokens, measured from the sample images in `docs/requirements/samples/`
  * (pixel reads; see docs/FELULET.md). Colour and size come only from here.
  */
 :root {
