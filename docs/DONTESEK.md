@@ -166,6 +166,21 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 | Egyelőre a Supabase alapsablonja küldi a levelet | Megrendelői döntés; a saját sablon a `docs/JELSZO_VISSZAALLITAS.md`-ben kész, ha kell | `docs/JELSZO_VISSZAALLITAS.md` |
 | A belépési, az elfelejtett jelszó és az új jelszó oldal közös kártyát használ | Egy kinézet, egy helyen javítható | `src/components/auth/auth-card.tsx` |
 
+## Röntgenképek csatolása
+
+| Döntés | Indok | Módosítás helye |
+|---|---|---|
+| A 2. fül röntgen szekciójában képek csatolhatók ráhúzással és fájlválasztással | Megrendelői kérés (a MASTER_PROMPT még későbbre hagyta) | `src/components/sheet/radiograph-gallery.tsx` |
+| Csak mentett laphoz lehet képet csatolni; új lapon „előbb mentse” üzenet | A kép a laphoz tartozik, a lapnak előbb azonosítója kell | uo. |
+| JPEG, PNG és WebP; képenként legfeljebb 15 MB, laponként legfeljebb 30 kép; a típust a szerver a fájl tartalmából ellenőrzi | A böngésző ezeket tudja megjeleníteni; a korlát a tárhelyet és a tableten a feltöltési időt védi. A DICOM-formátum nem jeleníthető meg böngészőben (kérdés: `docs/NYITOTT_KERDESEK.md`) | `src/contracts/radiographs.ts`, `src/server/services/radiographs.ts` |
+| A „Felvételek száma” mező nem változik a csatolt képek számától | Az alkalmazás rögzít, nem dönt: a felvételek száma eltérhet a csatolt képekétől | — |
+| **A kép az adatbázis-táblában van** (`sheet_radiographs.image`, bytea), nem a Supabase Storage-ban | Megrendelői döntés (2026-11-22). Következmény: az adatbázis mérete a képekkel nő (ingyenes csomag: 500 MB), a mentésekben is benne vannak | `supabase/migrations/20261122140000_radiographs_in_database.sql` |
+| A kép base64-ben megy az adatbázis-függvényekbe és onnan vissza; a listák a képet nem töltik le | A base64 fele akkora, mint a bytea hexa alakja; a lista gyors marad | `src/server/services/radiographs.ts` |
+| A képek csak az API-n át, a rendelő tagjainak érhetők el | Egészségügyi adat; nyilvános link nincs | `supabase/migrations/20261122120000_sheet_radiographs.sql` |
+| Az első változat Storage-tárhelyét (`radiographs`) töröltük; új telepítésen az első migráció még létrehozza, de üres marad és nem használjuk | A már feltöltött migrációt nem írjuk át | `supabase/migrations/` |
+| A fájlok egyesével töltődnek fel | Gyenge tabletes hálózaton se induljon egyszerre tíz nagy kép | `src/components/sheet/radiograph-gallery.tsx` |
+| A képek nem kerülnek a zárójelentésbe és a PDF-be | Nem volt kérés; ötletként felírva | `docs/OTLETEK.md` |
+
 ## Sok adat: kereső és lapozó
 
 | Döntés | Indok | Módosítás helye |

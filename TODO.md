@@ -13,4 +13,4 @@
 - [ ] **Impeccable telepítés újrapróbálása**, ha a bejelentkezésük újra működik: `npx impeccable install`, majd `/impeccable hooks on`. (A tervezői hook a munkamenetben így is futott.)
 
 ## Későbbre hagyva (a leírás szerint most nem kell)
-Diktálás (a `LongText` komponensbe kerülne), e-mail a gazdinak, adminisztrációs felület, regisztráció, szerepkörök, előfizetés, offline működés, gazdiportál, fotó- és röntgenfeltöltés.
+Diktálás (a `LongText` komponensbe kerülne), e-mail a gazdinak, adminisztrációs felület, regisztráció, szerepkörök, előfizetés, offline működés, gazdiportál, fotófeltöltés (a röntgenképek csatolása elkészült), röntgenképek a zárójelentésben és a PDF-ben.

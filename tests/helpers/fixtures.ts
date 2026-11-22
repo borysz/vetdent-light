@@ -62,7 +62,7 @@ export function clientFor(user: TestUser) {
   });
 }
 
-/** Delete everything the tests created: clinics (cascading to patients and sheets), then users. */
+/** Delete everything the tests created: clinics (cascading to patients, sheets and images), then users. */
 export async function cleanup() {
   for (const id of createdClinics) await getAdmin().from("clinics").delete().eq("id", id);
   for (const id of createdUsers) await getAdmin().auth.admin.deleteUser(id);
@@ -81,21 +81,26 @@ export async function call(
     method?: string;
     body?: unknown;
     rawBody?: string;
+    /** A multipart/form-data body (file uploads); the boundary header is set by Request. */
+    form?: FormData;
     params?: Record<string, string>;
     headers?: Record<string, string>;
   } = {},
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- test helper: bodies are asserted field by field
-): Promise<{ status: number; body: any }> {
+): Promise<{ status: number; body: any; contentType: string | null; bytes: Uint8Array }> {
   const headers: Record<string, string> = { ...opts.headers };
   if (opts.token) headers.authorization = `Bearer ${opts.token}`;
-  const hasBody = opts.body !== undefined || opts.rawBody !== undefined;
-  if (hasBody && !headers["content-type"]) headers["content-type"] = "application/json";
+  const hasJsonBody = opts.body !== undefined || opts.rawBody !== undefined;
+  if (hasJsonBody && !headers["content-type"]) headers["content-type"] = "application/json";
   const request = new Request(`http://localhost${path}`, {
     method: opts.method ?? "GET",
     headers,
-    body: opts.rawBody ?? (opts.body !== undefined ? JSON.stringify(opts.body) : undefined),
+    body: opts.form ?? opts.rawBody ?? (opts.body !== undefined ? JSON.stringify(opts.body) : undefined),
   });
   const response = await (handlerFn as Handler)(request, { params: Promise.resolve((opts.params ?? {}) as never) });
-  const text = await response.text();
-  return { status: response.status, body: text ? JSON.parse(text) : null };
+  const contentType = response.headers.get("content-type");
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  const isJson = contentType?.includes("application/json") ?? false;
+  const text = isJson ? new TextDecoder().decode(bytes) : "";
+  return { status: response.status, body: text ? JSON.parse(text) : null, contentType, bytes };
 }

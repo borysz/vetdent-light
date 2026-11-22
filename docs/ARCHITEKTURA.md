@@ -50,6 +50,12 @@ Az alapszabály: **a felület csak az API-n át ér el adatot.** Az `src/compone
 - Sütis, állapotváltoztató kérésnél azonos eredetű `Origin` kell (CSRF-védelem, `src/server/http.ts`).
 - Jogosultság: aki a rendelő tagja, az mindent lát és szerkeszt a rendelőben; aki nem tag, 403-at kap. Regisztrációs felület nincs, a felhasználót a `npm run user:create` hozza létre.
 
+## Röntgenképek
+
+- Feltöltés: `POST /sheets/{id}/radiographs` (multipart, `file` mező), lista: `GET /sheets/{id}/radiographs`, kép: `GET /radiographs/{id}/image`, törlés: `DELETE /radiographs/{id}`.
+- A kép bájtjai az adatbázisba, a `sheet_radiographs.image` oszlopba kerülnek a felhasználó tokenjével (RLS: csak a rendelő tagja írhatja és olvashatja); a szerver base64-ben küldi és kapja az `add_sheet_radiograph` és `sheet_radiograph_image` függvénnyel (`supabase/migrations/20261122140000_radiographs_in_database.sql`). A listák csak az adatokat kérik le, a képet nem.
+- A felület a képet az API-tól kéri a munkamenet sütijével; Supabase-cím vagy -kulcs nem kerül a böngészőbe.
+
 ## Keresés és lapozás
 
 - Minden lista szerveroldalon lapoz (`page`, `pageSize`), a felület 4 elemet mutat oldalanként, első / előző / következő / utolsó gombbal.

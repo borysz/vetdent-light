@@ -11,6 +11,11 @@ Minta:
 - Következő lépés: …
 ```
 
+## 2026-11-22 – Windows-laptop (Claude Code) – Röntgenképek csatolása
+- Kész: a 2. fül „Digitális fogászati röntgen” szekciójában képek csatolhatók ráhúzással és fájlválasztással; bélyegképek, nagy nézet lapozással, törlés megerősítéssel. A kép az adatbázisban van (`sheet_radiographs.image`, megrendelői döntés; migrációk feltöltve, az első változat Storage-tárhelye törölve), API, tesztek (`tests/api/radiographs.test.ts`), a `check:flow` és a `check:layout` is lefedi.
+- Félbemaradt: nincs.
+- Következő lépés: a rendelő röntgenszoftverének exportformátuma (`docs/NYITOTT_KERDESEK.md` 7.); ötletek: képek a PDF-ben, felirat a képekhez (`docs/OTLETEK.md`).
+
 ## 2026-11-22 – Windows-laptop (Claude Code) – Töltésjelző a PDF-gombokon
 - Kész: amíg a PDF készül, a fejléc PDF-gombján és a 4. fül „PDF letöltése” gombján forgó jelző látszik az ikon helyén, a felirat „PDF készül…”. A `check:flow` ellenőrzi, hogy a jelző megjelenik, majd a letöltés után eltűnik.
 - Félbemaradt: nincs.

@@ -15,6 +15,9 @@ export const errorCodes = [
   "rate_limited",
   "weak_password",
   "same_password",
+  "file_too_large",
+  "unsupported_file_type",
+  "too_many_files",
   "internal_error",
 ] as const;
 export type ErrorCode = (typeof errorCodes)[number];
@@ -33,6 +36,9 @@ export const httpStatusByCode: Record<ErrorCode, number> = {
   rate_limited: 429,
   weak_password: 422,
   same_password: 422,
+  file_too_large: 413,
+  unsupported_file_type: 415,
+  too_many_files: 409,
   internal_error: 500,
 };
 
