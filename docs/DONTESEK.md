@@ -162,6 +162,8 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 | A `/auth/confirm` a levél kétféle linkjét is elfogadja: `token_hash` (saját sablon, bármelyik eszközön működik) és `code` (alapsablon, csak a kérő böngészőben) | A sablon cseréje nem töri el a már kiküldött linkeket | `src/server/services/password.ts` |
 | A `/auth/confirm` relatív címre irányít át | A szerver a saját belső címét látja (0.0.0.0, proxy mögött), nem a publikusat | `src/app/auth/confirm/route.ts` |
 | Az új jelszó legalább 12 karakter, kétszer kell beírni; ugyanez a szabály a parancssori `user:create` és `user:password` esetén | Egy helyen definiálva (`MIN_PASSWORD_LENGTH`) | `src/contracts/auth.ts` |
+| A Supabase Auth beállításait (címek, SMTP) szkript írja a Management API-n, nem a `supabase config push` | A `config push` a teljes beállítást felülírná (például visszakapcsolhatná az önregisztrációt); a szkript csak a nevesített mezőket küldi, és megerősítést kér | `scripts/supabase-auth-config.ts` |
+| Egyelőre a Supabase alapsablonja küldi a levelet | Megrendelői döntés; a saját sablon a `docs/JELSZO_VISSZAALLITAS.md`-ben kész, ha kell | `docs/JELSZO_VISSZAALLITAS.md` |
 | A belépési, az elfelejtett jelszó és az új jelszó oldal közös kártyát használ | Egy kinézet, egy helyen javítható | `src/components/auth/auth-card.tsx` |
 
 ## Sok adat: kereső és lapozó
