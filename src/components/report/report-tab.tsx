@@ -1,6 +1,6 @@
 "use client";
 
-import { FileDown, Mail, Printer } from "lucide-react";
+import { FileDown, Loader2, Mail, Printer } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ReportDocument } from "./report-document";
@@ -32,8 +32,12 @@ export function ReportTab({
             <Printer className="size-5" aria-hidden />
             {t("print")}
           </Button>
-          <Button variant="dark" disabled={pdfBusy} onClick={onPdf}>
-            <FileDown className="size-5" aria-hidden />
+          <Button variant="dark" disabled={pdfBusy} aria-busy={pdfBusy} onClick={onPdf} data-pdf-button className="disabled:cursor-progress disabled:opacity-100">
+            {pdfBusy ? (
+              <Loader2 className="size-5 animate-spin" aria-hidden data-pdf-spinner />
+            ) : (
+              <FileDown className="size-5" aria-hidden />
+            )}
             {pdfBusy ? t("pdfBusy") : t("pdf")}
           </Button>
           <Button variant="secondary" disabled title={soon} aria-label={`${t("email")} (${soon})`}>

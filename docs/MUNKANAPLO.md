@@ -11,6 +11,11 @@ Minta:
 - Következő lépés: …
 ```
 
+## 2026-11-22 – Windows-laptop (Claude Code) – Töltésjelző a PDF-gombokon
+- Kész: amíg a PDF készül, a fejléc PDF-gombján és a 4. fül „PDF letöltése” gombján forgó jelző látszik az ikon helyén, a felirat „PDF készül…”. A `check:flow` ellenőrzi, hogy a jelző megjelenik, majd a letöltés után eltűnik.
+- Félbemaradt: nincs.
+- Következő lépés: lásd a `TODO.md`-t.
+
 ## 2026-11-22 – Windows-laptop (Claude Code) – Jelszó módosítása a menüből
 - Kész: a felhasználói menüben (jobb felül) új pont: **Jelszó módosítása**. Ez az új jelszó oldalra visz (ugyanaz, ahová a visszaállító levél linkje), ahol egy „Mégse, vissza a kezdőlapra” link is van. A `check:flow` mindkettőt kipróbálja.
 - Félbemaradt: nincs.

@@ -171,12 +171,17 @@ async function main() {
     await page.click(`[aria-label="${messages.tabs.report}"]`);
     await page.waitForSelector("[data-report]");
     await clickText(page, messages.reportTab.pdf);
+    const spinning = await page.waitForSelector("[data-pdf-spinner]", { timeout: 3000 }).then(() => true, () => false);
+    const headerBusy = await page.$eval("header [data-pdf-button]", (button) => button.getAttribute("aria-label")).catch(() => "");
+    ok("while the PDF is made, the buttons show a spinner and say so", spinning && headerBusy === messages.header.pdfBusy, String(headerBusy));
     let downloaded = "";
     for (let waited = 0; waited < 45000 && !downloaded; waited += 500) {
       downloaded = readdirSync(downloadDir).find((name) => name.endsWith(".pdf")) ?? "";
       if (!downloaded) await pause(500);
     }
     ok("the PDF is downloaded with an ASCII file name", /^fogaszati-lap_flowdog_\d{4}-\d{2}-\d{2}\.pdf$/.test(downloaded), downloaded || "no file");
+    const spinnerGone = await page.waitForFunction(() => !document.querySelector("[data-pdf-spinner]"), { timeout: 10000 }).then(() => true, () => false);
+    ok("the spinner stops when the PDF is ready", spinnerGone);
     // Direct printing from the browser: the app chrome is hidden, the report stays.
     await page.emulateMediaType("print");
     const printed = await page.evaluate(() => ({
