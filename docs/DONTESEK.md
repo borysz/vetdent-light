@@ -153,6 +153,16 @@ Minden döntés: mit, miért, hol kell módosítani, ha más a válasz.
 | A `CLAUDE.md` egyszer megduplázódott egy javítószkript miatt (`String.replace` és a `$` jelek): újraírva; a `tests/docs.test.ts` őrzi az ismétlődő bekezdéseket és a nem létező fájlokra mutató hivatkozásokat | A hiba így nem ismétlődhet észrevétlenül | `CLAUDE.md`, `tests/docs.test.ts` |
 | Új dokumentum: `docs/ARCHITEKTURA.md` (felépítés, adatfolyam, bővítés lépései); a `README.md` a teljes indulási útmutatót tartalmazza | Új fejlesztő gyorsan eligazodjon | `docs/`, `README.md` |
 
+## Profil és név
+
+| Döntés | Indok | Módosítás helye |
+|---|---|---|
+| A felhasználói menüben egy **Profil** pont: a saját név módosítása és a jelszó módosítása egy ablakban | Megrendelői kérés (2026-11-22) | `src/components/shell/profile-dialog.tsx` |
+| A titulus („Dr.”) nincs külön: a név része, a felhasználó úgy írja be, ahogy a lapokon látni szeretné | Megrendelői kérés; a meglévő titulusok beolvadtak a névbe | `supabase/migrations/20261122180000_member_name_without_title.sql` |
+| A `clinic_members.title` oszlop egyelőre üresen megmarad | A telepítés alatt még futó régi változat ne hibázzon; később törölhető (`TODO.md`) | uo. |
+| A felhasználó csak a saját nevét módosíthatja, mást nem (RLS és oszlopszintű jog) | Biztonság | uo., `src/server/services/profile.ts` |
+| A már elkészült lapokon a kezelőorvos neve nem változik a névváltoztatással | A lap a kezelés idején érvényes adatot rögzíti | — |
+
 ## Elfelejtett jelszó
 
 | Döntés | Indok | Módosítás helye |

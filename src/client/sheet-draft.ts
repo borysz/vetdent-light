@@ -37,8 +37,8 @@ export function formatDecimal(value: number | null): string {
 }
 
 /** Display name of a clinic member, e.g. "Dr. Jane Doe". */
-export function memberName(member: { displayName: string; title: string | null }): string {
-  return [member.title, member.displayName].filter(Boolean).join(" ");
+export function memberName(member: { displayName: string }): string {
+  return member.displayName.trim();
 }
 
 function emptyContent(): SheetContent {

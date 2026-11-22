@@ -15,9 +15,12 @@ export const passwordResetRequestSchema = z.object({ email: z.email().max(254) }
 
 export const passwordChangeSchema = z.object({ password: z.string().min(MIN_PASSWORD_LENGTH).max(256) });
 
+export const profileUpdateSchema = z.object({ displayName: z.string().trim().min(1).max(120) });
+
 export const meResponseSchema = z.object({
   user: z.object({ id: uuid, email: z.string().nullable() }),
-  member: z.object({ displayName: z.string(), title: z.string().nullable() }),
+  /** The name as it appears on sheets, title included (e.g. "Dr. Jane Doe"). */
+  member: z.object({ displayName: z.string() }),
   clinic: z.object({ id: uuid, name: z.string() }),
 });
 export type Me = z.infer<typeof meResponseSchema>;

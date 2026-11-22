@@ -53,8 +53,8 @@ describe("newDraft", () => {
   });
 
   it("formats a member name with the title when there is one", () => {
-    expect(memberName({ displayName: "Jane Doe", title: "Dr." })).toBe("Dr. Jane Doe");
-    expect(memberName({ displayName: "Jane Doe", title: null })).toBe("Jane Doe");
+    expect(memberName({ displayName: "Dr. Jane Doe" })).toBe("Dr. Jane Doe");
+    expect(memberName({ displayName: " Jane Doe " })).toBe("Jane Doe");
   });
 
   it("pre-fills the card of an existing patient, with the grown age and last weight", () => {

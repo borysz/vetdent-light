@@ -20,7 +20,7 @@ export type EditorBridge = {
   requestLeave: (proceed: () => void) => void;
 };
 
-type DialogName = "sheets" | "newSheet" | "clinic" | null;
+type DialogName = "sheets" | "newSheet" | "clinic" | "profile" | null;
 
 type ShellValue = {
   dialog: DialogName;

@@ -51,7 +51,7 @@ async function clickText(page: Page, text: string) {
 
 async function main() {
   const admin = createAdminClient();
-  const e2e = await createE2eUser(admin, { clinicName: "e2e flow", displayName: "E2E Flow" });
+  const e2e = await createE2eUser(admin, { clinicName: "e2e flow", displayName: "Dr. E2E Flow" });
   const { email, password } = e2e;
   const browser = await launchBrowser();
   try {
@@ -306,20 +306,42 @@ async function main() {
     await page.waitForFunction(() => document.body.innerText.includes("FlowDog"), { timeout: 10000 }).catch(() => undefined);
     ok("home lists the saved animal and its sheet", (await bodyText(page)).includes("FlowDog"));
 
-    // 5b. the user menu offers Change password; Cancel goes back home
-    await page.click(`[aria-label="${messages.header.userMenu}"]`);
-    await page.waitForSelector("[role=menuitem]");
-    await page.evaluate((t) => {
-      const entry = [...document.querySelectorAll("[role=menuitem]")].find((el) => el.textContent?.includes(t));
-      (entry as HTMLElement).click();
-    }, messages.header.changePassword);
-    await page.waitForFunction(() => location.pathname === "/reset-password", { timeout: 10000 });
-    ok("the user menu leads to the change password form", Boolean(await page.$("#new-password")));
-    await Promise.all([
-      page.waitForFunction(() => location.pathname === "/", { timeout: 10000 }),
-      page.evaluate((t) => [...document.querySelectorAll("a")].find((a) => a.textContent?.includes(t))?.click(), messages.resetPassword.cancel),
-    ]);
-    ok("Cancel on the change password form goes back home", true);
+    // 5b. Profile (user menu): change the name (title included), then the password
+    const openProfile = async () => {
+      await page.click(`[aria-label="${messages.header.userMenu}"]`);
+      await page.waitForSelector("[role=menuitem]");
+      await page.evaluate((t) => {
+        const entry = [...document.querySelectorAll("[role=menuitem]")].find((el) => el.textContent?.includes(t));
+        (entry as HTMLElement).click();
+      }, messages.header.profile);
+      await page.waitForSelector("#profile-name");
+    };
+    await openProfile();
+    ok("the user menu opens the profile with the current name", (await page.$eval("#profile-name", (el) => (el as HTMLInputElement).value)) === "Dr. E2E Flow");
+    await page.click("#profile-name", { count: 3 });
+    await page.type("#profile-name", "Dr. Profil Proba");
+    await clickText(page, messages.profile.saveName);
+    await page.waitForFunction((t) => document.body.innerText.includes(t), { timeout: 10000 }, messages.profile.nameSaved).catch(() => undefined);
+    const storedName = await admin.from("clinic_members").select("display_name, title").eq("user_id", e2e.id).single();
+    ok("the new name (with its title) is saved", storedName.data?.display_name === "Dr. Profil Proba" && storedName.data?.title === null, JSON.stringify(storedName.data));
+    const changedPassword = randomBytes(18).toString("base64url");
+    await page.type("#profile-password", changedPassword);
+    await page.type("#profile-password-again", changedPassword);
+    await clickText(page, messages.profile.savePassword);
+    await page.waitForFunction((t) => document.body.innerText.includes(t), { timeout: 10000 }, messages.profile.passwordSaved).catch(() => undefined);
+    ok("the profile changes the password", (await bodyText(page)).includes(messages.profile.passwordSaved));
+    await page.keyboard.press("Escape");
+    await page.goto(`${BASE}/sheets/new?species=cat`, { waitUntil: "networkidle2" });
+    await page.waitForSelector("input[type=date]");
+    const newVet = await page.evaluate((l) => {
+      const id = [...document.querySelectorAll("label")].find((el) => el.textContent?.trim().startsWith(l))?.htmlFor ?? "";
+      return (document.getElementById(id) as HTMLInputElement | null)?.value ?? "";
+    }, messages.card.treatingVet);
+    ok("a new sheet takes the new name as treating vet", newVet === "Dr. Profil Proba", newVet);
+    const relogin = await (await browser.createBrowserContext()).newPage();
+    await relogin.evaluateOnNewDocument("window.__name = (t) => t;");
+    await login(relogin, email, changedPassword);
+    ok("the password set in the profile signs in", new URL(relogin.url()).pathname === "/");
 
     // 6. forgotten password: link on the sign-in page, reset link, new password, sign in with it
     const guest = await (await browser.createBrowserContext()).newPage();

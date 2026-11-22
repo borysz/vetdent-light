@@ -5,6 +5,7 @@ import {
   meResponseSchema,
   passwordChangeSchema,
   passwordResetRequestSchema,
+  profileUpdateSchema,
 } from "./auth";
 import { clinicSchema, clinicUpdateSchema } from "./clinic";
 import { errorCodes, errorResponseSchema } from "./errors";
@@ -48,6 +49,7 @@ const operations: Operation[] = [
   { method: "post", path: "/auth/password-reset", summary: "E-mail a password reset link (202 whether or not the address has an account; the link opens /auth/confirm)", auth: false, request: passwordResetRequestSchema, status: 202 },
   { method: "put", path: "/auth/password", summary: "Set a new password for the signed-in user", auth: true, request: passwordChangeSchema, status: 204 },
   { method: "get", path: "/auth/me", summary: "The signed-in user and clinic", auth: true, response: meResponseSchema },
+  { method: "patch", path: "/auth/me", summary: "Change the signed-in user's display name (title included, e.g. Dr. Jane Doe)", auth: true, request: profileUpdateSchema, response: meResponseSchema },
   { method: "get", path: "/reference-data", summary: "Reference data (codes)", auth: true, response: referenceDataSchema },
   { method: "get", path: "/clinic", summary: "The clinic (letterhead data)", auth: true, response: clinicSchema },
   { method: "put", path: "/clinic", summary: "Update the clinic", auth: true, request: clinicUpdateSchema, response: clinicSchema },

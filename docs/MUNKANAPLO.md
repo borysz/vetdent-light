@@ -11,6 +11,11 @@ Minta:
 - Következő lépés: …
 ```
 
+## 2026-11-22 – Windows-laptop (Claude Code) – Profil: név és jelszó
+- Kész: a felhasználói menüben **Profil** pont (a „Jelszó módosítása” helyett): a saját név és a jelszó módosítása egy ablakban. A titulus kivezetve, a név része (a meglévők beolvadtak); `PATCH /api/v1/auth/me`; a `user:create` már nem kér `--title`-t. Migráció feltöltve; tesztek, `check:flow` és `check:layout` lefedi.
+- Félbemaradt: nincs.
+- Következő lépés: a `clinic_members.title` oszlop törlése később (`TODO.md`).
+
 ## 2026-11-22 – Windows-laptop (Claude Code) – PDF a röntgenfelvételek között
 - Kész: a röntgen szekcióba PDF is feltölthető (a rendelő röntgenszoftvere JPEG-et és PDF-et exportál). A PDF egy csempe, amely új lapon, a böngésző PDF-nézőjében nyílik meg; a képnézegető csak a képeken lép végig. A fájl végpontja `/api/v1/radiographs/{id}/file` lett. Migráció feltöltve; tesztek, `check:flow` és `check:layout` a PDF-et is lefedi.
 - Félbemaradt: nincs.

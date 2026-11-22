@@ -18,6 +18,14 @@ export function useLogin() {
   });
 }
 
+export function useUpdateProfile() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (displayName: string) => api.updateProfile(displayName),
+    onSuccess: (me) => queryClient.setQueryData(meKey, me),
+  });
+}
+
 export function useRequestPasswordReset() {
   return useMutation({ mutationFn: (email: string) => api.requestPasswordReset(email) });
 }

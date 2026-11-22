@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { AppHeader } from "./app-header";
 import { ClinicDialog } from "./clinic-dialog";
 import { NewSheetDialog } from "./new-sheet-dialog";
+import { ProfileDialog } from "./profile-dialog";
 import { SheetsDialog } from "./sheets-dialog";
 import { ShellProvider } from "./shell-context";
 
@@ -16,6 +17,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <SheetsDialog />
       <NewSheetDialog />
       <ClinicDialog />
+      <ProfileDialog />
     </ShellProvider>
   );
 }

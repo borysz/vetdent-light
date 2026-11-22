@@ -1511,13 +1511,6 @@
     "note": "",
     "textHash": "4a15461d1830bdba"
   },
-  "header.changePassword": {
-    "status": "pending",
-    "reviewer": null,
-    "reviewedAt": null,
-    "note": "",
-    "textHash": "e6ca4b8c50c88e50"
-  },
   "header.clinicData": {
     "status": "pending",
     "reviewer": null,
@@ -1566,6 +1559,13 @@
     "reviewedAt": null,
     "note": "",
     "textHash": "f97047e25c8a95b7"
+  },
+  "header.profile": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e267d343821f264e"
   },
   "header.reset": {
     "status": "pending",
@@ -2105,6 +2105,76 @@
     "reviewedAt": null,
     "note": "",
     "textHash": "1a1c3831cd6659e4"
+  },
+  "profile.name": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b2afee9589372fd4"
+  },
+  "profile.nameHint": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "f02ab8040bf4e37d"
+  },
+  "profile.nameSaved": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "5d8116e51fc9f204"
+  },
+  "profile.nameTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "467b5745e79e28c3"
+  },
+  "profile.passwordSaved": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b44fc25c99ea5af9"
+  },
+  "profile.passwordTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e6ca4b8c50c88e50"
+  },
+  "profile.saveName": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "11aa93b875f4c1be"
+  },
+  "profile.savePassword": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a7d6c4d112695e59"
+  },
+  "profile.saving": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b9a1838da73cdf69"
+  },
+  "profile.title": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e267d343821f264e"
   },
   "quick.calculus": {
     "status": "pending",
