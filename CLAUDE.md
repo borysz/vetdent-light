@@ -31,6 +31,7 @@ Next.js 16 (App Router, Turbopack), React 19, TypeScript strict, Tailwind CSS 4,
 | `npm run i18n:sync` | Új vagy módosított szövegek felvétele az ellenőrzési jegyzékbe |
 | `npm run user:create` / `npm run seed:demo` | Felhasználó létrehozása (a saját termináljában) / demóadat |
 | `npm run user:password -- --email <cím>` | Meglévő felhasználó új jelszava (a saját termináljában, kétszer kéri) |
+| `npm run supabase:auth-config` | Supabase Auth: Site URL és Redirect URL-ek, `-- --smtp` saját levelező (a saját termináljában, személyes tokennel; csak a nevesített mezőket írja) |
 
 Minden felületi változtatás után futtasd a három böngészős ellenőrzést; ami ott nem zöld, az nincs kész.
 

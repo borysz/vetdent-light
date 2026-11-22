@@ -6,8 +6,8 @@
 - [ ] **Éles elérés:** HTTPS és tartós tárhely (telepítés előtt egyeztetni). A publikus cím (`borysz.tplinkdns.com:6438`) a fejlesztés alatt nem volt elérhető: TP-Link port-átirányítás és Windows tűzfalszabály ellenőrzése.
 - [ ] További felhasználók felvétele: `npm run user:create -- --email … --name … --title "Dr."`.
 - [ ] A demóállatok törlése, ha már nem kellenek: `npm run seed:demo -- --reset`.
-- [ ] **Elfelejtett jelszó beállítása a Supabase felületén:** engedélyezett címek és a levél sablonja, lépésenként: `docs/JELSZO_VISSZAALLITAS.md`.
-- [ ] **Saját levélküldő rendszer.** A jelszó-visszaállító levelet most ideiglenesen a Supabase beépített levelezője küldi. Ez csak a Supabase-szervezet tagjainak küld, óránként csak néhány levelet, és a levelek könnyen a levélszemétbe kerülnek. Kell egy saját SMTP-szolgáltató a saját domainről (pl. `noreply@vetdent.hu`, SPF/DKIM beállítással), és ezt a Supabase-ben kell megadni (**Authentication → Emails → SMTP Settings**). Később ugyanez küldheti a gazdinak szóló leveleket is.
+- [ ] **Elfelejtett jelszó beállítása a Supabase-ben:** `npm run supabase:auth-config` a saját terminálban, egy személyes Supabase tokennel (`docs/JELSZO_VISSZAALLITAS.md`).
+- [ ] **Saját levélküldő rendszer (a külső tesztelők előtt kell).** A jelszó-visszaállító levelet most ideiglenesen a Supabase beépített levelezője küldi. Ez csak a Supabase-szervezet tagjainak küld (külső tesztelőt ne hívj meg a szervezetbe!), óránként csak néhány levelet, és a levelek könnyen a levélszemétbe kerülnek. Kell egy saját SMTP-szolgáltató a saját domainről (pl. `noreply@vetdent.hu`, SPF/DKIM beállítással); a Supabase-be a `npm run supabase:auth-config -- --smtp` teszi be. Később ugyanez küldheti a gazdinak szóló leveleket is.
 
 ## Eszközök
 - [ ] **Impeccable telepítés újrapróbálása**, ha a bejelentkezésük újra működik: `npx impeccable install`, majd `/impeccable hooks on`. (A tervezői hook a munkamenetben így is futott.)

@@ -5,11 +5,26 @@ import { MIN_PASSWORD_LENGTH } from "../../src/contracts/auth";
 const ESCAPE_SEQUENCE = /\u001b\[[0-9;?]*[ -/]*[@-~]/g;
 const CONTROL_CHARS = /[\u0000-\u001f\u007f]/g;
 
+/** The byte order mark that PowerShell puts in front of piped text (written by code point). */
+const BYTE_ORDER_MARK = new RegExp(String.fromCharCode(0xfeff), "g");
+
 function clean(value: string): string {
-  return value.replace(ESCAPE_SEQUENCE, () => "").replace(CONTROL_CHARS, () => "");
+  return value.replace(ESCAPE_SEQUENCE, () => "").replace(CONTROL_CHARS, () => "").replace(BYTE_ORDER_MARK, () => "");
 }
 
-function readHidden(question: string): Promise<string> {
+/** Ask a question and read a visible answer (one line). */
+export function askLine(question: string): Promise<string> {
+  return new Promise((resolve) => {
+    const rl = createInterface({ input: process.stdin, output: process.stdout });
+    rl.question(question, (answer) => {
+      rl.close();
+      resolve(clean(answer).trim());
+    });
+  });
+}
+
+/** Read a secret without echoing it (terminal), or one line from piped input. */
+export function readHidden(question: string): Promise<string> {
   if (!process.stdin.isTTY) {
     return new Promise((resolve) => {
       const rl = createInterface({ input: process.stdin });

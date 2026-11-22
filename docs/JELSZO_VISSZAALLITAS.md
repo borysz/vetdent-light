@@ -5,23 +5,44 @@ A belépési oldalon az **Elfelejtette a jelszavát?** link a `/forgot-password`
 - Az oldal nem árulja el, létezik-e fiók az adott címmel: mindig ugyanazt az üzenetet mutatja.
 - A link egyszer használható és lejár (alapból 1 óra). Érvénytelen linknél az oldal új link kérését kínálja.
 - API: `POST /api/v1/auth/password-reset` (levél kérése), `PUT /api/v1/auth/password` (új jelszó a bejelentkezett felhasználónak). Kód: `src/server/services/password.ts`, `src/app/auth/confirm/route.ts`.
-- A levelet **ideiglenesen a Supabase küldi** a saját levelezőjével. Saját levélküldő rendszer később kell (lásd `TODO.md`).
+- A levelet **ideiglenesen a Supabase küldi**, a saját alapsablonjával (angol szöveg). Saját levélküldő rendszer később kell (lásd `TODO.md`).
 
-## Beállítás a Supabase felületén (egyszer kell)
+## Beállítás a Supabase-ben: `npm run supabase:auth-config`
 
-### 1. Engedélyezett címek
-**Authentication → URL Configuration**
-- **Site URL:** `https://vetdent.hu`
-- **Redirect URLs:** vedd fel ezeket:
-  - `https://vetdent.hu/**`
-  - `http://localhost:6438/**`
+A beállítást egy szkript végzi a Supabase Management API-n keresztül; a felületen nem kell kattintgatni. Csak az itt felsorolt mezőket módosítja, minden mást (például a kikapcsolt önregisztrációt és a levélsablonokat) békén hagy. Futtatás előtt kiírja a jelenlegi állapotot és a tervezett változásokat, és csak megerősítés után ment.
 
-E nélkül a levélben lévő link nem a mi oldalunkra visz vissza.
+**Kell hozzá egy személyes hozzáférési token:** supabase.com → jobb felül a profil → **Access Tokens** → **Generate new token**. A szkript rejtve kéri be, nem menti el és nem írja ki. Használat után a tokent ugyanott törölheted.
 
-### 2. A levél sablonja (ajánlott)
-**Authentication → Emails → Templates → Reset Password**
+A saját terminálodban, a projekt mappájában:
 
-Az alapsablon linkje csak abban a böngészőben működik, amelyikben a linket kérték. Ha a felhasználó a tableten kéri, de a telefonján nyitja meg a levelet, a link „érvénytelen”. Ez a sablon bármelyik eszközön működik:
+```powershell
+npm.cmd run supabase:auth-config
+```
+
+Ez beállítja:
+- **Site URL:** `https://vetdent.hu` (más címhez: `-- --site https://masik.hu`)
+- **Redirect URLs:** hozzáadja a `https://vetdent.hu/**` és a `http://localhost:6438/**` címet; a már meglévőket megtartja.
+
+Csak megnézni, mi változna: `npm.cmd run supabase:auth-config -- --dry-run`.
+
+## Saját levelező (SMTP)
+
+**A Supabase beépített levelezője csak a Supabase-szervezet tagjainak küld levelet.** Más címre a levél nem megy ki, és ezt hibaüzenet sem jelzi. Külső tesztelőket **ne** hívj meg a szervezetbe: a tagok hozzáférnek a projekthez és az adatbázishoz. Külső felhasználóknak tehát saját levelező kell. Ezen felül a beépített levelező óránként csak néhány levelet küld, és a levelek könnyen a levélszemétbe kerülnek.
+
+Lépések:
+1. Regisztráció egy levélküldő szolgáltatónál (például Resend, Brevo vagy Mailgun; kis forgalomra mindegyik ingyenes).
+2. A `vetdent.hu` domain hitelesítése a szolgáltatónál: a szolgáltató megadja, milyen DNS-bejegyzéseket (SPF, DKIM) kell felvenni a domain DNS-beállításaiba.
+3. Az SMTP-adatok beállítása a Supabase-ben, ugyanazzal a szkripttel:
+
+```powershell
+npm.cmd run supabase:auth-config -- --smtp
+```
+
+A szkript bekéri a szerver címét, a portot, a felhasználónevet, a jelszót (rejtve), a feladó címét (például `noreply@vetdent.hu`) és nevét.
+
+## A levél sablonja (később)
+
+Most a Supabase alapsablonja megy ki. Ennek linkje csak abban a böngészőben működik, amelyikben a linket kérték: ha valaki a tableten kéri, de a telefonján nyitja meg a levelet, a link „érvénytelen”. Ha ez zavaró lesz, a **Authentication → Emails → Templates → Reset Password** sablont erre lehet cserélni, és akkor bármelyik eszközön működik:
 
 - **Subject:** `Jelszó visszaállítása – VetDent`
 - **Body:**
@@ -34,12 +55,6 @@ Az alapsablon linkje csak abban a böngészőben működik, amelyikben a linket 
 ```
 
 Az alkalmazás mindkét fajta linket elfogadja, így a sablon cseréje bármikor megtehető.
-
-## A Supabase beépített levelezőjének korlátai
-
-- **Csak a Supabase-szervezet tagjainak küld levelet.** Más címre a levél nem megy ki, és ezt hibaüzenet sem jelzi. Ideiglenes megoldás: a felhasználót meg kell hívni a Supabase-szervezetbe (**Organization → Team**). Végleges megoldás: saját levelező (SMTP), lásd `TODO.md`.
-- **Óránként csak néhány levelet küld** (a pontos szám a **Authentication → Rate Limits** oldalon látszik). Ha túllépi, a felület ezt írja: „Túl sok kérés érkezett…”.
-- A levél a Supabase feladójától érkezik, és könnyen a levélszemétbe kerül.
 
 ## Jelszócsere a parancssorból
 
