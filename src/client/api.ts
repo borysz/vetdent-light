@@ -3,6 +3,7 @@ import { loginResponseSchema, meResponseSchema, type LoginResponse, type Me } fr
 import { clinicSchema, clinicUpdateSchema } from "@/contracts/clinic";
 import { errorResponseSchema, type ErrorCode } from "@/contracts/errors";
 import { patientPageSchema, patientSchema, type Species } from "@/contracts/patients";
+import { radiographListSchema, radiographSchema, type Radiograph } from "@/contracts/radiographs";
 import {
   createSheetRequestSchema,
   sheetDetailSchema,
@@ -44,15 +45,31 @@ async function request<S extends z.ZodType>(
     throw new ApiClientError("network", 0);
   }
 
-  if (!response.ok) {
-    const parsed = errorResponseSchema.safeParse(await response.json().catch(() => null));
-    if (parsed.success) {
-      throw new ApiClientError(parsed.data.error.code, response.status, parsed.data.error.fields);
-    }
-    throw new ApiClientError("internal_error", response.status);
-  }
+  if (!response.ok) throw await errorOf(response);
   if (schema === null || response.status === 204) return undefined as z.output<S>;
   return schema.parse(await response.json());
+}
+
+async function errorOf(response: Response): Promise<ApiClientError> {
+  const parsed = errorResponseSchema.safeParse(await response.json().catch(() => null));
+  if (parsed.success) return new ApiClientError(parsed.data.error.code, response.status, parsed.data.error.fields);
+  // A proxy in front of the app may refuse a big upload before it reaches the API.
+  if (response.status === 413) return new ApiClientError("file_too_large", 413);
+  return new ApiClientError("internal_error", response.status);
+}
+
+/** Attach one radiograph image to a saved sheet (multipart upload). */
+async function uploadRadiograph(sheetId: string, file: File): Promise<Radiograph> {
+  const form = new FormData();
+  form.append("file", file, file.name);
+  let response: Response;
+  try {
+    response = await fetch(`/api/v1/sheets/${sheetId}/radiographs`, { method: "POST", credentials: "same-origin", body: form });
+  } catch {
+    throw new ApiClientError("network", 0);
+  }
+  if (!response.ok) throw await errorOf(response);
+  return radiographSchema.parse(await response.json());
 }
 
 function query(params: Record<string, string | number | undefined>): string {
@@ -84,6 +101,11 @@ async function sheetPdf(id: string): Promise<{ blob: Blob; fileName: string }> {
 
 export const api = {
   sheetPdf,
+  uploadRadiograph,
+  radiographs: (sheetId: string) => request("GET", `/sheets/${sheetId}/radiographs`, radiographListSchema),
+  deleteRadiograph: async (id: string): Promise<void> => {
+    await request("DELETE", `/radiographs/${id}`, null);
+  },
   login: (email: string, password: string): Promise<LoginResponse> =>
     request("POST", "/auth/login", loginResponseSchema, { email, password }),
   logout: async (): Promise<void> => {

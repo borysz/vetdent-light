@@ -7,7 +7,7 @@ import {
   passwordResetRequestSchema,
 } from "./auth";
 import { clinicSchema, clinicUpdateSchema } from "./clinic";
-import { errorResponseSchema } from "./errors";
+import { errorCodes, errorResponseSchema } from "./errors";
 import {
   patientInputSchema,
   patientPageSchema,
@@ -21,14 +21,17 @@ import {
   sheetSummaryPageSchema,
   updateSheetRequestSchema,
 } from "./sheets";
+import { radiographListSchema, radiographSchema } from "./radiographs";
 
 type Operation = {
-  method: "get" | "post" | "put" | "patch";
+  method: "get" | "post" | "put" | "patch" | "delete";
   path: string;
   summary: string;
   auth: boolean;
   query?: { name: string; description: string }[];
   request?: z.ZodType;
+  /** A file upload instead of a JSON body: multipart/form-data with this file field. */
+  fileField?: string;
   response?: z.ZodType;
   status?: number;
 };
@@ -58,6 +61,10 @@ const operations: Operation[] = [
   { method: "get", path: "/sheets/{id}", summary: "Get a sheet with its patient", auth: true, response: sheetDetailSchema },
   { method: "put", path: "/sheets/{id}", summary: "Save a sheet; a stale version answers 409", auth: true, request: updateSheetRequestSchema, response: sheetDetailSchema },
   { method: "get", path: "/sheets/{id}/pdf", summary: "The saved sheet as an A4 PDF (application/pdf, attachment)", auth: true },
+  { method: "get", path: "/sheets/{id}/radiographs", summary: "The radiograph images of a sheet, oldest first", auth: true, response: radiographListSchema },
+  { method: "post", path: "/sheets/{id}/radiographs", summary: "Attach a radiograph image (JPEG, PNG or WebP, at most 15 MB, at most 30 per sheet)", auth: true, fileField: "file", response: radiographSchema, status: 201 },
+  { method: "get", path: "/radiographs/{id}/image", summary: "The radiograph image file (image/jpeg, image/png or image/webp)", auth: true },
+  { method: "delete", path: "/radiographs/{id}", summary: "Delete a radiograph image", auth: true, status: 204 },
 ];
 
 const schemaOf = (schema: z.ZodType, io: "input" | "output") =>
@@ -84,12 +91,24 @@ export function buildOpenApi() {
       ...(op.request
         ? { requestBody: { required: true, content: { "application/json": { schema: schemaOf(op.request, "input") } } } }
         : {}),
+      ...(op.fileField
+        ? {
+            requestBody: {
+              required: true,
+              content: {
+                "multipart/form-data": {
+                  schema: { type: "object", required: [op.fileField], properties: { [op.fileField]: { type: "string", format: "binary" } } },
+                },
+              },
+            },
+          }
+        : {}),
       responses: {
         [status]: op.response
           ? { description: "OK", content: { "application/json": { schema: schemaOf(op.response, "output") } } }
           : { description: "OK" },
         default: {
-          description: "Error (codes: bad_request, validation_failed, unauthenticated, invalid_credentials, forbidden, not_a_member, origin_not_allowed, not_found, version_conflict, species_locked, internal_error)",
+          description: `Error (codes: ${errorCodes.join(", ")})`,
           content: { "application/json": { schema: schemaOf(errorResponseSchema, "output") } },
         },
       },

@@ -1336,6 +1336,13 @@
     "note": "",
     "textHash": "f267d2e16c7aa291"
   },
+  "errors.file_too_large": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "2dce61145d766ba4"
+  },
   "errors.forbidden": {
     "status": "pending",
     "reviewer": null,
@@ -1406,12 +1413,26 @@
     "note": "",
     "textHash": "96f7255472cea4a0"
   },
+  "errors.too_many_files": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "7a0b9e5dc0d98fa6"
+  },
   "errors.unauthenticated": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
     "textHash": "1345e9c08d057a7b"
+  },
+  "errors.unsupported_file_type": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "c4fb92543d5d968c"
   },
   "errors.validation_failed": {
     "status": "pending",
@@ -2294,6 +2315,139 @@
     "reviewedAt": null,
     "note": "",
     "textHash": "b6275c09b93d5c34"
+  },
+  "radiographs.cancel": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "626b32485a17bbd3"
+  },
+  "radiographs.choose": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "a24948c0dc5ed6e0"
+  },
+  "radiographs.delete": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1b2d171b187fe30f"
+  },
+  "radiographs.deleteBody": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "3893815004a17471"
+  },
+  "radiographs.deleteConfirm": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "3f8cd2aa925b76af"
+  },
+  "radiographs.deleteTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "9cdc2e60129be06f"
+  },
+  "radiographs.dropHint": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "3804a99e965af1b0"
+  },
+  "radiographs.dropNow": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "042771d0007aa69d"
+  },
+  "radiographs.empty": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "e7fd9e6508560997"
+  },
+  "radiographs.limits": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "843bf31c34d88399"
+  },
+  "radiographs.next": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "3b29894ab66a959c"
+  },
+  "radiographs.open": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "8ed1c42000dbfa93"
+  },
+  "radiographs.position": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "19b931d4a63776eb"
+  },
+  "radiographs.previous": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "ad42ec715906950a"
+  },
+  "radiographs.saveFirst": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "b01c4731c12652b4"
+  },
+  "radiographs.title": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "3e4352fbfbea6fa1"
+  },
+  "radiographs.uploadFailed": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "c1e15352a360fa43"
+  },
+  "radiographs.uploading": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "fb82c059a9535de1"
+  },
+  "radiographs.viewerTitle": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "de0a6923922581a3"
   },
   "report.affected": {
     "status": "pending",

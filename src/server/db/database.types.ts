@@ -175,6 +175,57 @@ export type Database = {
           },
         ]
       }
+      sheet_radiographs: {
+        Row: {
+          clinic_id: string
+          content_type: string
+          created_at: string
+          created_by: string | null
+          file_name: string
+          id: string
+          image: string
+          sheet_id: string
+          size_bytes: number
+        }
+        Insert: {
+          clinic_id: string
+          content_type: string
+          created_at?: string
+          created_by?: string | null
+          file_name: string
+          id?: string
+          image: string
+          sheet_id: string
+          size_bytes: number
+        }
+        Update: {
+          clinic_id?: string
+          content_type?: string
+          created_at?: string
+          created_by?: string | null
+          file_name?: string
+          id?: string
+          image?: string
+          sheet_id?: string
+          size_bytes?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sheet_radiographs_clinic_id_fkey"
+            columns: ["clinic_id"]
+            isOneToOne: false
+            referencedRelation: "clinics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sheet_radiographs_sheet_id_fkey"
+            columns: ["sheet_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_sheets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       treatment_sheets: {
         Row: {
           age_months: number | null
@@ -245,6 +296,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      add_sheet_radiograph: {
+        Args: {
+          p_clinic_id: string
+          p_content_type: string
+          p_file_name: string
+          p_id: string
+          p_image_base64: string
+          p_sheet_id: string
+        }
+        Returns: {
+          content_type: string
+          created_at: string
+          file_name: string
+          id: string
+          sheet_id: string
+          size_bytes: number
+        }[]
+      }
       create_patient_with_sheet: {
         Args: { p_clinic_id: string; p_patient: Json; p_sheet: Json }
         Returns: Json
@@ -260,6 +329,7 @@ export type Database = {
         }
         Returns: Json
       }
+      sheet_radiograph_image: { Args: { p_id: string }; Returns: string }
     }
     Enums: {
       [_ in never]: never

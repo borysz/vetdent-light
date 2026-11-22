@@ -12,7 +12,8 @@
  * Screenshots go to SCREENSHOT_DIR (default "screenshots", not in git). Everything it
  * created is deleted at the end.
  */
-import { mkdirSync } from "node:fs";
+import { randomUUID } from "node:crypto";
+import { mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Page } from "puppeteer-core";
 import messages from "../messages/hu.json";
@@ -292,6 +293,21 @@ async function main() {
     const demoMax = demo.find((animal) => animal.name === "Max");
     const demoMici = demo.find((animal) => animal.name === "Mici");
     if (!demoMax || !demoMici) throw new Error("demo animals were not created");
+    // Two radiograph images on Max's sheet (the sample screenshots stand in for X-ray images).
+    for (const sample of ["kutya.png", "3.png"]) {
+      const bytes = readFileSync(join("docs", "requirements", "samples", sample));
+      const row = await admin.from("sheet_radiographs").insert({
+        id: randomUUID(),
+        clinic_id: clinicId,
+        sheet_id: demoMax.sheetId,
+        file_name: sample,
+        content_type: "image/png",
+        size_bytes: bytes.length,
+        // bytea in PostgREST's hex form
+        image: `\\x${bytes.toString("hex")}`,
+      });
+      if (row.error) throw row.error;
+    }
 
     const browser = await launchBrowser();
     const desktopUserAgent = await browser.userAgent();
@@ -412,6 +428,16 @@ async function main() {
               });
             }
             await inspect(page, size, `demo-${label}-tab-${tab}`);
+            if (label === "max" && tab === 2) {
+              await page.waitForSelector("[data-radiograph] img");
+              await page.click("[data-radiograph] button");
+              await page.waitForFunction(() => {
+                const image = document.querySelector("[data-radiograph-large]") as HTMLImageElement | null;
+                return image !== null && image.complete && image.naturalWidth > 0;
+              });
+              await inspect(page, size, "dialog-radiograph");
+              await closeDialog(page);
+            }
           }
         }
 

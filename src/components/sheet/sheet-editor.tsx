@@ -314,7 +314,7 @@ export function SheetEditor(props: SheetEditorProps) {
       {tab === 1 ? (
         <OdontogramTab key={draft.species} species={draft.species} content={draft.content} onContent={(content) => change({ content })} />
       ) : tab === 2 ? (
-        <AnesthesiaTab content={draft.content} onContent={(content) => change({ content })} />
+        <AnesthesiaTab content={draft.content} onContent={(content) => change({ content })} sheetId={sheetId} />
       ) : tab === 3 ? (
         <HomecareTab content={draft.content} onContent={(content) => change({ content })} />
       ) : (

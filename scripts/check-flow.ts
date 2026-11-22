@@ -7,10 +7,10 @@
  *   npm run check:flow
  */
 import { randomBytes } from "node:crypto";
-import { mkdtempSync, readdirSync } from "node:fs";
+import { mkdtempSync, readdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { Page } from "puppeteer-core";
+import type { ElementHandle, Page } from "puppeteer-core";
 import messages from "../messages/hu.json";
 import { createAdminClient } from "../src/server/admin";
 import { launchBrowser } from "./lib/browser";
@@ -68,6 +68,10 @@ async function main() {
     const vetValue = await page.$eval(`#${vetId}`, (input) => (input as HTMLInputElement).value);
     ok("treating vet defaults to the signed-in user", vetValue === "Dr. E2E Flow", vetValue);
     ok("new sheet starts as not saved", (await bodyText(page)).includes(messages.editor.notSaved));
+    await page.click(`[aria-label="${messages.tabs.anesthesia}"]`);
+    await page.waitForFunction((t) => document.body.innerText.includes(t), { timeout: 5000 }, messages.radiographs.saveFirst).catch(() => undefined);
+    ok("a new sheet asks to be saved before attaching radiographs", (await bodyText(page)).includes(messages.radiographs.saveFirst));
+    await page.click(`[aria-label="${messages.tabs.odontogram}"]`);
     await clickText(page, messages.header.save);
     await pause(600);
     ok("saving an empty card shows required errors", (await bodyText(page)).includes(messages.card.required));
@@ -121,6 +125,57 @@ async function main() {
     await blockSelects[1].select("right");
     await blockSelects[2].select("lidocaine_2");
     await fillByLabel(page, messages.anesthesia.amount, "1,2");
+
+    // 1c'. radiograph images: file picker, drag and drop, large view, delete
+    const radiographCount = () => page.$$eval("[data-radiograph]", (tiles) => tiles.length);
+    const imageDir = mkdtempSync(join(tmpdir(), "vetdent-xray-"));
+    const pngPath = join(imageDir, "RTG 108.png");
+    writeFileSync(pngPath, Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=", "base64"));
+    const picker = (await page.$("input[data-radiograph-input]")) as ElementHandle<HTMLInputElement>;
+    await picker.uploadFile(pngPath);
+    await page.waitForFunction(() => document.querySelectorAll("[data-radiograph]").length === 1, { timeout: 20000 }).catch(() => undefined);
+    ok("an image chosen with the file picker is attached", (await radiographCount()) === 1, String(await radiographCount()));
+    // Drag and drop: a real image drawn in the page, dropped on the box.
+    await page.evaluate(async () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 800;
+      canvas.height = 600;
+      const g = canvas.getContext("2d")!;
+      const gradient = g.createLinearGradient(0, 0, 800, 600);
+      gradient.addColorStop(0, "#111");
+      gradient.addColorStop(1, "#ddd");
+      g.fillStyle = gradient;
+      g.fillRect(0, 0, 800, 600);
+      const blob: Blob = await new Promise((resolve) => canvas.toBlob((b) => resolve(b!), "image/jpeg", 0.9));
+      const transfer = new DataTransfer();
+      transfer.items.add(new File([blob], "RTG 309.jpg", { type: "image/jpeg" }));
+      const zone = document.querySelector("[data-drop-zone]")!;
+      zone.dispatchEvent(new DragEvent("dragenter", { bubbles: true, cancelable: true, dataTransfer: transfer }));
+      zone.dispatchEvent(new DragEvent("dragover", { bubbles: true, cancelable: true, dataTransfer: transfer }));
+      zone.dispatchEvent(new DragEvent("drop", { bubbles: true, cancelable: true, dataTransfer: transfer }));
+    });
+    await page.waitForFunction(() => document.querySelectorAll("[data-radiograph]").length === 2, { timeout: 20000 }).catch(() => undefined);
+    ok("an image dropped on the box is attached", (await radiographCount()) === 2, String(await radiographCount()));
+    const refused = await page.evaluate(() => {
+      const transfer = new DataTransfer();
+      transfer.items.add(new File(["not an image"], "notes.txt", { type: "text/plain" }));
+      document.querySelector("[data-drop-zone]")!.dispatchEvent(new DragEvent("drop", { bubbles: true, cancelable: true, dataTransfer: transfer }));
+      return new Promise<string>((resolve) => setTimeout(() => resolve(document.querySelector("[data-radiographs] [role=alert]")?.textContent ?? ""), 500));
+    });
+    ok("a file that is not an image is refused with a message", refused.includes("notes.txt") && (await radiographCount()) === 2, refused);
+    await page.click("[data-radiograph] button");
+    await page.waitForSelector("[data-radiograph-large]");
+    const shown = await page.waitForFunction(() => {
+      const image = document.querySelector("[data-radiograph-large]") as HTMLImageElement | null;
+      return image !== null && image.complete && image.naturalWidth > 0;
+    }, { timeout: 10000 }).then(() => true, () => false);
+    ok("the large view shows the image", shown);
+    await page.keyboard.press("Escape");
+    await page.waitForFunction(() => !document.querySelector("[data-radiograph-large]"));
+    await page.click(`[data-radiograph] button[aria-label="${messages.radiographs.delete}"]`);
+    await clickText(page, messages.radiographs.deleteConfirm);
+    await page.waitForFunction(() => document.querySelectorAll("[data-radiograph]").length === 1, { timeout: 10000 }).catch(() => undefined);
+    ok("deleting an image asks first and removes it", (await radiographCount()) === 1, String(await radiographCount()));
     await page.click(`[aria-label="${messages.tabs.homecare}"]`);
     await clickText(page, messages.homecare.templatePainkiller);
     const medicationValues = () =>

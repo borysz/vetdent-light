@@ -89,6 +89,29 @@ export function useUpdateClinic() {
   });
 }
 
+const radiographsKey = (sheetId: string | null) => ["radiographs", sheetId] as const;
+
+/** The radiograph images of a saved sheet (none before the first save). */
+export function useRadiographs(sheetId: string | null) {
+  return useQuery({ queryKey: radiographsKey(sheetId), queryFn: () => api.radiographs(sheetId as string), enabled: Boolean(sheetId) });
+}
+
+export function useUploadRadiograph(sheetId: string | null) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (file: File) => api.uploadRadiograph(sheetId as string, file),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: radiographsKey(sheetId) }),
+  });
+}
+
+export function useDeleteRadiograph(sheetId: string | null) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api.deleteRadiograph(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: radiographsKey(sheetId) }),
+  });
+}
+
 /** After a save, lists and patient data are stale. */
 export function useInvalidateSheetData() {
   const queryClient = useQueryClient();

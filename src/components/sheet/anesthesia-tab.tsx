@@ -8,9 +8,15 @@ import { Button } from "@/components/ui/button";
 import { LongText } from "@/components/ui/long-text";
 import { NumberInput } from "@/components/ui/number-input";
 import { Field, selectStyles, TextInput } from "./fields";
+import { RadiographGallery } from "./radiograph-gallery";
 import { SectionCard } from "./section-card";
 
-type Props = { content: SheetContent; onContent: (content: SheetContent) => void };
+type Props = {
+  content: SheetContent;
+  onContent: (content: SheetContent) => void;
+  /** The saved sheet (radiograph images can be attached only to a saved sheet). */
+  sheetId: string | null;
+};
 
 /** A list select that also shows a stored value that is not (or no longer) in the list, so nothing is hidden. */
 function CodeSelect({
@@ -42,7 +48,7 @@ function CodeSelect({
 }
 
 /** Tab 2: local anesthesia and nerve blocks, sutures and surgical details, dental radiographs. */
-export function AnesthesiaTab({ content, onContent }: Props) {
+export function AnesthesiaTab({ content, onContent, sheetId }: Props) {
   const t = useTranslations("anesthesia");
   const nerves = useTranslations("nerves");
   const sides = useTranslations("sides");
@@ -172,6 +178,7 @@ export function AnesthesiaTab({ content, onContent }: Props) {
             value={radiology.intraoperative}
             onChange={(intraoperative) => onContent({ ...content, radiology: { ...radiology, intraoperative } })}
           />
+          <RadiographGallery sheetId={sheetId} />
         </div>
       </SectionCard>
     </div>

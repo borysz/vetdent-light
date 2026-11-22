@@ -63,6 +63,11 @@ Minden felületi változtatás után futtasd a három böngészős ellenőrzést
 - Felület: `src/components/chart/` (`dental-chart.tsx` a tábla, `tooth-drawing.tsx` a saját SVG-rajzok, `odontogram-tab.tsx`, `tooth-editor-dialog.tsx`, `quick-panel.tsx`, `perio-summary.tsx`).
 - A teljes táblának minden célméreten egyben kell látszania: a `check:layout` ezt, a 42/30 fogat és a 11 px-es legkisebb betűt is ellenőrzi.
 
+## Röntgenképek (2. fül)
+- A „Digitális fogászati röntgen” szekcióban képek csatolhatók (ráhúzással vagy fájlválasztással): `src/components/sheet/radiograph-gallery.tsx`. Csak mentett laphoz; JPEG, PNG, WebP, képenként legfeljebb 15 MB, laponként legfeljebb 30 kép (`src/contracts/radiographs.ts`).
+- **A kép az adatbázisban van** (megrendelői döntés): a `sheet_radiographs.image` (bytea) oszlopban, a rendelő tagságát ellenőrző RLS-sel. Írás és olvasás a `add_sheet_radiograph` és `sheet_radiograph_image` adatbázis-függvénnyel (base64), a listák a képet nem töltik le. A kép csak az API-n át érhető el (`GET /api/v1/radiographs/{id}/image`), a típust a szerver a fájl első bájtjaiból ellenőrzi (`src/server/services/radiographs.ts`). A rendelő vagy a lap törlése a képeket is törli.
+- Az adatbázis mérete: a Supabase ingyenes csomagjában 500 MB; a képek ebbe számítanak bele.
+
 ## Zárójelentés és PDF (4. fül)
 - Egyetlen komponens: `src/components/report/report-document.tsx` (előnézet, böngészős nyomtatás, szerveroldali PDF). Az előnézet az aktuális szerkesztésből, a PDF a mentett lapból készül.
 - PDF: `GET /api/v1/sheets/{id}/pdf` → `src/server/pdf.ts` a `/print/sheets/<id>` oldalt nyomtatja a szerveren futó Chrome-mal (`CHROME_PATH`, `INTERNAL_BASE_URL`).
@@ -80,4 +85,4 @@ Render.com, natív Node-szolgáltatás: `render.yaml` és `docs/TELEPITES_RENDER
 - A Windows-os fájlok sorvége néha CRLF (pl. `.gitignore`): soralapúan szerkessz, ne `\n`-re illessz.
 
 ## Állapot
-**Mind a 7 fázis kész.** Az elfogadási feltételek állapota és a mintaképekkel való összevetés: `docs/ELFOGADAS.md`. Nyitott, nem fejlesztői teendők: állatorvosi jóváhagyás (`docs/SZAKMAI_ELLENORZES.md`, `pending` szövegek), kipróbálás valódi tableten és nyomtatón, HTTPS és éles elérés (`TODO.md`). A szándékosan későbbre hagyottak (diktálás, e-mail a gazdinak, admin felület, saját levélküldő rendszer, szerepkörök, offline, fotófeltöltés) a `docs/OTLETEK.md`-ben gyűlnek, ha felmerülnek. A többsoros szövegmezők a közös `src/components/ui/long-text.tsx` komponensen mennek át (a diktálás később ide kerül).
+**Mind a 7 fázis kész.** Az elfogadási feltételek állapota és a mintaképekkel való összevetés: `docs/ELFOGADAS.md`. Nyitott, nem fejlesztői teendők: állatorvosi jóváhagyás (`docs/SZAKMAI_ELLENORZES.md`, `pending` szövegek), kipróbálás valódi tableten és nyomtatón, HTTPS és éles elérés (`TODO.md`). A szándékosan későbbre hagyottak (diktálás, e-mail a gazdinak, admin felület, saját levélküldő rendszer, szerepkörök, offline, fotófeltöltés, röntgenképek a PDF-ben) a `docs/OTLETEK.md`-ben gyűlnek, ha felmerülnek. A többsoros szövegmezők a közös `src/components/ui/long-text.tsx` komponensen mennek át (a diktálás később ide kerül).
