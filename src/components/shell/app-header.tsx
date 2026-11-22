@@ -1,6 +1,6 @@
 "use client";
 
-import { FolderOpen, Mail, Plus, RotateCcw, Stethoscope, FileDown } from "lucide-react";
+import { FolderOpen, Loader2, Mail, Plus, RotateCcw, Stethoscope, FileDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button, buttonStyles } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -118,13 +118,19 @@ export function AppHeader() {
               <Button
                 variant="dark"
                 disabled={bridge.pdfBusy}
-                aria-label={t("pdf")}
-                title={t("pdf")}
+                aria-busy={bridge.pdfBusy}
+                aria-label={bridge.pdfBusy ? t("pdfBusy") : t("pdf")}
+                title={bridge.pdfBusy ? t("pdfBusy") : t("pdf")}
                 onClick={bridge.onPdf}
-                className="px-0 w-11 2xl:w-auto 2xl:px-4"
+                data-pdf-button
+                className="px-0 w-11 disabled:cursor-progress disabled:opacity-100 2xl:w-auto 2xl:px-4"
               >
-                <FileDown className="size-5" aria-hidden />
-                <span className="hidden 2xl:inline">{t("pdf")}</span>
+                {bridge.pdfBusy ? (
+                  <Loader2 className="size-5 animate-spin" aria-hidden data-pdf-spinner />
+                ) : (
+                  <FileDown className="size-5" aria-hidden />
+                )}
+                <span className="hidden 2xl:inline">{bridge.pdfBusy ? t("pdfBusy") : t("pdf")}</span>
               </Button>
               <Button
                 variant="secondary"
