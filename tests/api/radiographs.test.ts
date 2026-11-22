@@ -1,10 +1,10 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { DELETE as radiographDELETE } from "@/app/api/v1/radiographs/[id]/route";
-import { GET as imageGET } from "@/app/api/v1/radiographs/[id]/image/route";
+import { GET as fileGET } from "@/app/api/v1/radiographs/[id]/file/route";
 import { GET as listGET, POST as uploadPOST } from "@/app/api/v1/sheets/[id]/radiographs/route";
 import { POST as sheetsPOST } from "@/app/api/v1/sheets/route";
 import { RADIOGRAPH_MAX_BYTES } from "@/contracts/radiographs";
-import { sniffImageType } from "@/server/services/radiographs";
+import { sniffFileType } from "@/server/services/radiographs";
 import { call, cleanup, createTestUser, runId, type TestUser } from "../helpers/fixtures";
 
 const hasEnv = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SECRET_KEY);
@@ -18,13 +18,19 @@ function form(bytes: Uint8Array, name: string, type: string): FormData {
   return data;
 }
 
+/** A tiny one-page PDF. */
+const PDF = new TextEncoder().encode(
+  "%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj 2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj 3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 200 200]>>endobj\ntrailer<</Root 1 0 R>>\n%%EOF\n",
+);
+
 describe("radiograph type check", () => {
-  it("recognises JPEG, PNG and WebP by their bytes, nothing else", () => {
-    expect(sniffImageType(PNG)).toBe("image/png");
-    expect(sniffImageType(Uint8Array.from([0xff, 0xd8, 0xff, 0xe0]))).toBe("image/jpeg");
-    expect(sniffImageType(new TextEncoder().encode("RIFF1234WEBPVP8 "))).toBe("image/webp");
-    expect(sniffImageType(new TextEncoder().encode("<svg xmlns='http://www.w3.org/2000/svg'/>"))).toBeNull();
-    expect(sniffImageType(new TextEncoder().encode("%PDF-1.7"))).toBeNull();
+  it("recognises JPEG, PNG, WebP and PDF by their bytes, nothing else", () => {
+    expect(sniffFileType(PNG)).toBe("image/png");
+    expect(sniffFileType(Uint8Array.from([0xff, 0xd8, 0xff, 0xe0]))).toBe("image/jpeg");
+    expect(sniffFileType(new TextEncoder().encode("RIFF1234WEBPVP8 "))).toBe("image/webp");
+    expect(sniffFileType(new TextEncoder().encode("<svg xmlns='http://www.w3.org/2000/svg'/>"))).toBeNull();
+    expect(sniffFileType(PDF)).toBe("application/pdf");
+    expect(sniffFileType(new TextEncoder().encode("PK\u0003\u0004 zip"))).toBeNull();
   });
 });
 
@@ -68,19 +74,19 @@ describe.skipIf(!hasEnv)("radiograph images (real Supabase)", () => {
     expect(added.status).toBe(201);
     expect(added.body.fileName).toBe("RTG 108.png");
     expect(added.body.contentType).toBe("image/png");
-    expect(added.body.imageUrl).toBe(`/api/v1/radiographs/${added.body.id}/image`);
+    expect(added.body.fileUrl).toBe(`/api/v1/radiographs/${added.body.id}/file`);
 
     const listed = await call(listGET, `/api/v1/sheets/${sheetId}/radiographs`, { token: alice.token, params: { id: sheetId } });
     expect(listed.body.items.map((item: { id: string }) => item.id)).toEqual([added.body.id]);
 
-    const image = await call(imageGET, added.body.imageUrl, { token: alice.token, params: { id: added.body.id } });
+    const image = await call(fileGET, added.body.fileUrl, { token: alice.token, params: { id: added.body.id } });
     expect(image.status).toBe(200);
     expect(image.contentType).toBe("image/png");
     expect(Buffer.from(image.bytes).equals(Buffer.from(PNG))).toBe(true);
 
     const removed = await call(radiographDELETE, `/api/v1/radiographs/${added.body.id}`, { token: alice.token, method: "DELETE", params: { id: added.body.id } });
     expect(removed.status).toBe(204);
-    const gone = await call(imageGET, added.body.imageUrl, { token: alice.token, params: { id: added.body.id } });
+    const gone = await call(fileGET, added.body.fileUrl, { token: alice.token, params: { id: added.body.id } });
     expect(gone.status).toBe(404);
   });
 
@@ -97,12 +103,28 @@ describe.skipIf(!hasEnv)("radiograph images (real Supabase)", () => {
     });
     expect(added.status, JSON.stringify(added.body)).toBe(201);
     expect(added.body.sizeBytes).toBe(large.length);
-    const image = await call(imageGET, added.body.imageUrl, { token: alice.token, params: { id: added.body.id } });
+    const image = await call(fileGET, added.body.fileUrl, { token: alice.token, params: { id: added.body.id } });
     expect(image.status).toBe(200);
     expect(Buffer.from(image.bytes).equals(Buffer.from(large))).toBe(true);
     console.log(`12 MB image: upload and download in ${Date.now() - started} ms`);
     await call(radiographDELETE, `/api/v1/radiographs/${added.body.id}`, { token: alice.token, method: "DELETE", params: { id: added.body.id } });
   }, 120_000);
+
+  it("attaches a PDF and serves it inline with its name", async () => {
+    const added = await call(uploadPOST, `/api/v1/sheets/${sheetId}/radiographs`, {
+      token: alice.token,
+      method: "POST",
+      params: { id: sheetId },
+      form: form(PDF, "RTG lelet 108.pdf", "application/pdf"),
+    });
+    expect(added.status).toBe(201);
+    expect(added.body.contentType).toBe("application/pdf");
+    const file = await call(fileGET, added.body.fileUrl, { token: alice.token, params: { id: added.body.id } });
+    expect(file.status).toBe(200);
+    expect(file.contentType).toBe("application/pdf");
+    expect(Buffer.from(file.bytes).equals(Buffer.from(PDF))).toBe(true);
+    await call(radiographDELETE, `/api/v1/radiographs/${added.body.id}`, { token: alice.token, method: "DELETE", params: { id: added.body.id } });
+  });
 
   it("keeps another clinic out", async () => {
     const added = await call(uploadPOST, `/api/v1/sheets/${sheetId}/radiographs`, {
@@ -115,7 +137,7 @@ describe.skipIf(!hasEnv)("radiograph images (real Supabase)", () => {
     const id = added.body.id;
 
     expect((await call(listGET, `/api/v1/sheets/${sheetId}/radiographs`, { token: bob.token, params: { id: sheetId } })).status).toBe(404);
-    expect((await call(imageGET, `/api/v1/radiographs/${id}/image`, { token: bob.token, params: { id } })).status).toBe(404);
+    expect((await call(fileGET, `/api/v1/radiographs/${id}/file`, { token: bob.token, params: { id } })).status).toBe(404);
     expect((await call(radiographDELETE, `/api/v1/radiographs/${id}`, { token: bob.token, method: "DELETE", params: { id } })).status).toBe(404);
     const upload = await call(uploadPOST, `/api/v1/sheets/${sheetId}/radiographs`, {
       token: bob.token,
@@ -125,7 +147,7 @@ describe.skipIf(!hasEnv)("radiograph images (real Supabase)", () => {
     });
     expect(upload.status).toBe(404);
     // Still there for its own clinic.
-    expect((await call(imageGET, `/api/v1/radiographs/${id}/image`, { token: alice.token, params: { id } })).status).toBe(200);
+    expect((await call(fileGET, `/api/v1/radiographs/${id}/file`, { token: alice.token, params: { id } })).status).toBe(200);
   });
 
   it("refuses files that are not images, too large or missing", async () => {

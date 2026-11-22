@@ -1418,7 +1418,7 @@
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "7a0b9e5dc0d98fa6"
+    "textHash": "49bc953ab781e164"
   },
   "errors.unauthenticated": {
     "status": "pending",
@@ -1432,7 +1432,7 @@
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "c4fb92543d5d968c"
+    "textHash": "5bf624e89122a3d8"
   },
   "errors.validation_failed": {
     "status": "pending",
@@ -2328,21 +2328,21 @@
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "a24948c0dc5ed6e0"
+    "textHash": "fea27a928c9f263a"
   },
   "radiographs.delete": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "1b2d171b187fe30f"
+    "textHash": "d4f808fb9ad16033"
   },
   "radiographs.deleteBody": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "3893815004a17471"
+    "textHash": "9167b62d66c49a61"
   },
   "radiographs.deleteConfirm": {
     "status": "pending",
@@ -2356,35 +2356,35 @@
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "9cdc2e60129be06f"
+    "textHash": "f449c4bb27dbc77f"
   },
   "radiographs.dropHint": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "3804a99e965af1b0"
+    "textHash": "33c97ff2b6622204"
   },
   "radiographs.dropNow": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "042771d0007aa69d"
+    "textHash": "95f115eef91c7c29"
   },
   "radiographs.empty": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "e7fd9e6508560997"
+    "textHash": "3a6fc9b17cd04070"
   },
   "radiographs.limits": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "843bf31c34d88399"
+    "textHash": "15d856ca23aa6c11"
   },
   "radiographs.next": {
     "status": "pending",
@@ -2399,6 +2399,20 @@
     "reviewedAt": null,
     "note": "",
     "textHash": "8ed1c42000dbfa93"
+  },
+  "radiographs.openPdf": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "03adfe81a2f61651"
+  },
+  "radiographs.pdfBadge": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewedAt": null,
+    "note": "",
+    "textHash": "1d393b0081b632c5"
   },
   "radiographs.position": {
     "status": "pending",
@@ -2419,14 +2433,14 @@
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "b01c4731c12652b4"
+    "textHash": "ea79209569800669"
   },
   "radiographs.title": {
     "status": "pending",
     "reviewer": null,
     "reviewedAt": null,
     "note": "",
-    "textHash": "3e4352fbfbea6fa1"
+    "textHash": "6eb01d120246d72d"
   },
   "radiographs.uploadFailed": {
     "status": "pending",

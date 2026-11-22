@@ -163,7 +163,15 @@ async function main() {
       return new Promise<string>((resolve) => setTimeout(() => resolve(document.querySelector("[data-radiographs] [role=alert]")?.textContent ?? ""), 500));
     });
     ok("a file that is not an image is refused with a message", refused.includes("notes.txt") && (await radiographCount()) === 2, refused);
-    await page.click("[data-radiograph] button");
+    // A PDF report from the X-ray software: a PDF tile that opens the file in the browser.
+    const pdfPath = join(imageDir, "RTG lelet.pdf");
+    writeFileSync(pdfPath, "%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj 2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj 3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 200 200]>>endobj\ntrailer<</Root 1 0 R>>\n%%EOF\n");
+    await picker.uploadFile(pdfPath);
+    await page.waitForSelector("[data-radiograph-pdf]", { timeout: 20000 }).catch(() => undefined);
+    const pdfTile = await page.$eval("[data-radiograph-pdf]", (link) => ({ href: link.getAttribute("href") ?? "", target: link.getAttribute("target") })).catch(() => null);
+    const pdfType = pdfTile ? await page.evaluate((href) => fetch(href).then((r) => r.headers.get("content-type")), pdfTile.href) : null;
+    ok("a PDF is attached as a tile that opens the file in a new tab", (await radiographCount()) === 3 && pdfTile?.target === "_blank" && pdfType === "application/pdf", `${pdfTile?.href} ${pdfType}`);
+    await page.click("[data-radiograph] button:has(img)");
     await page.waitForSelector("[data-radiograph-large]");
     const shown = await page.waitForFunction(() => {
       const image = document.querySelector("[data-radiograph-large]") as HTMLImageElement | null;
@@ -174,8 +182,8 @@ async function main() {
     await page.waitForFunction(() => !document.querySelector("[data-radiograph-large]"));
     await page.click(`[data-radiograph] button[aria-label="${messages.radiographs.delete}"]`);
     await clickText(page, messages.radiographs.deleteConfirm);
-    await page.waitForFunction(() => document.querySelectorAll("[data-radiograph]").length === 1, { timeout: 10000 }).catch(() => undefined);
-    ok("deleting an image asks first and removes it", (await radiographCount()) === 1, String(await radiographCount()));
+    await page.waitForFunction(() => document.querySelectorAll("[data-radiograph]").length === 2, { timeout: 10000 }).catch(() => undefined);
+    ok("deleting a file asks first and removes it", (await radiographCount()) === 2, String(await radiographCount()));
     await page.click(`[aria-label="${messages.tabs.homecare}"]`);
     await clickText(page, messages.homecare.templatePainkiller);
     const medicationValues = () =>

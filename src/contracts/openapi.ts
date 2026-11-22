@@ -62,9 +62,9 @@ const operations: Operation[] = [
   { method: "put", path: "/sheets/{id}", summary: "Save a sheet; a stale version answers 409", auth: true, request: updateSheetRequestSchema, response: sheetDetailSchema },
   { method: "get", path: "/sheets/{id}/pdf", summary: "The saved sheet as an A4 PDF (application/pdf, attachment)", auth: true },
   { method: "get", path: "/sheets/{id}/radiographs", summary: "The radiograph images of a sheet, oldest first", auth: true, response: radiographListSchema },
-  { method: "post", path: "/sheets/{id}/radiographs", summary: "Attach a radiograph image (JPEG, PNG or WebP, at most 15 MB, at most 30 per sheet)", auth: true, fileField: "file", response: radiographSchema, status: 201 },
-  { method: "get", path: "/radiographs/{id}/image", summary: "The radiograph image file (image/jpeg, image/png or image/webp)", auth: true },
-  { method: "delete", path: "/radiographs/{id}", summary: "Delete a radiograph image", auth: true, status: 204 },
+  { method: "post", path: "/sheets/{id}/radiographs", summary: "Attach a radiograph file (JPEG, PNG, WebP or PDF, at most 15 MB, at most 30 per sheet)", auth: true, fileField: "file", response: radiographSchema, status: 201 },
+  { method: "get", path: "/radiographs/{id}/file", summary: "The radiograph file, inline (image/jpeg, image/png, image/webp or application/pdf)", auth: true },
+  { method: "delete", path: "/radiographs/{id}", summary: "Delete a radiograph file", auth: true, status: 204 },
 ];
 
 const schemaOf = (schema: z.ZodType, io: "input" | "output") =>

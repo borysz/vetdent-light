@@ -293,7 +293,20 @@ async function main() {
     const demoMax = demo.find((animal) => animal.name === "Max");
     const demoMici = demo.find((animal) => animal.name === "Mici");
     if (!demoMax || !demoMici) throw new Error("demo animals were not created");
-    // Two radiograph images on Max's sheet (the sample screenshots stand in for X-ray images).
+    // Two radiograph images and a PDF on Max's sheet (the sample screenshots stand in for X-ray images).
+    {
+      const pdf = Buffer.from("%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj 2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj 3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 200 200]>>endobj\ntrailer<</Root 1 0 R>>\n%%EOF\n");
+      const row = await admin.from("sheet_radiographs").insert({
+        id: randomUUID(),
+        clinic_id: clinicId,
+        sheet_id: demoMax.sheetId,
+        file_name: "RTG lelet 2026-11-21.pdf",
+        content_type: "application/pdf",
+        size_bytes: pdf.length,
+        image: `\\x${pdf.toString("hex")}`,
+      });
+      if (row.error) throw row.error;
+    }
     for (const sample of ["kutya.png", "3.png"]) {
       const bytes = readFileSync(join("docs", "requirements", "samples", sample));
       const row = await admin.from("sheet_radiographs").insert({
@@ -430,7 +443,7 @@ async function main() {
             await inspect(page, size, `demo-${label}-tab-${tab}`);
             if (label === "max" && tab === 2) {
               await page.waitForSelector("[data-radiograph] img");
-              await page.click("[data-radiograph] button");
+              await page.click("[data-radiograph] button:has(img)");
               await page.waitForFunction(() => {
                 const image = document.querySelector("[data-radiograph-large]") as HTMLImageElement | null;
                 return image !== null && image.complete && image.naturalWidth > 0;

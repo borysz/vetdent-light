@@ -8,7 +8,6 @@
 | 4 | Kipróbálás valódi tableten (iPad, Android), ujjal, a képernyő-billentyűzettel; valódi nyomtatás | Csak Chrome-ban, méretezve ellenőriztük | Megrendelő |
 | 5 | Impeccable telepítés és hook bekötése | A hook a munkamenetben működött; a bejelentkezéses telepítés elhalasztva, lásd `TODO.md` | Megrendelő |
 | 6 | További rendelői felhasználók felvétele | `npm run user:create` (a saját termináljában) | Megrendelő |
-| 7 | **Röntgenképek formátuma**: a rendelő röntgenszoftvere milyen formátumban exportál? A DICOM (`.dcm`) böngészőben nem jeleníthető meg | JPEG, PNG és WebP tölthető fel; DICOM-ot előbb képpé kell exportálni | Megrendelő / állatorvos |
 
 ## Megoldva
 
@@ -16,3 +15,4 @@
 - Supabase Auth önregisztráció kikapcsolva (megrendelő, 2026-11-21).
 - Az első felhasználó létrejött (`npm run user:create`).
 - Demóadat betöltve (`npm run seed:demo`); a fogszám elhagyása a felületről eldöntve.
+- A röntgenszoftver exportformátuma: JPEG (.jpg, .jpeg) és PDF (megrendelő, 2026-11-22); mindkettő feltölthető.
